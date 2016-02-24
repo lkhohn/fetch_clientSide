@@ -1,0 +1,23 @@
+<form name='form' novalidate ng-controller='SigninController as SIC'>
+  <div class="form-group">
+    <label for="signupUsername">username</label>
+    <input type="text"
+    class="form-control"
+    name='username'
+    ng-model='user.username'
+    required>
+  </div>
+
+	<div class="form-group">
+		<label for="password">Password</label>
+		<input type="password"
+    class="form-control"
+    name="password"
+    ng-model="user.password"
+    required>
+	</div>
+
+  <div class='form-group'>
+    <input type="button" ng-disabled='!form.$valid' value='Submit' class="btn btn-primary" ng-click="SIC.signin(user)">
+  </div>
+</form>

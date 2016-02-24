@@ -1,0 +1,175 @@
+<form name='form' novalidate ng-controller='SignupController as SUC'>
+  <div class="form-group" ng-class="{ 'has-error': form.username.$invalid && form.username.$dirty, 'has-success': form.username.$valid && form.username.$dirty}">
+    <label for="signupUsername">username</label>
+    <input type="text"
+    class="form-control"
+    name='username'
+    ng-model='user.username'
+    ng-minlength='3'
+    ng-maxlength='20'
+    required>
+    <div class='help-block' ng-messages="form.username.$error" style="color:maroon" role="alert" ng-show="form.username.$touched">
+      <div ng-message="required">You did not enter a field</div>
+      <div ng-message="minlength">Your field is too short</div>
+      <div ng-message="maxlength">Your field is too long</div>
+    </div>
+  </div>
+
+  <div class="form-group" ng-class="{'has-error': form.email.$invalid && form.email.$dirty, 'has-success': form.email.$valid && form.email.$dirty}">
+    <label class="control-label">Email</label>
+    <input type="email"
+    class="form-control"
+    name='email'
+    ng-model='user.email'
+    ng-pattern="SUC.regex"
+    required>
+    <div class='help-block' ng-messages="form.email.$error" style="color:maroon" role="alert" ng-show="form.email.$touched">
+      <div ng-message="required">You did not enter a field</div>
+      <div ng-message="type">You did not enter a valid email</div>
+    </div>
+  </div>
+
+  <div class="form-group" ng-class="{'has-error': form.firstName.$invalid && form.firstName.$dirty, 'has-success': form.firstName.$valid && form.firstName.$dirty}">
+    <label for="firstName">first name</label>
+    <input type="text"
+    class="form-control"
+    name="firstName"
+    ng-model='user.firstName'
+    required>
+  </div>
+
+  <div class="form-group" ng-class="{'has-error': form.lastName.$invalid && form.lastName.$dirty, 'has-success': form.lastName.$valid && form.lastName.$dirty}">
+    <label for="lastName">last name</label>
+    <input type="text"
+    class="form-control"
+    name="lastName"
+    ng-model="user.lastName"
+    required>
+  </div>
+
+  <div class="form-group" ng-class="{'has-error': form.phoneNumber.$invalid && form.phoneNumber.$dirty, 'has-success': form.phoneNumber.$valid && form.phoneNumber.$dirty}">
+    <label for="phoneNumber">phone number</label>
+    <input type="text"
+    class="form-control"
+    name="phoneNumber"
+    ng-model='user.phoneNumber'
+    required>
+  </div>
+
+  <div class="form-group" ng-class="{'has-error': form.city.$invalid && form.city.$dirty, 'has-success': form.city.$valid && form.city.$dirty}">
+    <label for="city">city</label>
+    <input type="text"
+    class="form-control"
+    name="city"
+    ng-model='user.city'
+    ng-minlength='3'
+    ng-maxlength='20'
+    required>
+  </div>
+
+  <div class="form-group" ng-class="{'has-error': form.state.$invalid && form.state.$dirty, 'has-success': form.state.$valid && form.state.$dirty}">
+    <label for="state">state</label>
+
+    <select name="state" ng-model="user.state" required>
+      <option value="AL">Alabama</option>
+      <option value="AK">Alaska</option>
+    	<option value="AZ">Arizona</option>
+    	<option value="AR">Arkansas</option>
+    	<option value="CA">California</option>
+    	<option value="CO">Colorado</option>
+    	<option value="CT">Connecticut</option>
+    	<option value="DE">Delaware</option>
+    	<option value="DC">District Of Columbia</option>
+    	<option value="FL">Florida</option>
+    	<option value="GA">Georgia</option>
+    	<option value="HI">Hawaii</option>
+    	<option value="ID">Idaho</option>
+    	<option value="IL">Illinois</option>
+    	<option value="IN">Indiana</option>
+    	<option value="IA">Iowa</option>
+    	<option value="KS">Kansas</option>
+    	<option value="KY">Kentucky</option>
+    	<option value="LA">Louisiana</option>
+    	<option value="ME">Maine</option>
+    	<option value="MD">Maryland</option>
+    	<option value="MA">Massachusetts</option>
+    	<option value="MI">Michigan</option>
+    	<option value="MN">Minnesota</option>
+    	<option value="MS">Mississippi</option>
+    	<option value="MO">Missouri</option>
+    	<option value="MT">Montana</option>
+    	<option value="NE">Nebraska</option>
+    	<option value="NV">Nevada</option>
+    	<option value="NH">New Hampshire</option>
+    	<option value="NJ">New Jersey</option>
+    	<option value="NM">New Mexico</option>
+    	<option value="NY">New York</option>
+    	<option value="NC">North Carolina</option>
+    	<option value="ND">North Dakota</option>
+    	<option value="OH">Ohio</option>
+    	<option value="OK">Oklahoma</option>
+    	<option value="OR">Oregon</option>
+    	<option value="PA">Pennsylvania</option>
+    	<option value="RI">Rhode Island</option>
+    	<option value="SC">South Carolina</option>
+    	<option value="SD">South Dakota</option>
+    	<option value="TN">Tennessee</option>
+    	<option value="TX">Texas</option>
+    	<option value="UT">Utah</option>
+    	<option value="VT">Vermont</option>
+    	<option value="VA">Virginia</option>
+    	<option value="WA">Washington</option>
+    	<option value="WV">West Virginia</option>
+    	<option value="WI">Wisconsin</option>
+    	<option value="WY">Wyoming</option>
+    </select>
+  </div>
+
+  <div class="form-group" ng-class="{'has-error': form.preferredPayment.$invalid && form.preferredPayment.$dirty, 'has-success': form.preferredPayment.$valid && form.preferredPayment.$dirty}">
+    <label for "preferredPayment">prefered payment</label>
+    <select
+    name="preferredPayment"
+    ng-model="user.preferredPayment"
+    required>
+      <option>bitcoin</option>
+      <option>stripe</option>
+    </select>
+  </div>
+
+	<div class="form-group"
+		ng-class="{'has-error': isInputInvalid(form.password), 'has-success': isInputValid(form.password)}">
+		<label for="password">Password</label>
+		<input type="password" name="password" ng-model="user.password" class="form-control" required>
+		<div class="progress" style="margin-top:10px">
+			<div class="progress-bar"
+					ng-class="{'progress-bar-success': isPasswordStrong(), 'progress-bar-warning': isPasswordOk(), 'progress-bar-danger': isPasswordWeak()}"
+					aria-valuenow="{{ passwordStrength }}"
+					aria-valuemin="0"
+					aria-valuemax="100"
+					style="width:{{ passwordStrength }}%">
+
+			</div>
+		</div>
+	</div>
+
+
+
+   <!-- <div class="form-group">
+    <label for="confirmPassword">confirm password</label>
+    <input type="password"
+    class="form-control"
+    id="confirmPassword"
+    name="confirmPassword"
+    ng-model="user.confirmPassword"
+    required
+    compare-to="user.password"> -->
+    <!-- <div ng-messages="form.confirmPassword.$error" ng-messages-include="messages.html"></div> -->
+    <!-- <div ng-message="form.confirmPassword.$error">Passwords do not make</div> -->
+
+  <!-- </div> -->
+
+
+  <div class='form-group'>
+    <input type="button" ng-disabled='!form.$valid' value='Submit' class="btn btn-primary" ng-click="SUC.signup(user)">
+  </div>
+</form>
