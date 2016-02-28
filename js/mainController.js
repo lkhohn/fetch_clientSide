@@ -1,20 +1,21 @@
 angular.module('app')
-.controller('MainController', ['$scope', '$http', MainController]);
+.controller('MainController', ['$scope', '$http', MainController])
+.controller('LandingPageController', ['$scope', LandingPageController])
+.controller('NewFetchController', ['$scope', 'FetchService', NewFetchController])
+.controller('SignupController', ['$scope','$location', 'Password', 'addUserService', SignupController])
+.controller('SigninController', ['$scope', '$location', 'signinService', SigninController]);
+
 function MainController ($scope, $http) {
   var vm = this;
 }
 
-angular.module('app')
-.controller('LandingPageController', ['$scope', LandingPageController]);
+
 function LandingPageController(){
   var vm = this;
-
 }
 
 
-angular.module('app')
-.controller('NewScoutController', ['$scope', 'ScoutService', NewScoutController]);
-function NewScoutController($scope, ScoutService) {
+function NewFetchController($scope, FetchService) {
   var vm = this;
   vm.initialize = initialize;
   vm.autocomplete;
@@ -26,18 +27,16 @@ function NewScoutController($scope, ScoutService) {
      });
     }
   vm.initialize();
-  vm.postNewScout = postNewScout;
-  function postNewScout(newScout){
-    ScoutService.postNewScout(newScout).then(function(response){
-      console.log('post new scout worked!');
+  vm.postNewFetch = postNewFetch;
+  function postNewFetch(newFetch){
+    FetchService.postNewFetch(newFetch).then(function(response){
+      console.log('post new fetch worked!');
       });
     }
   }
 
 
 
-angular.module('app')
-.controller('SignupController', ['$scope','$location', 'Password', 'addUserService', SignupController]);
 function SignupController($scope, $location, Password, addUserService){
   var vm = this;
   this.regex = /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i;
@@ -70,17 +69,16 @@ function SignupController($scope, $location, Password, addUserService){
   };
 
   vm.signup = signup;
-
   function signup(user) {
     addUserService.addUser(user).then(function(response){
+      console.log("main controller check")
       $location.path('/signin');
     });
   }
 }
 
 
-angular.module('app')
-.controller('SigninController', ['$scope', '$location', 'signinService', SigninController]);
+
 function SigninController($scope, $location, signinService){
   var vm = this;
   vm.signin = signin;

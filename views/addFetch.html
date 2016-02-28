@@ -1,4 +1,4 @@
-<div class='container' ng-controller='NewScoutController as NSC'>
+<div class='container' ng-controller='NewFetchController as NFC'>
   <form class="form-horizontal">
 
   <div class="form-group">
@@ -9,7 +9,7 @@
   <div class="form-group">
     <div id="locationField">
       <label for="autocomplete" class="col-sm-2 control-label">where are you located?</label>
-      <input id="autocomplete" class="form-control" onFocus="NSC.initialize()" type="text"></input>
+      <input id="autocomplete" class="form-control" onFocus="NFC.initialize()" type="text"></input>
     </div>
   </div>
 
@@ -28,7 +28,7 @@
   </div>
 
   <div class="form-group">
-    <input type="button" class="btn btn-default" value="submit" ng-click="NSC.postNewScout(newScout)">
+    <input type="button" class="btn btn-default" value="submit" ng-click="NFC.postNewFetch(newFetch)">
   </div>
 
   </form>

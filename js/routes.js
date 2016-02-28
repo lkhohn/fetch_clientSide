@@ -6,8 +6,8 @@ angular.module('app')
     controller: 'LandingPageController as LPC'
   })
   .when('/new', {
-    templateUrl: 'views/addScout.html',
-    controller: 'NewScoutController as NSC'
+    templateUrl: 'views/addFetch.html',
+    controller: 'NewFetchController as NFC'
   })
   .when('/signup', {
     templateUrl: 'views/signup.html',
@@ -18,7 +18,7 @@ angular.module('app')
     controller: 'SigninController as SIC'
   })
   .when('/scout', {
-    templateUrl: 'views/avaiableScouts.html',
-    controller: 'AvailableScoutController as ASC'
+    templateUrl: 'views/avaiableFetches.html',
+    controller: 'AvailableFetchController as AFC'
   });
 });

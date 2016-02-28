@@ -1,12 +1,12 @@
 angular.module('app')
-.service('ScoutService', ['$http', '$q', ScoutService]);
+.service('FetchService', ['$http', '$q', FetchService]);
 
-function ScoutService($http, $q){
+function FetchService($http, $q){
 
   return {
-    getScout:function(scout){
+    getFetch:function(fetch){
       return $q(function(resolve, reject){
-        $http.post('http://localhost:3000/scout', scout)
+        $http.post('http://localhost:3000/fetch', fetch)
         .then(function sucess(response){
           resolve(response);
         }, function error(response){
@@ -14,9 +14,9 @@ function ScoutService($http, $q){
         });
       });
     },
-    showAvailScouts: function(scout){
+    showAvailFetches: function(fetch){
       return $q(function(resolve, reject){
-        $http.get('http://localhost:3000/availScout', scout)
+        $http.get('http://localhost:3000/availFetch', fetch)
         .then(function success(response){
           resolve(response);
         }, function error(response){
@@ -24,13 +24,13 @@ function ScoutService($http, $q){
         });
       });
     },
-    getScoutDetails: function(id) {
+    getFetchDetails: function(id) {
       // console.log(id);
       return $http.get('http://localhost:3000/' + id);
     },
-    postNewScout: function(scoutObj) {
+    postNewFetch: function(fetchObj) {
       return $q(function(resolve, reject){
-        $http.post('http://localhost:3000/new', scoutObj)
+        $http.post('http://localhost:3000/new', fetchObj)
         .then(function success(response){
           resolve(response);
         }, function error(response){
@@ -38,10 +38,10 @@ function ScoutService($http, $q){
         });
       });
     },
-    deleteScout: function(id) {
+    deleteFetch: function(id) {
       return $http.delete('http://localhost:3000/' + id);
     },
-    editScout: function(id, editObj) {
+    editFetch: function(id, editObj) {
       return $http.put('http://localhost:3000/' + id, editObj);
     }
   };
@@ -49,22 +49,24 @@ function ScoutService($http, $q){
 
 
 angular.module('app')
-.service('addUserService', ['$http', '$q', addUserService]);
+.service('addUserService', ['$http', addUserService]);
 
-function addUserService($http, $q){
+function addUserService($http){
   return {
     addUser: function(user){
-      return $q(function(resolve, reject){
         $http.post('http://localhost:3000/signup', user)
-        .then(function success(response){
-          resolve(response);
-        }, function error(response){
-          console.error(response);
+        .then(function(response){
+          return response;
+        }, function(error){
+          return error;
         });
-      });
-    }
-  };
-}
+      }
+    };
+  }
+
+
+
+
 
 angular.module('app')
 .service('signinService', ['$http', '$q', signinService]);
