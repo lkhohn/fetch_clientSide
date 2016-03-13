@@ -1,0 +1,28 @@
+<!--
+Create tabs with an icon and label, using the tabs-positive style.
+Each tab's child <ion-nav-view> directive will have its own
+navigation history that also transitions its views in and out.
+-->
+<ion-tabs class="tabs-icon-top tabs-color-active-positive">
+
+
+  <ion-tab title="Home" icon-off="ion-ios-home" icon-on="ion-ios-home" href="#/tab/home">
+    <ion-nav-view name="home"></ion-nav-view>
+  </ion-tab>
+
+
+  <ion-tab title="add a fetch" icon-off="ion-plus-round" icon-on="ion-plus-round" href="#/tab/addFetch">
+    <ion-nav-view name="addFetch"></ion-nav-view>
+  </ion-tab>
+
+
+  <ion-tab title="find a fetch" icon-off="ion-android-walk" icon-on="ion-android-walk" href="#/tab/findFetch">
+    <ion-nav-view name="findFetch"></ion-nav-view>
+  </ion-tab>
+
+
+  <ion-tab title="account" icon-off="ion-ios-gear-outline" icon-on="ion-ios-gear" href="#/tab/account">
+    <ion-nav-view name="account"></ion-nav-view>
+  </ion-tab>
+
+</ion-tabs>

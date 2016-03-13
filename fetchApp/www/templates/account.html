@@ -1,0 +1,123 @@
+<ion-view view-title="Account">
+  <ion-content>
+  <h3>account</h3>
+<h3>signin form </h3>
+<!-- <form name='form' novalidate ng-controller='SigninController as SIC'> -->
+  <form name='form' novalidate>
+  <div class="form-group">
+    <label for="signupEmail">email</label>
+    <input type="text"
+    class="form-control"
+    name='email'
+    ng-model='user.email'
+    required>
+  </div>
+
+	<div class="form-group">
+		<label for="password">Password</label>
+		<input type="password"
+    class="form-control"
+    name="password"
+    ng-model="user.password"
+    required>
+	</div>
+
+  <div class='form-group'>
+    <input type="button" ng-disabled='!form.$valid' value='Submit' class="btn btn-primary" ng-click="SIC.signin(user)">
+  </div>
+</form>
+
+
+<h3>signup form</h3>
+<!-- <form name='form' novalidate ng-controller='SignupController as SUC'> -->
+  <form name='form' novalidate>
+
+  <div class="form-group" ng-class="{'has-error': form.email.$invalid && form.email.$dirty, 'has-success': form.email.$valid && form.email.$dirty}">
+    <label class="control-label">Email</label>
+    <input type="email"
+    class="form-control"
+    name='email'
+    ng-model='user.email'
+    ng-pattern="SUC.regex"
+    required>
+  </div>
+
+  <div class="form-group" ng-class="{'has-error': form.firstName.$invalid && form.firstName.$dirty, 'has-success': form.firstName.$valid && form.firstName.$dirty}">
+    <label for="firstName">first name</label>
+    <input type="text"
+    class="form-control"
+    name="firstName"
+    ng-model='user.firstName'
+    required>
+  </div>
+
+  <div class="form-group" ng-class="{'has-error': form.lastName.$invalid && form.lastName.$dirty, 'has-success': form.lastName.$valid && form.lastName.$dirty}">
+    <label for="lastName">last name</label>
+    <input type="text"
+    class="form-control"
+    name="lastName"
+    ng-model="user.lastName"
+    required>
+  </div>
+
+  <div class="form-group" ng-class="{'has-error': form.phoneNumber.$invalid && form.phoneNumber.$dirty, 'has-success': form.phoneNumber.$valid && form.phoneNumber.$dirty}">
+    <label for="phoneNumber">phone number</label>
+    <input type="text"
+    class="form-control"
+    name="phoneNumber"
+    ng-model='user.phoneNumber'
+    required>
+  </div>
+
+  <div class="form-group" ng-class="{'has-error': form.zipCode.$invalid && form.zipCode.$dirty, 'has-success': form.zipCode.$valid && form.zipCode.$dirty}">
+    <label for="zipCode">zip code</label>
+    <input type="text"
+    class="form-control"
+    name="zipCode"
+    ng-model='user.zipCode'
+    ng-minlength='5'
+    ng-maxlength='20'
+    required>
+  </div>
+
+	<div class="form-group"
+		ng-class="{'has-error': isInputInvalid(form.password), 'has-success': isInputValid(form.password)}">
+		<label for="password">Password</label>
+		<input type="password" name="password" ng-model="user.password" class="form-control" required>
+		<div class="progress" style="margin-top:10px">
+			<div class="progress-bar"
+					ng-class="{'progress-bar-success': isPasswordStrong(), 'progress-bar-warning': isPasswordOk(), 'progress-bar-danger': isPasswordWeak()}"
+					aria-valuenow="{{ passwordStrength }}"
+					aria-valuemin="0"
+					aria-valuemax="100"
+					style="width:{{ passwordStrength }}%">
+
+			</div>
+		</div>
+	</div>
+
+
+
+   <!-- <div class="form-group">
+    <label for="confirmPassword">confirm password</label>
+    <input type="password"
+    class="form-control"
+    id="confirmPassword"
+    name="confirmPassword"
+    ng-model="user.confirmPassword"
+    required
+    compare-to="user.password"> -->
+    <!-- <div ng-messages="form.confirmPassword.$error" ng-messages-include="messages.html"></div> -->
+    <!-- <div ng-message="form.confirmPassword.$error">Passwords do not make</div> -->
+
+  <!-- </div> -->
+
+
+  <div class='form-group'>
+    <input type="button" ng-disabled='!form.$valid' value='Submit' class="btn btn-primary" ng-click="SUC.signup(user)">
+  </div>
+</form>
+
+
+  </ion-content>
+</ion-view>
