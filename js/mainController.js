@@ -1,9 +1,16 @@
 angular.module('app')
 .controller('MainController', ['$scope', '$http', MainController])
 .controller('LandingPageController', ['$scope', LandingPageController])
-.controller('NewFetchController', ['$scope', 'FetchService', NewFetchController])
-.controller('SignupController', ['$scope','$location', 'Password', 'addUserService', SignupController])
-.controller('SigninController', ['$scope', '$location', 'signinService', SigninController]);
+.controller('NewFetchController', ['$scope', '$location', 'FetchService', NewFetchController])
+.controller('SignupController', ['$scope','$location', 'Password', 'AddUserService', SignupController])
+.controller('SigninController', ['$scope', '$location', 'SigninService', SigninController]);
+
+
+// .controller('NavController', ['$scope', 'NavService', NavController])
+// function NavController($scope, NavService){
+//   var vm = this;
+    // vm.name = NavService.name;
+// }
 
 function MainController ($scope, $http) {
   var vm = this;
@@ -15,7 +22,9 @@ function LandingPageController(){
 }
 
 
-function NewFetchController($scope, FetchService) {
+
+
+function NewFetchController($scope, $location, FetchService) {
   var vm = this;
   vm.initialize = initialize;
   vm.autocomplete;
@@ -31,14 +40,23 @@ function NewFetchController($scope, FetchService) {
   function postNewFetch(newFetch){
     FetchService.postNewFetch(newFetch).then(function(response){
       console.log('post new fetch worked!');
+      $location.path('/landingPage');
       });
     }
   }
 
 
 
-function SignupController($scope, $location, Password, addUserService){
+function SignupController($scope, $location, Password, AddUserService){
   var vm = this;
+  vm.signup = signup;
+  function signup(user) {
+    console.log(user);
+    AddUserService.signup(user).then(function(response){
+      $location.path('/signin');
+    });
+  }
+
   this.regex = /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i;
 
   $scope.$watch('user.password', function(pass) {
@@ -46,14 +64,26 @@ function SignupController($scope, $location, Password, addUserService){
   	$scope.passwordStrength = Password.getStrength(pass);
 
   	if($scope.isPasswordWeak()) {
-  		$scope.form.password.$setValidity('strength', false);
+      if($scope.form !== undefined && $scope.form.password !== undefined){
+  		    $scope.form.password.$setValidity('strength', false);
+      }
+      // else {
+      //   $scope.form.password = "";
+      //   $scope.form.password.$setValidity('strength', false);
+      // }
   	} else {
   		$scope.form.password.$setValidity('strength', true);
   	}
   });
 
   $scope.isPasswordWeak = function() {
-  	return $scope.passwordStrength < 20;
+    if($scope.form !== undefined && $scope.form.password !== undefined){
+      return $scope.passwordStrength < 20;
+    }
+    else {
+      return true;
+    }
+
   };
   $scope.isPasswordOk = function() {
   	return $scope.passwordStrength >= 20 && $scope.passwordStrength <= 50;
@@ -67,23 +97,14 @@ function SignupController($scope, $location, Password, addUserService){
   $scope.isInputInvalid = function(input) {
   	return input.$dirty && input.$invalid;
   };
-
-  vm.signup = signup;
-  function signup(user) {
-    addUserService.addUser(user).then(function(response){
-      console.log("main controller check")
-      $location.path('/signin');
-    });
-  }
 }
 
-
-
-function SigninController($scope, $location, signinService){
+function SigninController($scope, $location, SigninService){
   var vm = this;
   vm.signin = signin;
   function signin(user){
-    signinService.signin(user).then(function(response){
+    SigninService.signin(user).then(function(response){
+      localStorage.setItem('Authorization', 'Bearer ' + response.data.token);
       $location.path('/');
     });
   }
