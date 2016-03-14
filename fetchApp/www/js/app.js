@@ -22,7 +22,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   });
 })
 
-.config(function($stateProvider, $urlRouterProvider) {
+.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 
   // Ionic uses AngularUI Router which uses the concept of states
   // Learn more here: https://github.com/angular-ui/ui-router
@@ -54,7 +54,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       views: {
         'addFetch': {
           templateUrl: 'templates/addFetch.html',
-          controller: 'AddFetchCtrl as AFC'
+          controller: 'AddFetchCtrl as AddFetch'
         }
       }
     })
@@ -63,7 +63,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       views: {
         'findFetch': {
           templateUrl: 'templates/findFetch.html',
-          controller: 'FindFetchCtrl as FFC'
+          controller: 'FindFetchCtrl as FindFetch'
         }
       }
     })
@@ -73,12 +73,13 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     views: {
       'account': {
         templateUrl: 'templates/account.html',
-        controller: 'AccountCtrl as AC'
+        controller: 'AccountCtrl as Account'
       }
     }
   });
 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/tab/home');
+  $httpProvider.interceptors.push("AuthInterceptor");
 
 });

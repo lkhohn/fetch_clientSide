@@ -26,7 +26,7 @@
 <!-- sign up form -->
 
 
-<form novalidate name="form" ng-show="checkSignup" ng-submit="Account.signup({firstName: SUfirstName, lastName: SUlastName, email: SUemail, password: SUpassword})">
+<form novalidate name="form" ng-show="checkSignup" ng-submit="Account.signup({firstName: SUfirstName, lastName: SUlastName, email: SUemail, phoneNumber: SUphoneNumber, zipCode: SUzipCode, password: SUpassword})">
   <div class="list">
 
     <label class="item item-input item-floating-label" ng-class="{'has-error': form.email.$invalid && form.email.$dirty, 'has-success': form.email.$valid && form.email.$dirty}">

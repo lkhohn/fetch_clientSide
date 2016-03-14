@@ -1,8 +1,33 @@
 angular.module('starter.services', [])
 .service('FetchService', ['$http', FetchService])
 .service('SigninService', ['$http', SigninService])
-.service('AddUserService', ['$http', AddUserService]);
+.service('AddUserService', ['$http', AddUserService])
 
+.service("AuthInterceptor", function($location, $q) {
+  return {
+    request: function(config) {
+      // prevent browser bar tampering for /api routes
+      config.headers['X-Requested-With'] = 'XMLHttpRequest';
+      var token = localStorage.getItem("Authorization");
+      if (token)
+        config.headers.Authorization = token;
+      return $q.resolve(config);
+    },
+    responseError: function(err) {
+      // if you mess around with the token, log them out and destroy it
+      if (err.data === "invalid token" || err.data === "invalid signature" || err.data === "jwt malformed") {
+        $location.path("/signin");
+        return $q.reject(err);
+      }
+      // if you try to access a user who is not yourself
+      if (err.status === 401) {
+        $location.path('/signin');
+        return $q.reject(err);
+      }
+      return $q.reject(err);
+    }
+  };
+})
 
 function FetchService($http){
   return {
@@ -14,19 +39,26 @@ function FetchService($http){
     //       console.log(error);
     //     });
     //   },
-    // showAvailFetches: function(fetch){
-    //     return $http.get('http://localhost:3000/availFetch', fetch)
-    //     .then(function(response){
-    //       console.log(response);
-    //     }, function(error){
-    //       console.log(error);
-    //     });
-    //   },
+    showAvailFetches: function(fetch){
+        return $http.get('http://localhost:3000/fetches/', fetch)
+        .then(function(response){
+          console.log(response);
+          return response;
+        }, function(error){
+          console.log(error);
+        });
+      },
     // getFetchDetails: function(id) {
     //   // console.log(id);
-    //   return $http.get('http://localhost:3000/' + id);
+    //   return $http.get('http://localhost:3000/' + id)
+    //   .then(function(response){
+    //     console.log(response);
+    //   }, function(error){
+    //     console.log(error);
+    //   });
     // },
     postNewFetch: function(fetchObj) {
+      console.log(fetchObj)
         return $http.post('http://localhost:3000/fetches', fetchObj)
         .then(function(response){
           console.log(response);
