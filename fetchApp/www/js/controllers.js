@@ -1,12 +1,39 @@
 angular.module('starter.controllers', [])
 
-.controller('HomeCtrl', function($scope) {})
+.controller('HomeCtrl', ['$scope', '$stateParams', 'Fetches', 'FetchService', HomeCtrl])
 
 .controller('AddFetchCtrl', ['$scope', '$location', 'FetchService', AddFetchCtrl])
 
-.controller('FindFetchCtrl', ['$scope', 'FetchService', FindFetchCtrl])
+.controller('FindFetchCtrl', ['$scope', 'Fetches', FindFetchCtrl])
+
+.controller('FetchDetailCtrl', ['$scope', '$stateParams', 'Fetches', FetchDetailCtrl])
 
 .controller('AccountCtrl', ['$scope', '$location', 'Password', 'SigninService', 'AddUserService', AccountCtrl]);
+
+function HomeCtrl($scope, $stateParams, Fetches, FetchService){
+  var vm = this;
+
+
+  // FetchService.getFetch().then(function(response){
+  //   console.log(response);
+  // });
+  // vm.fetch = Fetches.all()
+  // .then(function(fetchArr){
+  //   var fetches = fetchArr.data;
+  //   for (var i = 0; i < fetches.length; i++) {
+  //     // console.log(fetches[i])
+  //     // console.log($stateParams['requestor_id'])
+  //     var currentId = $stateParams['requestor_id'];
+  //       if (fetches[i].id === parseInt(currentId)) {
+  //         vm.fetchDetails = fetches[i];
+  //         // return fetches[i];
+  //       }
+  //     }
+  //     return null;
+  // });
+}
+
+
 
 
 function AddFetchCtrl($scope, $location, FetchService) {
@@ -35,17 +62,44 @@ function AddFetchCtrl($scope, $location, FetchService) {
 
 
 
-function FindFetchCtrl($scope, FetchService){
+function FindFetchCtrl($scope, Fetches){
   var vm = this;
-  vm.fetch = {};
-  vm.test = 'this is a test';
-
-  FetchService.showAvailFetches().then(function(response){
-    // console.log(response);
-    // console.log(response.data);
-    vm.fetch = response.data;
+  vm.fetch = Fetches.all()
+  .then(function(fetchArr){
+    // console.log(fetchArr.data);
+    vm.fetches = fetchArr.data;
   });
 }
+
+function FetchDetailCtrl($scope, $stateParams, Fetches){
+    var vm = this;
+    // console.log($stateParams)
+    vm.fetchDetails = Fetches.all()
+    .then(function(fetchArr){
+      // console.log(fetchArr.data)
+      var fetches = fetchArr.data;
+      for (var i = 0; i < fetches.length; i++) {
+        // console.log(fetches[i].id)
+        // console.log($stateParams['fetch_id'])
+        var currentId = $stateParams['fetch_id'];
+          if (fetches[i].id === parseInt(currentId)) {
+            vm.fetchDetails = fetches[i];
+            // return fetches[i];
+          }
+        }
+        return null;
+    });
+}
+
+
+
+
+
+
+
+
+
+
 
 
 

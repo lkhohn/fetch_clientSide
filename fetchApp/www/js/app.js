@@ -44,7 +44,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     views: {
       'home': {
         templateUrl: 'templates/home.html',
-        controller: 'HomeCtrl'
+        controller: 'HomeCtrl as Home'
+
       }
     }
   })
@@ -59,11 +60,22 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       }
     })
     .state('tab.findFetch', {
+      cache: false,
       url: '/findFetch',
       views: {
         'findFetch': {
           templateUrl: 'templates/findFetch.html',
           controller: 'FindFetchCtrl as FindFetch'
+        }
+      }
+    })
+
+    .state('tab.fetchDetails', {
+      url: '/fetchDetails/:fetch_id',
+      views: {
+        'findFetch': {
+          templateUrl: 'templates/fetchDetails.html',
+          controller: 'FetchDetailCtrl as FetchDetail'
         }
       }
     })

@@ -4,8 +4,8 @@
     <h3>available fetches</h3>
       <div class="card">
       <div class="item item-text-wrap">
-        <ul ng-repeat="fetch in FindFetch.fetch" ng-if="!fetch.dateClosed">
-          <li><a href="/fetches/{{fetch.id}}">{{fetch.item}}</a></li>
+        <ul ng-repeat="fetch in FindFetch.fetches" ng-if="!fetch.dateClosed">
+          <li><a href="#/tab/fetchDetails/{{fetch.id}}">{{fetch.item}}</a></li>
           <li>date requested: {{fetch.dateRequested | date:'fullDate' }}</li>
           <li>date claimed: {{fetch.dateClaimed | date:'fullDate' }}</li>
           <li>date closed: {{fetch.dateClosed | date:'fullDate' }}</li>
@@ -17,10 +17,10 @@
     </div>
 
 
-    <h3>previous fetches</h3>
+    <h3>claimed fetches</h3>
       <div class="card" >
       <div class="item item-text-wrap">
-        <ul ng-repeat="fetch in FindFetch.fetch" ng-if="fetch.dateClosed">
+        <ul ng-repeat="fetch in FindFetch.fetches" ng-if="fetch.dateClosed">
           <li>{{fetch.item}}</li>
           <li>date requested: {{fetch.dateRequested | date:'fullDate' }}</li>
           <li>date claimed: {{fetch.dateClaimed | date:'fullDate' }}</li>

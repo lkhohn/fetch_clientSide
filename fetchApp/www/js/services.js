@@ -29,27 +29,45 @@ angular.module('starter.services', [])
   };
 })
 
+.service('Fetches', ['$http', function($http) {
+  return {
+    all : function() {
+      return $http.get('http://localhost:3000/fetches/', fetch)
+      .then(function(fetchObj) {
+        // console.log(fetchObj);
+        return fetchObj;
+      }, function(response) {
+        console.error(new Error(response));
+      });
+    }
+    // this.remove = function(fetch) {
+    //   fetchObj.splice(fetchObj.indexOf(fetch), 1);
+    // };
+    };
+  }]);
+
 function FetchService($http){
   return {
-    // getFetch:function(fetch){
-    //   return $http.post('http://localhost:3000/fetch', fetch)
-    //     .then(function(response){
-    //       console.log(response);
-    //     }, function(error){
-    //       console.log(error);
-    //     });
-    //   },
-    showAvailFetches: function(fetch){
-        return $http.get('http://localhost:3000/fetches/', fetch)
+    getFetch:function(user){
+      console.log(user);
+      return $http.post('http://localhost:3000/fetches/user/', user)
         .then(function(response){
           console.log(response);
-          return response;
         }, function(error){
           console.log(error);
         });
       },
+    // showAvailFetches: function(fetch){
+    //     return $http.get('http://localhost:3000/fetches/', fetch)
+    //     .then(function(response){
+    //       console.log(response);
+    //       return response;
+    //     }, function(error){
+    //       console.log(error);
+    //     });
+    //   },
     // getFetchDetails: function(id) {
-    //   // console.log(id);
+    //   console.log(id);
     //   return $http.get('http://localhost:3000/' + id)
     //   .then(function(response){
     //     console.log(response);
@@ -58,7 +76,7 @@ function FetchService($http){
     //   });
     // },
     postNewFetch: function(fetchObj) {
-      console.log(fetchObj)
+      console.log(fetchObj);
         return $http.post('http://localhost:3000/fetches', fetchObj)
         .then(function(response){
           console.log(response);
