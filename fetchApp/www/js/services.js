@@ -1,7 +1,10 @@
 angular.module('starter.services', [])
-.service('FetchService', ['$http', FetchService])
-.service('SigninService', ['$http', SigninService])
-.service('AddUserService', ['$http', AddUserService])
+
+.service('dbURL', [dbURL])
+
+.service('FetchService', ['$http', 'dbURL', FetchService])
+.service('SigninService', ['$http', 'dbURL', SigninService])
+.service('AddUserService', ['$http', 'dbURL', AddUserService])
 
 .service("AuthInterceptor", function($location, $q) {
   return {
@@ -29,10 +32,10 @@ angular.module('starter.services', [])
   };
 })
 
-.service('Fetches', ['$http', function($http) {
+.service('Fetches', ['$http', 'dbURL', function($http, dbURL) {
   return {
     all : function() {
-      return $http.get('http://localhost:3000/fetches/', fetch)
+      return $http.get(dbURL.url + '/fetches/', fetch)
       .then(function(fetchObj) {
         // console.log(fetchObj);
         return fetchObj;
@@ -47,10 +50,10 @@ angular.module('starter.services', [])
   }])
 
 
-  .service('AvailableFetchesService', ['$http', function($http) {
+  .service('AvailableFetchesService', ['$http', 'dbURL', function($http, dbURL) {
     return {
       all : function(fetch) {
-        return $http.get('http://localhost:3000/availableFetches', fetch)
+        return $http.get(dbURL.url + '/availableFetches', fetch)
         .then(function(fetchObj) {
           // console.log(fetchObj);
           return fetchObj;
@@ -62,13 +65,17 @@ angular.module('starter.services', [])
     }]);
 
 
+function dbURL() {
+  return {
+    url: "https://mysterious-waters-23406.herokuapp.com"
+  };
+}
 
-
-function FetchService($http){
+function FetchService($http, dbURL){
   return {
     getFetch:function(user){
       console.log(user);
-      return $http.post('http://localhost:3000/fetches/', user)
+      return $http.post(dbURL.url + '/fetches/', user)
         .then(function(response){
           console.log(response);
         }, function(error){
@@ -95,7 +102,7 @@ function FetchService($http){
     // },
     postNewFetch: function(fetchObj) {
       console.log(fetchObj);
-        return $http.post('http://localhost:3000/fetches', fetchObj)
+        return $http.post(dbURL.url + '/fetches', fetchObj)
         .then(function(response){
           console.log(response);
         }, function(error){
@@ -112,10 +119,10 @@ function FetchService($http){
   };
 }
 
-function SigninService($http){
+function SigninService($http, dbURL){
   return {
     signin: function(user){
-        return $http.post('http://localhost:3000/users/signin', user)
+        return $http.post(dbURL.url + '/users/signin', user)
         .then(function(response){
           return response;
         }, function(error){
@@ -125,10 +132,10 @@ function SigninService($http){
   };
 }
 
-function AddUserService($http){
+function AddUserService($http, dbURL){
   return {
     signup: function(user){
-        return $http.post('http://localhost:3000/users/signup', user)
+        return $http.post(dbURL.url + '/users/signup', user)
         .then(function(response){
           return response;
         }, function(error){
