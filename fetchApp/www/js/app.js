@@ -30,6 +30,27 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   // Each state's controller can be found in controllers.js
   $stateProvider
 
+  .state('landingPage', {
+     url: '/landingPage',
+     templateUrl: 'templates/landingPage.html',
+     controller: 'AccountCtrl as Account'
+   })
+   .state('signin', {
+      url: '/signin',
+      templateUrl: 'templates/signin.html',
+      controller: 'AccountCtrl as Account'
+    })
+    .state('signup', {
+       url: '/signup',
+       templateUrl: 'templates/signup.html',
+       controller: 'AccountCtrl as Account'
+     })
+    .state('availableFetches', {
+      url: '/availableFetches',
+      templateUrl: 'templates/availableFetches.html',
+      controller: 'AvailableFetches as AvailableFetches'
+    })
+
   // setup an abstract state for the tabs directive
     .state('tab', {
     url: '/tab',
@@ -41,11 +62,11 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 
   .state('tab.home', {
     url: '/home',
+    cache: false,
     views: {
       'home': {
         templateUrl: 'templates/home.html',
         controller: 'HomeCtrl as Home'
-
       }
     }
   })
@@ -59,17 +80,26 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         }
       }
     })
+    // .state('tab.findFetch', {
+    //   cache: false,
+    //   url: '/findFetch',
+    //   views: {
+    //     'findFetch': {
+    //       templateUrl: 'templates/findFetch.html',
+    //       controller: 'FindFetchCtrl as FindFetch'
+    //     }
+    //   }
+    // })
     .state('tab.findFetch', {
       cache: false,
       url: '/findFetch',
       views: {
         'findFetch': {
-          templateUrl: 'templates/findFetch.html',
-          controller: 'FindFetchCtrl as FindFetch'
+          templateUrl: 'templates/availableFetches.html',
+          controller: 'AvailableFetches as AvailableFetches'
         }
       }
     })
-
     .state('tab.fetchDetails', {
       url: '/fetchDetails/:fetch_id',
       views: {
@@ -80,18 +110,28 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       }
     })
 
-  .state('tab.account', {
-    url: '/account',
+  // .state('tab.account', {
+  //   url: '/account',
+  //   views: {
+  //     'account': {
+  //       templateUrl: 'templates/account.html',
+  //       controller: 'AccountCtrl as Account'
+  //     }
+  //   }
+  // });
+
+  .state('tab.signout', {
+    url: '/signout',
     views: {
-      'account': {
-        templateUrl: 'templates/account.html',
+      'signout': {
+        templateUrl: 'templates/signout.html',
         controller: 'AccountCtrl as Account'
       }
     }
   });
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/tab/home');
+  $urlRouterProvider.otherwise('/landingPage');
   $httpProvider.interceptors.push("AuthInterceptor");
 
 });

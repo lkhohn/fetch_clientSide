@@ -4,8 +4,9 @@
 
     <div class="list">
 
-      <div class="item item-divider">available fetches</div>
-        <ul  ng-repeat="fetch in Home.fetches" ng-if="!fetch.dateClosed">
+
+      <div class="item item-divider">your unclosed fetches</div>
+        <ul  ng-repeat="fetch in Home.fetches" ng-if="!fetches.dateClosed">
           <li><a class="item" href="#/tab/fetchDetails/{{fetch.id}}">{{fetch.item}}</a></li>
         </ul>
 

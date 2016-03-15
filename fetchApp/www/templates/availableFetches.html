@@ -1,0 +1,21 @@
+<ion-view view-title="available fetches">
+  <ion-content class="padding AvailableFetches">
+
+      <h3>available fetches</h3>
+        <div class="card">
+        <div class="item item-text-wrap">
+          <ul ng-repeat="fetch in AvailableFetches.fetches" ng-if="!fetch.dateClosed">
+            <li><a href="#/tab/fetchDetails/{{fetch.id}}">{{fetch.item}}</a></li>
+            <li>date requested: {{fetch.dateRequested | date:'fullDate' }}</li>
+            <li>date claimed: {{fetch.dateClaimed | date:'fullDate' }}</li>
+            <li>date closed: {{fetch.dateClosed | date:'fullDate' }}</li>
+            <!-- <li>payment amount: {{fetch.paymentAmount}}</li> -->
+            <!-- <li>payment type: {{fetch.paymentType}}</li> -->
+            <!-- <li>zipcode: {{fetch.zipCode}}</li> -->
+          </ul>
+        </div>
+      </div>
+
+
+    </ion-content>
+  </ion-view>

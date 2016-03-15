@@ -8,32 +8,18 @@ angular.module('starter.controllers', [])
 
 .controller('FetchDetailCtrl', ['$scope', '$stateParams', 'Fetches', FetchDetailCtrl])
 
-.controller('AccountCtrl', ['$scope', '$location', 'Password', 'SigninService', 'AddUserService', AccountCtrl]);
+.controller('AvailableFetches', ['$scope', 'AvailableFetchesService', AvailableFetches])
+
+.controller('AccountCtrl', ['$scope', '$location', '$state', 'Password', 'SigninService', 'AddUserService', AccountCtrl]);
+
 
 function HomeCtrl($scope, $stateParams, Fetches, FetchService){
   var vm = this;
-
-
-  // FetchService.getFetch().then(function(response){
-  //   console.log(response);
-  // });
-  // vm.fetch = Fetches.all()
-  // .then(function(fetchArr){
-  //   var fetches = fetchArr.data;
-  //   for (var i = 0; i < fetches.length; i++) {
-  //     // console.log(fetches[i])
-  //     // console.log($stateParams['requestor_id'])
-  //     var currentId = $stateParams['requestor_id'];
-  //       if (fetches[i].id === parseInt(currentId)) {
-  //         vm.fetchDetails = fetches[i];
-  //         // return fetches[i];
-  //       }
-  //     }
-  //     return null;
-  // });
+  vm.fetch = Fetches.all()
+  .then(function(fetchArr){
+    vm.fetches = fetchArr.data;
+  });
 }
-
-
 
 
 function AddFetchCtrl($scope, $location, FetchService) {
@@ -42,7 +28,7 @@ function AddFetchCtrl($scope, $location, FetchService) {
   vm.autocomplete;
 
   function initialize() {
-     autocomplete = new google.maps.places.Autocomplete(
+    autocomplete = new google.maps.places.Autocomplete(
          /** @type {HTMLInputElement} */(document.getElementById('autocomplete')),
          { types: ['geocode'] });
      google.maps.event.addListener(autocomplete, 'place_changed', function() {
@@ -60,8 +46,6 @@ function AddFetchCtrl($scope, $location, FetchService) {
     }
   }
 
-
-
 function FindFetchCtrl($scope, Fetches){
   var vm = this;
   vm.fetch = Fetches.all()
@@ -74,16 +58,16 @@ function FindFetchCtrl($scope, Fetches){
 function FetchDetailCtrl($scope, $stateParams, Fetches){
     var vm = this;
     // console.log($stateParams)
-    vm.fetchDetails = Fetches.all()
+    vm.fetch = Fetches.all()
     .then(function(fetchArr){
       // console.log(fetchArr.data)
-      var fetches = fetchArr.data;
-      for (var i = 0; i < fetches.length; i++) {
+      var fetchesData = fetchArr.data;
+      for (var i = 0; i < fetchesData.length; i++) {
         // console.log(fetches[i].id)
         // console.log($stateParams['fetch_id'])
         var currentId = $stateParams['fetch_id'];
-          if (fetches[i].id === parseInt(currentId)) {
-            vm.fetchDetails = fetches[i];
+          if (fetchesData[i].id === parseInt(currentId)) {
+            vm.fetchDetails = fetchesData[i];
             // return fetches[i];
           }
         }
@@ -91,19 +75,20 @@ function FetchDetailCtrl($scope, $stateParams, Fetches){
     });
 }
 
+function AvailableFetches($scope, AvailableFetchesService){
+  var vm = this;
+  vm.fetch = AvailableFetchesService.all()
+  .then(function(fetchArr){
+    // console.log(fetchArr.data);
+    vm.fetches = fetchArr.data;
+  });
+}
 
 
 
 
 
-
-
-
-
-
-
-
-function AccountCtrl($scope, $location, Password, SigninService, AddUserService){
+function AccountCtrl($scope, $location, $state, Password, SigninService, AddUserService){
   var vm = this;
   vm.signin = signin;
   vm.signup = signup;
@@ -112,7 +97,9 @@ function AccountCtrl($scope, $location, Password, SigninService, AddUserService)
   function signin(user){
     SigninService.signin(user).then(function(response){
       localStorage.setItem('Authorization', 'Bearer ' + response.data.token);
-      $location.path('/tab/home');
+      // $location.path('/tab/home');
+      $state.go('tab.home');
+
       vm.loggedStatus = true;
     });
   }
@@ -167,13 +154,13 @@ function AccountCtrl($scope, $location, Password, SigninService, AddUserService)
 
 
     AddUserService.signup(user).then(function(response){
-      $location.path('/tab/account');
+      $location.path('/signin');
     });
   }
 
   function signout() {
     localStorage.setItem('Authorization', null);
-    $location.path('/tab/new');
+    $location.path('/landingPage');
     vm.loggedStatus = false;
   }
 }

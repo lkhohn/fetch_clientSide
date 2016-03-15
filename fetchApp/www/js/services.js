@@ -44,13 +44,31 @@ angular.module('starter.services', [])
     //   fetchObj.splice(fetchObj.indexOf(fetch), 1);
     // };
     };
-  }]);
+  }])
+
+
+  .service('AvailableFetchesService', ['$http', function($http) {
+    return {
+      all : function(fetch) {
+        return $http.get('http://localhost:3000/availableFetches', fetch)
+        .then(function(fetchObj) {
+          // console.log(fetchObj);
+          return fetchObj;
+        }, function(response) {
+          console.log(response);
+        });
+      }
+      };
+    }]);
+
+
+
 
 function FetchService($http){
   return {
     getFetch:function(user){
       console.log(user);
-      return $http.post('http://localhost:3000/fetches/user/', user)
+      return $http.post('http://localhost:3000/fetches/', user)
         .then(function(response){
           console.log(response);
         }, function(error){
