@@ -17,9 +17,42 @@ function HomeCtrl($scope, $stateParams, Fetches, FetchService){
   var vm = this;
   vm.fetch = Fetches.all()
   .then(function(fetchArr){
-    vm.fetches = fetchArr.data;
-  });
+    // vm.fetches = fetchArr.data;
+  // });
+  vm.fetches = fetchArr.data;
+
+  $scope.items = [{
+      title: '1',
+      text: '...'
+    },{
+      title: '2',
+      text: '...'
+    },{
+      title: '3',
+      text: '...asfasdfasdfasfasdfasdfasdfasf...asfasdfasdfasfasdfasdfasdfasf...asfasdfasdfasfasdfasdfasdfasf...asfasdfasdfasfasdfasdfasdfasf...asfasdfasdfasfasdfasdfasdfasf...asfasdfasdfasfasdfasdfasdfasf'
+    },{
+      title: '4',
+      text: '...'
+    },{
+      title: '5',
+      text: '...'
+  }];
+});
+  $scope.toggleItem= function(fetch) {
+    if ($scope.isItemShown(fetch)) {
+      $scope.shownItem = null;
+    } else {
+      $scope.shownItem = fetch;
+    }
+  };
+  $scope.isItemShown = function(fetch) {
+    return $scope.shownItem === fetch;
+  };
 }
+
+
+
+
 
 
 function AddFetchCtrl($scope, $location, FetchService) {
