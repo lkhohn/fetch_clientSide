@@ -26,22 +26,21 @@
               <p>{{ fetch.paymentAmount }}</p>
               <p>{{ fetch.paymentType }}</p>
               <p>{{ fetch.zipCode }}</p>
-              <button>claim</button>
               <button>edit</button>
               <button>close</button>
             </div>
             <div ng-click="toggleItem(fetch)" class="item-expand-footer">
               <i ng-class="isItemShown(fetch) ? 'ion-ios-minus-outline' : 'ion-ios-plus-outline'"></i>
-              {{ isGroupShown(fetch) ? 'Less' : 'More' }}
+              {{ isGroupShown(fetch) }}
             </div>
           </ion-item>
         </ion-list>
       </div>
 
       <div class="list">
-        <div class="item item-divider">your unclosed fetches</div>
+        <div class="item item-divider">your closed fetches</div>
         <ion-list>
-          <ion-item ng-repeat="fetch in Home.fetches" class="item item-text-wrap" ng-if="fetches.dateCLosed">
+          <ion-item ng-repeat="fetch in Home.fetches" class="item item-text-wrap" ng-if="fetches.dateClosed">
             <div ng-class="isItemShown(fetch) ? 'item-expand active' : 'item-expand inactive'">
               <h2>{{ fetch.item }}</h2>
               <p>{{ fetch.dateRequested }}</p>
@@ -61,6 +60,29 @@
         </ion-list>
       </div>
 
+
+      <div class="list">
+        <div class="item item-divider">your closed fetches</div>
+        <ion-list>
+          <ion-item ng-repeat="fetch in Home.fetches" class="item item-text-wrap" ng-if="fetches.dateClaimed">
+            <div ng-class="isItemShown(fetch) ? 'item-expand active' : 'item-expand inactive'">
+              <h2>{{ fetch.item }}</h2>
+              <p>{{ fetch.dateRequested }}</p>
+              <p>{{ fetch.dateClaimed }}</p>
+              <p>{{ fetch.dateClosed }}</p>
+              <p>{{ fetch.requestor_id }}</p>
+              <p>{{ fetch.claimor_id }}</p>
+              <!-- <p>{{ fetch.paymentAmount }}</p> -->
+              <!-- <p>{{ fetch.paymentType }}</p> -->
+              <!-- <p>{{ fetch.zipCode }}</p> -->
+            </div>
+            <div ng-click="toggleItem(fetch)" class="item-expand-footer">
+              <i ng-class="isItemShown(fetch) ? 'ion-ios-minus-outline' : 'ion-ios-plus-outline'"></i>
+              {{ isGroupShown(fetch) ? 'Less' : 'More' }}
+            </div>
+          </ion-item>
+        </ion-list>
+      </div>
 
   </ion-content>
 </ion-view>

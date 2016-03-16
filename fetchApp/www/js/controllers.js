@@ -8,7 +8,7 @@ angular.module('starter.controllers', [])
 
 .controller('FetchDetailCtrl', ['$scope', '$stateParams', 'Fetches', FetchDetailCtrl])
 
-.controller('AvailableFetches', ['$scope', 'AvailableFetchesService', AvailableFetches])
+.controller('AvailableFetches', ['$scope', 'AvailableFetchesService', 'FetchService', '$ionicPopup', '$timeout', '$stateParams', AvailableFetches])
 
 .controller('AccountCtrl', ['$scope', '$location', '$state', 'Password', 'SigninService', 'AddUserService', AccountCtrl]);
 
@@ -20,23 +20,6 @@ function HomeCtrl($scope, $stateParams, Fetches, FetchService){
     // vm.fetches = fetchArr.data;
   // });
   vm.fetches = fetchArr.data;
-
-  $scope.items = [{
-      title: '1',
-      text: '...'
-    },{
-      title: '2',
-      text: '...'
-    },{
-      title: '3',
-      text: '...asfasdfasdfasfasdfasdfasdfasf...asfasdfasdfasfasdfasdfasdfasf...asfasdfasdfasfasdfasdfasdfasf...asfasdfasdfasfasdfasdfasdfasf...asfasdfasdfasfasdfasdfasdfasf...asfasdfasdfasfasdfasdfasdfasf'
-    },{
-      title: '4',
-      text: '...'
-    },{
-      title: '5',
-      text: '...'
-  }];
 });
   $scope.toggleItem= function(fetch) {
     if ($scope.isItemShown(fetch)) {
@@ -49,10 +32,6 @@ function HomeCtrl($scope, $stateParams, Fetches, FetchService){
     return $scope.shownItem === fetch;
   };
 }
-
-
-
-
 
 
 function AddFetchCtrl($scope, $location, FetchService) {
@@ -69,8 +48,20 @@ function AddFetchCtrl($scope, $location, FetchService) {
     }
 
   vm.initialize();
-  vm.postNewFetch = postNewFetch;
 
+  vm.disableTap = function(){
+      container = document.getElementsByClassName('autocomplete');
+      // disable ionic data tab
+      angular.element(container).attr('data-tap-disabled', 'true');
+      // leave input field if google-address-entry is selected
+      angular.element(container).on("click", function(){
+          document.getElementById('autocomplete').blur();
+      });
+  }
+
+
+
+  vm.postNewFetch = postNewFetch;
   function postNewFetch(fetchObj){
     FetchService.postNewFetch(fetchObj).then(function(response){
       console.log('post new fetch worked!');
@@ -89,6 +80,7 @@ function FindFetchCtrl($scope, Fetches){
 }
 
 function FetchDetailCtrl($scope, $stateParams, Fetches){
+  // CURRENTLY NOT BEING USED. USE AVAILABLE FETCHES CONTROLLER
     var vm = this;
     // console.log($stateParams)
     vm.fetch = Fetches.all()
@@ -108,13 +100,49 @@ function FetchDetailCtrl($scope, $stateParams, Fetches){
     });
 }
 
-function AvailableFetches($scope, AvailableFetchesService){
+function AvailableFetches($scope, AvailableFetchesService, FetchService, $ionicPopup, $timeout, $stateParams){
+  // var vm = this;
+  // vm.fetch = AvailableFetchesService.all()
+  // .then(function(fetchArr){
+  //   // console.log(fetchArr.data);
+  //   vm.fetches = fetchArr.data;
+  // });
   var vm = this;
   vm.fetch = AvailableFetchesService.all()
   .then(function(fetchArr){
-    // console.log(fetchArr.data);
-    vm.fetches = fetchArr.data;
-  });
+    // vm.fetches = fetchArr.data;
+  // });
+  vm.fetches = fetchArr.data;
+});
+
+  $scope.toggleItem= function(fetch) {
+    if ($scope.isItemShown(fetch)) {
+      $scope.shownItem = null;
+    } else {
+      $scope.shownItem = fetch;
+    }
+  };
+  $scope.isItemShown = function(fetch) {
+    return $scope.shownItem === fetch;
+  };
+
+
+// confirm fetch claim
+ vm.showConfirm = function() {
+   var confirmPopup = $ionicPopup.confirm({
+     title: 'claim fetch',
+     template: 'Are you sure you want to claim this fetch?'
+   });
+
+   confirmPopup.then(function(res) {
+     if(res) {
+       console.log('you are sure');
+      }
+     else {
+       console.log('You are not sure');
+     }
+   });
+ };
 }
 
 

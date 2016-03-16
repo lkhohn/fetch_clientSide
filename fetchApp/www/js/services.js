@@ -68,6 +68,7 @@ angular.module('starter.services', [])
 function dbURL() {
   return {
     url: "https://mysterious-waters-23406.herokuapp.com"
+    // url: "http://localhost:3000"
   };
 }
 
@@ -81,6 +82,14 @@ function FetchService($http, dbURL){
         }, function(error){
           console.log(error);
         });
+      },
+      claimFetch: function(){
+        return $http.put(dbURL.url + '/fetches/claim/')
+          .then(function(response){
+            console.log(response);
+          }, function(error){
+            console.log(error);
+          });
       },
     // showAvailFetches: function(fetch){
     //     return $http.get('http://localhost:3000/fetches/', fetch)
