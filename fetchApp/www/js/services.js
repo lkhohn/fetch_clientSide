@@ -1,7 +1,5 @@
 angular.module('starter.services', [])
-
 .service('dbURL', [dbURL])
-
 .service('FetchService', ['$http', 'dbURL', FetchService])
 .service('SigninService', ['$http', 'dbURL', SigninService])
 .service('AddUserService', ['$http', 'dbURL', AddUserService])
@@ -82,32 +80,25 @@ function FetchService($http, dbURL){
           console.log(error);
         });
       },
-      claimFetch: function(){
-        return $http.put(dbURL.url + '/fetches/claim/')
-          .then(function(response){
-            console.log(response);
-          }, function(error){
-            console.log(error);
-          });
-      },
-    // showAvailFetches: function(fetch){
-    //     return $http.get('http://localhost:3000/fetches/', fetch)
-    //     .then(function(response){
-    //       console.log(response);
-    //       return response;
-    //     }, function(error){
-    //       console.log(error);
-    //     });
-    //   },
-    // getFetchDetails: function(id) {
-    //   console.log(id);
-    //   return $http.get('http://localhost:3000/' + id)
-    //   .then(function(response){
-    //     console.log(response);
-    //   }, function(error){
-    //     console.log(error);
-    //   });
-    // },
+
+    claimFetch: function(fetch){
+      return $http.put(dbURL.url + '/fetches/claim/', fetch)
+        .then(function(response){
+          console.log(response);
+        }, function(error){
+          console.log(error);
+        });
+    },
+    
+    closeFetch: function(fetch){
+      return $http.put(dbURL.url + '/fetches/close/', fetch)
+      .then(function(response){
+        console.log(response);
+      }, function(error){
+        console.log(error)
+      });
+    },
+
     postNewFetch: function(fetchObj) {
       console.log(fetchObj);
         return $http.post(dbURL.url + '/fetches', fetchObj)
@@ -117,13 +108,6 @@ function FetchService($http, dbURL){
           console.log(error);
         });
     }
-    // ,
-    // deleteFetch: function(id) {
-    //   return $http.delete('http://localhost:3000/' + id);
-    // },
-    // editFetch: function(id, editObj) {
-    //   return $http.put('http://localhost:3000/' + id, editObj);
-    // }
   };
 }
 

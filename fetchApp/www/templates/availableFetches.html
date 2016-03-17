@@ -4,7 +4,7 @@
       <div class="list">
         <div class="item item-divider">available fetches</div>
         <ion-list>
-          <ion-item ng-repeat="fetch in AvailableFetches.fetches" class="item item-text-wrap" ng-if="!fetches.dateCLosed">
+          <ion-item ng-repeat="fetch in AvailableFetches.fetches | filter: { dateClaimed: '!', dateClosed: '!' }" class="item item-text-wrap">
             <div ng-class="isItemShown(fetch) ? 'item-expand active' : 'item-expand inactive'">
               <h2>{{ fetch.item }}</h2>
               <p>requested: {{ fetch.dateRequested | date:'fullDate'  }}</p>

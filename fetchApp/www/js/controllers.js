@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller('HomeCtrl', ['$scope', '$stateParams', 'Fetches', 'FetchService', HomeCtrl])
+.controller('HomeCtrl', ['$scope', '$ionicPopup', '$timeout', '$location', '$stateParams', 'Fetches', 'FetchService', 'AvailableFetchesService', HomeCtrl])
 
 .controller('AddFetchCtrl', ['$scope', '$location', 'FetchService', AddFetchCtrl])
 
@@ -8,19 +8,17 @@ angular.module('starter.controllers', [])
 
 .controller('FetchDetailCtrl', ['$scope', '$stateParams', 'Fetches', FetchDetailCtrl])
 
-.controller('AvailableFetches', ['$scope', 'AvailableFetchesService', 'FetchService', '$ionicPopup', '$timeout', '$stateParams', AvailableFetches])
+.controller('AvailableFetches', ['$scope', 'AvailableFetchesService', 'FetchService', '$ionicPopup', '$timeout', '$location', AvailableFetches])
 
 .controller('AccountCtrl', ['$scope', '$location', '$state', 'Password', 'SigninService', 'AddUserService', AccountCtrl]);
 
 
-function HomeCtrl($scope, $stateParams, Fetches, FetchService){
+function HomeCtrl($scope, $ionicPopup, $timeout, $location, $stateParams, Fetches, FetchService, AvailableFetchesService){
   var vm = this;
   vm.fetch = Fetches.all()
   .then(function(fetchArr){
-    // vm.fetches = fetchArr.data;
-  // });
-  vm.fetches = fetchArr.data;
-});
+    vm.fetches = fetchArr.data;
+  });
   $scope.toggleItem= function(fetch) {
     if ($scope.isItemShown(fetch)) {
       $scope.shownItem = null;
@@ -31,6 +29,43 @@ function HomeCtrl($scope, $stateParams, Fetches, FetchService){
   $scope.isItemShown = function(fetch) {
     return $scope.shownItem === fetch;
   };
+
+// close button to update dateClosed
+  vm.showClosed = function() {
+    var confirmPopup = $ionicPopup.confirm({
+      scope: $scope,
+      title: 'claim fetch',
+      template: 'Are you sure you want to claim this fetch?'
+    });
+
+    confirmPopup.then(function(res) {
+      if(res) {
+        var updateFetch = $scope.shownItem;
+        FetchService.closeFetch(updateFetch).then(function(response){
+          $location.path('/tab/home');
+        });
+       }
+      else {
+        console.log('You are not sure');
+      }
+    });
+  };
+
+// show user claimed fetches
+  vm.userClaimedFetch = AvailableFetchesService.all()
+  .then(function(fetchArr){
+    var fetchData = fetchArr.data
+    // console.log($scope)
+    // console.log($scope.Home.userClaimedFetches);
+    // for(var i=0; i<fetchData.length; i++){
+      // if(fetchData[i].requestor_id === $stateParams(id)){
+        // console.log(fetchData[i].requestor_id)
+      // }
+    // }
+    // console.log(fetchArr.data[requestor_id])
+    // if(fetchArr.data.requestor_id)
+    vm.userClaimedFetches = fetchArr.data;
+  });
 }
 
 
@@ -57,8 +92,7 @@ function AddFetchCtrl($scope, $location, FetchService) {
       angular.element(container).on("click", function(){
           document.getElementById('autocomplete').blur();
       });
-  }
-
+  };
 
 
   vm.postNewFetch = postNewFetch;
@@ -68,7 +102,15 @@ function AddFetchCtrl($scope, $location, FetchService) {
       $location.path('/tab/home');
       });
     }
+
+// display map
+
+
+
+
   }
+
+
 
 function FindFetchCtrl($scope, Fetches){
   var vm = this;
@@ -78,6 +120,8 @@ function FindFetchCtrl($scope, Fetches){
     vm.fetches = fetchArr.data;
   });
 }
+
+
 
 function FetchDetailCtrl($scope, $stateParams, Fetches){
   // CURRENTLY NOT BEING USED. USE AVAILABLE FETCHES CONTROLLER
@@ -100,21 +144,16 @@ function FetchDetailCtrl($scope, $stateParams, Fetches){
     });
 }
 
-function AvailableFetches($scope, AvailableFetchesService, FetchService, $ionicPopup, $timeout, $stateParams){
-  // var vm = this;
-  // vm.fetch = AvailableFetchesService.all()
-  // .then(function(fetchArr){
-  //   // console.log(fetchArr.data);
-  //   vm.fetches = fetchArr.data;
-  // });
+
+
+function AvailableFetches($scope, AvailableFetchesService, FetchService, $ionicPopup, $timeout, $location){
   var vm = this;
   vm.fetch = AvailableFetchesService.all()
   .then(function(fetchArr){
-    // vm.fetches = fetchArr.data;
-  // });
-  vm.fetches = fetchArr.data;
+    vm.fetches = fetchArr.data;
 });
 
+// accordian to show fetch details
   $scope.toggleItem= function(fetch) {
     if ($scope.isItemShown(fetch)) {
       $scope.shownItem = null;
@@ -126,17 +165,20 @@ function AvailableFetches($scope, AvailableFetchesService, FetchService, $ionicP
     return $scope.shownItem === fetch;
   };
 
-
 // confirm fetch claim
  vm.showConfirm = function() {
    var confirmPopup = $ionicPopup.confirm({
+     scope: $scope,
      title: 'claim fetch',
      template: 'Are you sure you want to claim this fetch?'
    });
 
    confirmPopup.then(function(res) {
      if(res) {
-       console.log('you are sure');
+       var updateFetch = $scope.shownItem;
+       FetchService.claimFetch(updateFetch).then(function(response){
+         $location.path('/tab/home');
+       });
       }
      else {
        console.log('You are not sure');
