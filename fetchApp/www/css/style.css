@@ -46,3 +46,15 @@
 .item-expand-footer i {
   margin-right: 10px;
 }
+
+
+
+/* MAP on add a fetch */
+.scroll {
+    height: 100%;
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+}

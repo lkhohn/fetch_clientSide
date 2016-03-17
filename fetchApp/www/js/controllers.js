@@ -2,7 +2,7 @@ angular.module('starter.controllers', [])
 
 .controller('HomeCtrl', ['$scope', '$ionicPopup', '$timeout', '$location', '$stateParams', 'Fetches', 'FetchService', 'AvailableFetchesService', HomeCtrl])
 
-.controller('AddFetchCtrl', ['$scope', '$location', 'FetchService', AddFetchCtrl])
+.controller('AddFetchCtrl', ['$scope', '$location', 'FetchService', '$state', '$cordovaGeolocation', AddFetchCtrl])
 
 .controller('FindFetchCtrl', ['$scope', 'Fetches', FindFetchCtrl])
 
@@ -69,7 +69,7 @@ function HomeCtrl($scope, $ionicPopup, $timeout, $location, $stateParams, Fetche
 }
 
 
-function AddFetchCtrl($scope, $location, FetchService) {
+function AddFetchCtrl($scope, $location, FetchService, $state, $cordovaGeolocation) {
   var vm = this;
   vm.initialize = initialize;
   vm.autocomplete;
@@ -105,7 +105,23 @@ function AddFetchCtrl($scope, $location, FetchService) {
 
 // display map
 
+var options = {timeout: 10000, enableHighAccuracy: true};
 
+  $cordovaGeolocation.getCurrentPosition(options).then(function(position){
+
+    var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+    var mapOptions = {
+      center: latLng,
+      zoom: 15,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+
+    $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+  }, function(error){
+    console.log("Could not get location");
+  });
 
 
   }
