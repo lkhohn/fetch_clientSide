@@ -5,7 +5,9 @@
       <div class="list">
         <div class="item item-divider">your unclaimed fetches</div>
         <ion-list>
-          <ion-item ng-repeat="fetch in Home.fetches | filter: { dateClaimed: '!', dateClosed: '!' }" class="item item-text-wrap">
+          <!-- <ion-item ng-repeat="fetch in Home.fetches | filter: { dateClaimed: '!', dateClosed: '!' }" class="item item-text-wrap"> -->
+            <ion-item ng-repeat="fetch in Home.fetches" class="item item-text-wrap">
+
             <div ng-class="isItemShown(fetch) ? 'item-expand active' : 'item-expand inactive'">
               <h2>{{ fetch.item }}</h2>
               <p>requested: {{ fetch.dateRequested | date:'fullDate'  }}</p>
@@ -13,6 +15,8 @@
               <p> closed: {{ fetch.dateClosed | date:'fullDate'  }}</p>
               <p> requestor: {{ fetch.requestor_id }}</p>
               <p> claimor: {{ fetch.claimor_id }}</p>
+              <p id="address" ng-model="address">address: {{ fetch.address }}</p>
+
               <!-- <p>{{ fetch.paymentAmount }}</p> -->
               <!-- <p>{{ fetch.paymentType }}</p> -->
               <!-- <p>{{ fetch.zipCode }}</p> -->
@@ -37,6 +41,8 @@
               <p> closed: {{ fetch.dateClosed | date:'fullDate'  }}</p>
               <p> requestor: {{ fetch.requestor_id }}</p>
               <p> claimor: {{ fetch.claimor_id }}</p>
+              <p id="address" ng-model="address">address: {{ Home.address }}</p>
+
               <!-- <p>{{ fetch.paymentAmount }}</p> -->
               <!-- <p>{{ fetch.paymentType }}</p> -->
               <!-- <p>{{ fetch.zipCode }}</p> -->
@@ -62,6 +68,8 @@
               <p> closed: {{ fetch.dateClosed | date:'fullDate'  }}</p>
               <p> requestor: {{ fetch.requestor_id }}</p>
               <p> claimor: {{ fetch.claimor_id }}</p>
+              <p id="address" ng-model="address">address: {{ Home.address }}</p>
+
               <!-- <p>{{ fetch.paymentAmount }}</p> -->
               <!-- <p>{{ fetch.paymentType }}</p> -->
               <!-- <p>{{ fetch.zipCode }}</p> -->
@@ -86,6 +94,8 @@
               <p> closed: {{ userClaimedFetch.dateClosed | date:'fullDate'  }}</p>
               <p> requestor: {{ userClaimedFetch.requestor_id }}</p>
               <p> claimor: {{ userClaimedFetch.claimor_id }}</p>
+              <p id="address" ng-model="address">address: {{ Home.address }}</p>
+
               <!-- <p>{{ fetch.paymentAmount }}</p> -->
               <!-- <p>{{ fetch.paymentType }}</p> -->
               <!-- <p>{{ fetch.zipCode }}</p> -->
@@ -96,7 +106,7 @@
             </div>
           </ion-item>
         </ion-list>
-      </div> --> 
+      </div> -->
 
 
   </ion-content>

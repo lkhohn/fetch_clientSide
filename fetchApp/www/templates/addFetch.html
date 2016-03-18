@@ -1,22 +1,38 @@
 <ion-view view-title="add a fetch">
   <ion-content class="padding AddFetch">
 
-    <form class="form-horizontal" ng-submit="AddFetch.postNewFetch({item: item, paymentAmount: paymentAmount, paymentType: paymentType})" name="addFetchForm">
+
+  MAP
+    <div id="map" data-tap-disabled="true"></div>
+
+
+    <form class="form-horizontal" ng-submit="AddFetch.postNewFetch({item: item, paymentAmount: paymentAmount, lat: lat, lng: lng, address: address })" name="addFetchForm">
       <div class="list">
+
+      <label class="item item-input">
+        <input type="text" name="lat" placeholder="lat" id="lat" ng-model="lat">
+      </label>
+      <label class="item item-input">
+        <input type="text" name="lng" placeholder="lng" id='lng' ng-model="lng">
+      </label>
+        <!-- <input type="hidden" name="lat">
+        <input type="hidden" name="lon"> -->
+
+        <label class="item item-input">
+          <input type="text" placeholder="where are you located?" id="autocomplete" ng-model="address" name="address" AddFetch.disable-tap="true">
+        </label>
+
 
         <label class="item item-input">
           <input type="text" placeholder="what do you need" ng-model="item" name="item">
         </label>
 
-        <label class="item item-input">
-          <input type="text" placeholder="where are you located?" id="autocomplete" onFocus="AddFetch.initialize()" ng-model="location" name="location" AddFetch.disable-tap="true">
-        </label>
 
         <label class="item item-input">
           <input type="text" placeholder="how much will you pay?" id="requestedItemFee" ng-model="paymentAmount" name="paymentAmount">
         </label>
 
-        <label class="item item-input item-select">
+        <!-- <label class="item item-input item-select">
           <div class="input-label" id="paymentSelect" ng-model="paymentType" name="paymentType">
             payment type
           </div>
@@ -25,7 +41,7 @@
             <option selected>stripe</option>
             <option>cash</option>
           </select>
-        </label>
+        </label> -->
 
       </div>
 
@@ -33,12 +49,9 @@
 
     </form>
 
-    <!-- <ion-view> -->
-      <!-- <ion-content> -->
-        MAP
-          <div id="map" data-tap-disabled="true"></div>
-      <!-- </ion-content> -->
-  <!-- </ion-view> -->
+
+
+
 
 
   </ion-content>

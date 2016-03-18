@@ -12,13 +12,45 @@ angular.module('starter.controllers', [])
 
 .controller('AccountCtrl', ['$scope', '$location', '$state', 'Password', 'SigninService', 'AddUserService', AccountCtrl]);
 
+// function latLngConvertToAddress(){
+//   var vm = this;
+//   vm.fetch = Fetches.all()
+//   .then(function(fetchArr){
+//     vm.fetches = fetchArr.data;
+//     // console.log(vm.fetches)
+//
+//     var fetchData = vm.fetches;
+//     var latitude = {};
+//     var longitude = {};
+//
+//     for(var i=0; i<fetchData.length; i++){
+//       // console.log(fetchData[i])
+//       latitude.lat = fetchData[i].lat;
+//       longitude.lng = fetchData[i].lng;
+//       var latLng = Object.assign(latitude, longitude);
+//       // console.log(latLng);
+//
+//       var myLatlng = new google.maps.LatLng(parseFloat(latLng.lat),parseFloat(latLng.lng));
+//
+//       var geocoder = new google.maps.Geocoder();
+//        geocoder.geocode({'location': myLatlng}, function(results, status) {
+//          if (status === google.maps.GeocoderStatus.OK) {
+//           vm.address = results[0]['formatted_address'];
+//         }
+//       });
+//     }
+//   }
+// });
+// }
 
 function HomeCtrl($scope, $ionicPopup, $timeout, $location, $stateParams, Fetches, FetchService, AvailableFetchesService){
   var vm = this;
   vm.fetch = Fetches.all()
   .then(function(fetchArr){
     vm.fetches = fetchArr.data;
+    // console.log(vm.fetches);
   });
+
   $scope.toggleItem= function(fetch) {
     if ($scope.isItemShown(fetch)) {
       $scope.shownItem = null;
@@ -51,10 +83,10 @@ function HomeCtrl($scope, $ionicPopup, $timeout, $location, $stateParams, Fetche
     });
   };
 
-// show user claimed fetches
+//TODO: show user claimed fetches
   vm.userClaimedFetch = AvailableFetchesService.all()
   .then(function(fetchArr){
-    var fetchData = fetchArr.data
+    var fetchData = fetchArr.data;
     // console.log($scope)
     // console.log($scope.Home.userClaimedFetches);
     // for(var i=0; i<fetchData.length; i++){
@@ -71,6 +103,8 @@ function HomeCtrl($scope, $ionicPopup, $timeout, $location, $stateParams, Fetche
 
 function AddFetchCtrl($scope, $location, FetchService, $state, $cordovaGeolocation) {
   var vm = this;
+
+// autocomplete
   vm.initialize = initialize;
   vm.autocomplete;
 
@@ -95,17 +129,10 @@ function AddFetchCtrl($scope, $location, FetchService, $state, $cordovaGeolocati
   };
 
 
-  vm.postNewFetch = postNewFetch;
-  function postNewFetch(fetchObj){
-    FetchService.postNewFetch(fetchObj).then(function(response){
-      console.log('post new fetch worked!');
-      $location.path('/tab/home');
-      });
-    }
-
 // display map
-
 var options = {timeout: 10000, enableHighAccuracy: true};
+
+var locationData = {};
 
   $cordovaGeolocation.getCurrentPosition(options).then(function(position){
 
@@ -119,10 +146,68 @@ var options = {timeout: 10000, enableHighAccuracy: true};
 
     $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
 
+    //Wait until the map is loaded
+    google.maps.event.addListenerOnce($scope.map, 'idle', function(){
+      //drop pin
+      var marker = new google.maps.Marker({
+        map: $scope.map,
+        animation: google.maps.Animation.DROP,
+        draggable: true,
+        position: latLng
+      });
+
+
+//update address field based on dragged pin
+    google.maps.event.addListener(marker, 'dragend', function() {
+    // set the new marker location's lat and lng\
+      // console.log(marker.getPosition());
+      $scope.$apply(function(){
+      marker.position[marker.getPosition()];
+
+      var locationData = JSON.stringify(marker.position);
+
+      var locationObject = JSON.parse(locationData);
+
+      var geocoder = new google.maps.Geocoder();
+      // console.log(locationObject)
+      $scope.lat = locationObject.lat;
+      $scope.lng = locationObject.lng;
+      geocoder.geocode({'location': locationObject}, function(results, status) {
+        $scope.address = results[0]['formatted_address'];
+      });
+    });
+  });
+
+  // convert latLng to address
+      var locationData = JSON.stringify(marker.position);
+
+      var locationObject = JSON.parse(locationData);
+
+
+      var geocoder = new google.maps.Geocoder();
+
+       geocoder.geocode({'location': locationObject}, function(results, status) {
+         if (status === google.maps.GeocoderStatus.OK) {
+           $scope.$apply(function(){
+            $scope.address = results[0]['formatted_address'];
+            $scope.lat = locationObject.lat;
+            $scope.lng = locationObject.lng;
+
+          });
+        }
+      });
+    });
   }, function(error){
     console.log("Could not get location");
   });
 
+  vm.postNewFetch = postNewFetch;
+  function postNewFetch(fetchObj){
+    // console.log(fetchObj);
+    FetchService.postNewFetch(fetchObj).then(function(response){
+      $location.path('/tab/home');
+      });
+    }
 
   }
 
@@ -139,6 +224,34 @@ function FindFetchCtrl($scope, Fetches){
 
 
 
+
+
+function AvailableFetches($scope, AvailableFetchesService, FetchService, $ionicPopup, $timeout, $location){
+  var vm = this;
+  vm.fetch = AvailableFetchesService.all()
+  .then(function(fetchArr){
+    vm.fetches = fetchArr.data;
+    // console.log(fetchArr.data);
+});
+// accordian to show fetch details
+  $scope.toggleItem= function(fetch) {
+    if ($scope.isItemShown(fetch)) {
+      $scope.shownItem = null;
+    } else {
+      $scope.shownItem = fetch;
+    }
+  };
+  $scope.isItemShown = function(fetch) {
+    return $scope.shownItem === fetch;
+  };
+
+// confirm fetch claim
+
+}
+
+
+
+// CURRENTLY NOT BEING USED. USE AVAILABLE FETCHES CONTROLLER
 function FetchDetailCtrl($scope, $stateParams, Fetches){
   // CURRENTLY NOT BEING USED. USE AVAILABLE FETCHES CONTROLLER
     var vm = this;
@@ -159,50 +272,6 @@ function FetchDetailCtrl($scope, $stateParams, Fetches){
         return null;
     });
 }
-
-
-
-function AvailableFetches($scope, AvailableFetchesService, FetchService, $ionicPopup, $timeout, $location){
-  var vm = this;
-  vm.fetch = AvailableFetchesService.all()
-  .then(function(fetchArr){
-    vm.fetches = fetchArr.data;
-});
-
-// accordian to show fetch details
-  $scope.toggleItem= function(fetch) {
-    if ($scope.isItemShown(fetch)) {
-      $scope.shownItem = null;
-    } else {
-      $scope.shownItem = fetch;
-    }
-  };
-  $scope.isItemShown = function(fetch) {
-    return $scope.shownItem === fetch;
-  };
-
-// confirm fetch claim
- vm.showConfirm = function() {
-   var confirmPopup = $ionicPopup.confirm({
-     scope: $scope,
-     title: 'claim fetch',
-     template: 'Are you sure you want to claim this fetch?'
-   });
-
-   confirmPopup.then(function(res) {
-     if(res) {
-       var updateFetch = $scope.shownItem;
-       FetchService.claimFetch(updateFetch).then(function(response){
-         $location.path('/tab/home');
-       });
-      }
-     else {
-       console.log('You are not sure');
-     }
-   });
- };
-}
-
 
 
 
