@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller('HomeCtrl', ['$scope', '$ionicPopup', '$timeout', '$location', '$stateParams', 'Fetches', 'FetchService', 'AvailableFetchesService', HomeCtrl])
+.controller('HomeCtrl', ['$scope', '$ionicPopup', '$timeout', '$location', 'Fetches', 'FetchService', 'AvailableFetchesService', HomeCtrl])
 
 .controller('AddFetchCtrl', ['$scope', '$location', 'FetchService', '$state', '$cordovaGeolocation', AddFetchCtrl])
 
@@ -43,12 +43,11 @@ angular.module('starter.controllers', [])
 // });
 // }
 
-function HomeCtrl($scope, $ionicPopup, $timeout, $location, $stateParams, Fetches, FetchService, AvailableFetchesService){
+function HomeCtrl($scope, $ionicPopup, $timeout, $location, Fetches, FetchService, AvailableFetchesService){
   var vm = this;
   vm.fetch = Fetches.all()
   .then(function(fetchArr){
-    vm.fetches = fetchArr.data;
-    // console.log(vm.fetches);
+    vm.fetches = fetchArr.data;  
   });
 
   $scope.toggleItem= function(fetch) {
@@ -83,21 +82,24 @@ function HomeCtrl($scope, $ionicPopup, $timeout, $location, $stateParams, Fetche
     });
   };
 
-//TODO: show user claimed fetches
+//show user claimed fetches
   vm.userClaimedFetch = AvailableFetchesService.all()
-  .then(function(fetchArr){
-    var fetchData = fetchArr.data;
-    // console.log($scope)
-    // console.log($scope.Home.userClaimedFetches);
-    // for(var i=0; i<fetchData.length; i++){
-      // if(fetchData[i].requestor_id === $stateParams(id)){
-        // console.log(fetchData[i].requestor_id)
-      // }
-    // }
-    // console.log(fetchArr.data[requestor_id])
-    // if(fetchArr.data.requestor_id)
-    vm.userClaimedFetches = fetchArr.data;
+  .then(function(fetchUserArr){
+
+    var userFetchData = vm.fetches;
+    var userClaimedFetchData = fetchUserArr.data;
+    // console.log(userFetchData[0]['requestor_id']);
+    // console.log(userClaimedFetchData);
+    var userClaimedFetchDataArr = [];
+    for(var i=0; i<userClaimedFetchData.length; i++){
+      if(userClaimedFetchData[i].claimor_id = userFetchData[0]['requestor_id']){
+        // console.log(userClaimedFetchData[i]);
+        userClaimedFetchDataArr.push(userClaimedFetchData[i]);
+          vm.userClaimedFetches = userClaimedFetchDataArr;
+      }
+    }
   });
+
 }
 
 
@@ -132,7 +134,7 @@ function AddFetchCtrl($scope, $location, FetchService, $state, $cordovaGeolocati
 // display map
 var options = {timeout: 10000, enableHighAccuracy: true};
 
-var locationData = {};
+// var locationData = {};
 
   $cordovaGeolocation.getCurrentPosition(options).then(function(position){
 
@@ -231,7 +233,7 @@ function AvailableFetches($scope, AvailableFetchesService, FetchService, $ionicP
   vm.fetch = AvailableFetchesService.all()
   .then(function(fetchArr){
     vm.fetches = fetchArr.data;
-    // console.log(fetchArr.data);
+    console.log(fetchArr.data);
 });
 // accordian to show fetch details
   $scope.toggleItem= function(fetch) {
@@ -241,6 +243,27 @@ function AvailableFetches($scope, AvailableFetchesService, FetchService, $ionicP
       $scope.shownItem = fetch;
     }
   };
+
+  vm.showConfirm = function() {
+    var confirmPopup = $ionicPopup.confirm({
+      scope: $scope,
+      title: 'claim fetch',
+      template: 'Are you sure you want to claim this fetch?'
+    });
+
+    confirmPopup.then(function(res) {
+      if(res) {
+        var updateFetch = $scope.shownItem;
+        FetchService.claimFetch(updateFetch).then(function(response){
+          $location.path('/tab/home');
+        });
+       }
+      else {
+        console.log('You are not sure');
+      }
+    });
+  };
+
   $scope.isItemShown = function(fetch) {
     return $scope.shownItem === fetch;
   };

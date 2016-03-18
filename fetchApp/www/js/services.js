@@ -89,7 +89,7 @@ function FetchService($http, dbURL){
           console.log(error);
         });
     },
-    
+
     closeFetch: function(fetch){
       return $http.put(dbURL.url + '/fetches/close/', fetch)
       .then(function(response){

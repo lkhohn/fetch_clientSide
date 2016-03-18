@@ -41,8 +41,7 @@
               <p> closed: {{ fetch.dateClosed | date:'fullDate'  }}</p>
               <p> requestor: {{ fetch.requestor_id }}</p>
               <p> claimor: {{ fetch.claimor_id }}</p>
-              <p id="address" ng-model="address">address: {{ Home.address }}</p>
-
+              <!-- <p id="address" ng-model="address">address: {{ Home.address }}</p> -->
               <!-- <p>{{ fetch.paymentAmount }}</p> -->
               <!-- <p>{{ fetch.paymentType }}</p> -->
               <!-- <p>{{ fetch.zipCode }}</p> -->
@@ -68,8 +67,7 @@
               <p> closed: {{ fetch.dateClosed | date:'fullDate'  }}</p>
               <p> requestor: {{ fetch.requestor_id }}</p>
               <p> claimor: {{ fetch.claimor_id }}</p>
-              <p id="address" ng-model="address">address: {{ Home.address }}</p>
-
+              <!-- <p id="address" ng-model="address">address: {{ Home.address }}</p> -->
               <!-- <p>{{ fetch.paymentAmount }}</p> -->
               <!-- <p>{{ fetch.paymentType }}</p> -->
               <!-- <p>{{ fetch.zipCode }}</p> -->
@@ -83,7 +81,7 @@
       </div>
 
 
-      <!-- <div class="list">
+     <div class="list">
         <div class="item item-divider">fetches you have claimed</div>
         <ion-list>
           <ion-item ng-repeat="userClaimedFetch in Home.userClaimedFetches | filter: { dateClosed: '' }" class="item item-text-wrap">
@@ -94,20 +92,41 @@
               <p> closed: {{ userClaimedFetch.dateClosed | date:'fullDate'  }}</p>
               <p> requestor: {{ userClaimedFetch.requestor_id }}</p>
               <p> claimor: {{ userClaimedFetch.claimor_id }}</p>
-              <p id="address" ng-model="address">address: {{ Home.address }}</p>
-
+              <!-- <p id="address" ng-model="address">address: {{ userClaimedFetch.address }}</p> -->
               <!-- <p>{{ fetch.paymentAmount }}</p> -->
               <!-- <p>{{ fetch.paymentType }}</p> -->
               <!-- <p>{{ fetch.zipCode }}</p> -->
-            <!-- </div>
+          </div>
             <div ng-click="toggleItem(fetch)" class="item-expand-footer">
               <i ng-class="isItemShown(fetch) ? 'ion-ios-minus-outline' : 'ion-ios-plus-outline'"></i>
               {{ isGroupShown(fetch) ? 'Less' : 'More' }}
             </div>
           </ion-item>
         </ion-list>
-      </div> -->
+      </div>
 
-
+      <div class="list">
+         <div class="item item-divider">fetches you have claimed and are closed</div>
+         <ion-list>
+           <ion-item ng-repeat="userClaimedFetch in Home.userClaimedFetches | filter: { dateClosed: '!'} " class="item item-text-wrap">
+             <div ng-class="isItemShown(fetch) ? 'item-expand active' : 'item-expand inactive'">
+               <h2>{{ userClaimedFetch.item }}</h2>
+               <p> requested: {{ userClaimedFetch.dateRequested | date:'fullDate'  }}</p>
+               <p> claimed: {{ userClaimedFetch.dateClaimed | date:'fullDate'  }}</p>
+               <p> closed: {{ userClaimedFetch.dateClosed | date:'fullDate'  }}</p>
+               <p> requestor: {{ userClaimedFetch.requestor_id }}</p>
+               <p> claimor: {{ userClaimedFetch.claimor_id }}</p>
+               <!-- <p id="address" ng-model="address">address: {{ userClaimedFetch.address }}</p> -->
+               <!-- <p>{{ fetch.paymentAmount }}</p> -->
+               <!-- <p>{{ fetch.paymentType }}</p> -->
+               <!-- <p>{{ fetch.zipCode }}</p> -->
+           </div>
+             <div ng-click="toggleItem(fetch)" class="item-expand-footer">
+               <i ng-class="isItemShown(fetch) ? 'ion-ios-minus-outline' : 'ion-ios-plus-outline'"></i>
+               {{ isGroupShown(fetch) ? 'Less' : 'More' }}
+             </div>
+           </ion-item>
+         </ion-list>
+       </div>
   </ion-content>
 </ion-view>
