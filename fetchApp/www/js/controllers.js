@@ -8,7 +8,7 @@ angular.module('starter.controllers', [])
 
 .controller('FetchDetailCtrl', ['$scope', '$stateParams', 'Fetches', FetchDetailCtrl])
 
-.controller('AvailableFetches', ['$scope', 'AvailableFetchesService', 'FetchService', '$ionicPopup', '$timeout', '$location', AvailableFetches])
+.controller('AvailableFetches', ['$scope', 'AvailableFetchesService', 'FetchService', '$ionicPopup', '$timeout', '$location', '$state', '$cordovaGeolocation', AvailableFetches])
 
 .controller('AccountCtrl', ['$scope', '$location', '$state', 'Password', 'SigninService', 'AddUserService', AccountCtrl]);
 
@@ -47,7 +47,7 @@ function HomeCtrl($scope, $ionicPopup, $timeout, $location, Fetches, FetchServic
   var vm = this;
   vm.fetch = Fetches.all()
   .then(function(fetchArr){
-    vm.fetches = fetchArr.data;  
+    vm.fetches = fetchArr.data;
   });
 
   $scope.toggleItem= function(fetch) {
@@ -228,12 +228,12 @@ function FindFetchCtrl($scope, Fetches){
 
 
 
-function AvailableFetches($scope, AvailableFetchesService, FetchService, $ionicPopup, $timeout, $location){
+function AvailableFetches($scope, AvailableFetchesService, FetchService, $ionicPopup, $timeout, $location, $state, $cordovaGeolocation){
   var vm = this;
   vm.fetch = AvailableFetchesService.all()
   .then(function(fetchArr){
     vm.fetches = fetchArr.data;
-    console.log(fetchArr.data);
+    // console.log(fetchArr.data);
 });
 // accordian to show fetch details
   $scope.toggleItem= function(fetch) {
@@ -244,6 +244,7 @@ function AvailableFetches($scope, AvailableFetchesService, FetchService, $ionicP
     }
   };
 
+// confirm fetch claim
   vm.showConfirm = function() {
     var confirmPopup = $ionicPopup.confirm({
       scope: $scope,
@@ -268,8 +269,86 @@ function AvailableFetches($scope, AvailableFetchesService, FetchService, $ionicP
     return $scope.shownItem === fetch;
   };
 
-// confirm fetch claim
 
+  vm.initialize = initialize;
+
+
+  function initialize() {
+
+
+  // display map
+  var options = {timeout: 10000, enableHighAccuracy: true};
+
+  $cordovaGeolocation.getCurrentPosition(options).then(function(position){
+
+    var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+    var mapOptions = {
+      center: latLng,
+      zoom: 15,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+
+    $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+    //Wait until the map is loaded
+    google.maps.event.addListenerOnce($scope.map, 'idle', function(){
+
+      loadMarkers();
+
+    });
+  }, function(error){
+    console.log("Could not get location");
+  });
+}
+
+  vm.initialize();
+
+  vm.loadMarkers = loadMarkers;
+
+  function loadMarkers(){
+    AvailableFetchesService.all()
+      .then(function(fetchArr){
+        // console.log(fetchArr.data);
+    var markers = fetchArr.data;
+    for(var i=0; i<markers.length; i++){
+      var record = markers[i];
+
+      if(!record.dateClaimed && !record.dateClosed){
+         var markerPos = new google.maps.LatLng(record.lat, record.lng);
+
+         // Add the markerto the map
+         var marker = new google.maps.Marker({
+            map: $scope.map,
+            animation: google.maps.Animation.DROP,
+            position: markerPos
+         });
+
+         var contentString = "<div>" + "<h4>" + record.item + "</h4>" +
+         "<p>" + "requested: " + record.dateRequested + "</p>" +
+        "<p>" +  "claimed: " + record.dateClaimed + "</p>" +
+        "<p>" +  "closed: " + record.dateClosed + "</p>" +
+        "<p>" +  "requestor id: " + record.requestor_id + "</p>" +
+        "<p>" +  "claimor id: " + record.claimor_id + "</p>" +
+        "<p>" +  "address: " + record.address + "</p>" +
+        "<p>" +  "amount: " + record.paymentAmount + "</p>" +
+        "</div>";
+
+         addInfoWindow(marker, contentString, record);
+          }
+        }
+      });
+    }
+
+     vm.addInfoWindow = addInfoWindow;
+     function addInfoWindow(marker, message, record) {
+       var infoWindow = new google.maps.InfoWindow({
+        content: message
+      });
+     marker.addListener('click', function() {
+        infoWindow.open($scope.map, marker);
+      });
+    }
 }
 
 
