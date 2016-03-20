@@ -8,7 +8,7 @@ angular.module('starter.controllers', [])
 
 .controller('FetchDetailCtrl', ['$scope', '$stateParams', 'Fetches', FetchDetailCtrl])
 
-.controller('AvailableFetches', ['$scope', 'AvailableFetchesService', 'FetchService', '$ionicPopup', '$timeout', '$location', '$state', '$cordovaGeolocation', AvailableFetches])
+.controller('AvailableFetches', ['$scope', 'AvailableFetchesService', 'FetchService', '$ionicPopup', '$timeout', '$location', '$state', '$cordovaGeolocation', '$compile', AvailableFetches])
 
 .controller('AccountCtrl', ['$scope', '$location', '$state', 'Password', 'SigninService', 'AddUserService', AccountCtrl]);
 
@@ -228,7 +228,7 @@ function FindFetchCtrl($scope, Fetches){
 
 
 
-function AvailableFetches($scope, AvailableFetchesService, FetchService, $ionicPopup, $timeout, $location, $state, $cordovaGeolocation){
+function AvailableFetches($scope, AvailableFetchesService, FetchService, $ionicPopup, $timeout, $location, $state, $cordovaGeolocation, $compile){
   var vm = this;
   vm.fetch = AvailableFetchesService.all()
   .then(function(fetchArr){
@@ -332,9 +332,12 @@ function AvailableFetches($scope, AvailableFetchesService, FetchService, $ionicP
         "<p>" +  "claimor id: " + record.claimor_id + "</p>" +
         "<p>" +  "address: " + record.address + "</p>" +
         "<p>" +  "amount: " + record.paymentAmount + "</p>" +
+      "<button class='button' ng-click='AvailableFetches.showConfirm(fetch)'>claim</button>" +
         "</div>";
-
-         addInfoWindow(marker, contentString, record);
+        // must compile for button ng-click functionality
+        var compile = $compile(contentString)($scope);
+        var compileArr = compile[0]
+         addInfoWindow(marker, compileArr, record);
           }
         }
       });
