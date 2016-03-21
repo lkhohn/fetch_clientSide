@@ -1,22 +1,22 @@
 <ion-view view-title="add a fetch">
   <ion-content class="padding AddFetch">
 
-
-  MAP
     <div id="map" data-tap-disabled="true"></div>
 
 
     <form class="form-horizontal" ng-submit="AddFetch.postNewFetch({item: item, paymentAmount: paymentAmount, lat: lat, lng: lng, address: address })" name="addFetchForm">
       <div class="list">
 
-      <label class="item item-input">
-        <input type="text" name="lat" placeholder="lat" id="lat" ng-model="lat">
-      </label>
-      <label class="item item-input">
-        <input type="text" name="lng" placeholder="lng" id='lng' ng-model="lng">
-      </label>
-        <!-- <input type="hidden" name="lat">
-        <input type="hidden" name="lon"> -->
+      <!-- <label class="item item-input"> -->
+        <!-- <input type="text" name="lat" placeholder="lat" id="lat" ng-model="lat"> -->
+        <input type="hidden" name="lat" placeholder="lat" id="lat" ng-model="lat">
+      <!-- </label> -->
+      <!-- <label class="item item-input"> -->
+        <!-- <input type="text" name="lng" placeholder="lng" id='lng' ng-model="lng"> -->
+        <input type="hidden" name="lng" placeholder="lng" id='lng' ng-model="lng">
+      <!-- </label> -->
+
+
 
         <label class="item item-input">
           <input type="text" placeholder="where are you located?" id="autocomplete" ng-model="address" name="address" AddFetch.disable-tap="true">

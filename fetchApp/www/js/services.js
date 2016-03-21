@@ -30,6 +30,19 @@ angular.module('starter.services', [])
   };
 })
 
+.service('UserHistoryService', ['$http', 'dbURL', function($http, dbURL){
+  return {
+    getHistory: function(user) {
+      return $http.get(dbURL.url + '/fetches/userHistory', user)
+      .then(function(data){
+        return data;
+      }, function(response) {
+        console.log(response);
+      });
+    }
+  };
+}])
+
 .service('Fetches', ['$http', 'dbURL', function($http, dbURL) {
   return {
     all : function() {
