@@ -3,9 +3,9 @@
 
     <h3>Profile</h3>
 
-    
+
       <div class="list">
-        <div class="item item-divider">your closed fetches</div>
+        <div class="item item-divider">fetches you have claimed from <br> other users that are closed</div>
         <ion-list>
           <ion-item ng-repeat="fetch in Account.fetches | filter: { dateClosed: '' }" class="item item-text-wrap">
             <div ng-class="isItemShown(fetch) ? 'item-expand active' : 'item-expand inactive'">
@@ -30,7 +30,7 @@
 
 
        <div class="list">
-         <div class="item item-divider">fetches you have claimed and are closed</div>
+         <div class="item item-divider">fetches you have claimed<br> from other users & are not closed</div>
          <ion-list>
            <ion-item ng-repeat="fetch in Account.fetches | filter: { dateClosed: '!' }" class="item item-text-wrap">
              <div ng-class="isItemShown(fetch) ? 'item-expand active' : 'item-expand inactive'">

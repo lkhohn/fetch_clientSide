@@ -51,16 +51,16 @@
 
 
      <div class="list">
-        <div class="item item-divider">fetches you have claimed <br>from other users</div>
+        <div class="item item-divider">fetches you have claimed <br> from other users that are not closed</div>
         <ion-list>
-          <ion-item ng-repeat="userClaimedFetch in Home.userClaimedFetches | filter: { dateClosed: '' }" class="item item-text-wrap">
+          <ion-item ng-repeat="userClaimedFetch in Home.userClaimedFetches | filter: { dateClosed: '!' }" class="item item-text-wrap">
             <div ng-class="isItemShown(fetch) ? 'item-expand active' : 'item-expand inactive'">
               <h2>{{ userClaimedFetch.item }}</h2>
               <p> requested: {{ userClaimedFetch.dateRequested | date:'fullDate'  }}</p>
               <p> claimed: {{ userClaimedFetch.dateClaimed | date:'fullDate'  }}</p>
-              <!-- <p> closed: {{ userClaimedFetch.dateClosed | date:'fullDate'  }}</p> -->
+              <p> closed: {{ userClaimedFetch.dateClosed | date:'fullDate'  }}</p>
               <p> requestor: {{ userClaimedFetch.requestor_id }}</p>
-              <!-- <p> claimor: {{ userClaimedFetch.claimor_id }}</p> -->
+              <p> claimor: {{ userClaimedFetch.claimor_id }}</p>
               <p> address: {{ userClaimedFetch.address }}</p>
               <p>{{ fetch.paymentAmount }}</p>
           </div>
