@@ -256,6 +256,7 @@ function AvailableFetches($scope, AvailableFetchesService, FetchService, $ionicP
       if(res) {
         // console.log($scope);
         var updateFetch = $scope.shownItem;
+        console.log(updateFetch)
         FetchService.claimFetch(updateFetch).then(function(response){
           $location.path('/tab/home');
         });
@@ -275,8 +276,6 @@ function AvailableFetches($scope, AvailableFetchesService, FetchService, $ionicP
 
 
   function initialize() {
-
-
   // display map
   var options = {timeout: 10000, enableHighAccuracy: true};
 
@@ -295,8 +294,11 @@ function AvailableFetches($scope, AvailableFetchesService, FetchService, $ionicP
     //Wait until the map is loaded
     google.maps.event.addListenerOnce($scope.map, 'idle', function(){
 
-      loadMarkers();
+      var fetchData = $scope.AvailableFetches.fetches
+      // console.log($scope.AvailableFetches.fetches)
+      infoWindow = new google.maps.InfoWindow();
 
+      loadMarkers(fetchData);
     });
   }, function(error){
     console.log("Could not get location");
@@ -306,108 +308,275 @@ function AvailableFetches($scope, AvailableFetchesService, FetchService, $ionicP
   vm.initialize();
 
   vm.loadMarkers = loadMarkers;
+  function loadMarkers(fetchData){
+    for(var i=0; i<fetchData.length; i++){
+      if(!fetchData[i].dateClaimed && !fetchData[i].dateClosed){
+        var markerPos = new google.maps.LatLng(fetchData[i].lat, fetchData[i].lng);
+        var item = fetchData[i].item;
+        var address = fetchData[i].address;
+        var id = fetchData[i].id;
 
-  function loadMarkers(){
-    AvailableFetchesService.all()
-      .then(function(fetchArr){
-        // console.log(fetchArr.data);
+        createMarker(markerPos, item, address, id);
+      }
+    }
+  }
 
-    var markers = fetchArr.data;
+function createMarker(markerPos, item, address, id){
+  var marker = new google.maps.Marker({
+    map: $scope.map,
+    animation: google.maps.Animation.DROP,
+    position: markerPos,
+    item: item,
+    address: address,
+    id: id
+ });
 
+   google.maps.event.addListener(marker, 'click', function(){
+    //  console.log(marker);
 
-    for(var i=0; i<markers.length; i++){
-      // var record = markers[i];
-      $scope.record = markers[i];
-      // console.log($scope.record)
+     var infoWindow = new google.maps.InfoWindow();
 
-      // if(!record.dateClaimed && !record.dateClosed){
-        if(!$scope.record.dateClaimed && !$scope.record.dateClosed){
-        // console.log($scope.record)
-        // var markerPos = new google.maps.LatLng(record.lat, record.lng);
-         var markerPos = new google.maps.LatLng($scope.record.lat, $scope.record.lng);
+     var iwContent = '<div id="iw_container">' +
+        '<div>' + address + '<br />' + item + '<br />' +
+        // '<button class="button-addClaimFetch">claim</button>' +
+        '<button class="button" id="addClaimFetch" ng-click="AvailableFetches.addClaimFetch(iwContent)">claim</button>' +
+        '</div>' + '</div>';
 
-         // Add the markerto the map
-         var marker = new google.maps.Marker({
-            map: $scope.map,
-            animation: google.maps.Animation.DROP,
-            position: markerPos
-         });
-
-
-         var contentString = "<div>" +
-
-        "<h4 ng-model='item'>" + "item: " + $scope.record.item + "</h4>" +
-        // "<p>" + "requested: " + $scope.record.dateRequested  + "</p>" +
-        // "<p>" + "claimed: " + $scope.record.dateClaimed  + "</p>" +
-        // "<p>" + "closed: " + $scope.record.dateClosed  + "</p>" +
-        // "<p>" + "requestor id: " + $scope.record.requestor_id  + "</p>" +
-        // "<p>" + "claimor id: " + $scope.record.claimor_id  + "</p>" +
-        "<p ng-model='address'>" + "address: " + $scope.record.address  + "</p>" +
-        // "<p>" + "amount: " + $scope.record.paymentAmount  + "</p>" +
-
-
-        //  "<h4>" + "item: {{ record.item }} </h4>" +
-        // "<p>" + "requested: {{ record.dateRequested }} </p>" +
-        // "<p>" +  "claimed: {{ record.dateClaimed }} </p>" +
-        // "<p>" +  "closed: {{ record.dateClosed }} </p>" +
-        // "<p>" +  "requestor id: {{ record.requestor_id }} </p>" +
-        // "<p>" +  "claimor id: {{ record.claimor_id }} </p>" +
-        // "<p>" +  "address: {{ record.address }} </p>" +
-        // "<p>" +  "amount: {{ record.paymentAmount }} </p>" +
-      "<button class='button' ng-click='AvailableFetches.showConfirmButton({item:item, address: address})'>claim</button>" +
-        "</div>";
-        // must compile for button ng-click functionality
-        // console.log($scope)
-        // var compile = $compile(contentString)($scope);
+        var compile = $compile(iwContent)($scope);
         // var compileArr = compile[0];
         // console.log(compileArr)
 
-         addInfoWindow(marker, contentString);
-          }
+
+      // including content to the infowindow
+      infoWindow.setContent(compile[0]);
+
+      // opening the infowindow in the current map and at the current marker location
+      infoWindow.open($scope.map, marker);
+
+
+      vm.addClaimFetch = addClaimFetch;
+      function addClaimFetch(iwContent){
+        var fetchObjClaim = {
+          item: marker.item,
+          address: marker.address,
+          id: marker.id
         }
-      });
+        console.log(fetchObjClaim);
+        console.log(marker.item);
+        FetchService.claimFetch(fetchObjClaim).then(function(response){
+               $location.path('/tab/home')
+
+              })
+      }
+
+
+
+   });
+ }
+
+// vm.addClaimFetch = addClaimFetch;
+// function addClaimFetch(iwContent){
+//   console.log(iwContent)
+//
+//         var confirmBtn = document.getElementsByClassName('button-addClaimFetch')
+//         console.log(document.getElementsByClassName('button-addClaimFetch'))
+//         google.maps.event.addDomListener(confirmBtn, 'click', function(event){
+//           console.log('hey')
+//         })
+// }
+
+
+  //  var fetchObj = {};
+   //
+   //
+  //   for(var i=0; i<fetchData.length; i++){
+  //     // console.log(fetchData[i])
+  //     var markerDetails = fetchData[i];
+  //     if(!markerDetails.dateClaimed && !markerDetails.dateClosed){
+  //         var markerPos = new google.maps.LatLng(markerDetails.lat, markerDetails.lng);
+  //       // console.log(markerDetails)
+  //       // vm.item = markerDetails.item;
+  //       // vm.address = markerDetails.address;
+  //       fetchObj['item'] = markerDetails.item;
+  //       fetchObj['address'] = markerDetails.address;
+  //       // console.log(fetchObj)
+  //       var marker = new google.maps.Marker({
+  //         map: $scope.map,
+  //         animation: google.maps.Animation.DROP,
+  //         position: markerPos,
+  //         content: fetchObj
+  //      });
+   //
+   //
+  //      google.maps.event.addListener(marker, 'click', function() {
+  //        console.log(marker)
+  //         // infoWindow.open($scope.map, marker);
+  //           });
+  //     }
+  //   }
+
+    //  vm.addInfoWindow = addInfoWindow;
+    //  function addInfoWindow(marker, message) {
+    //   //  var compile = $compile(message)($scope);
+    //   //  var compileArr = compile[0];
+    //   //  console.log(compileArr)
+    //    var infoWindow = new google.maps.InfoWindow({
+    //     content: message
+    //   });
+    //  marker.addListener('click', function() {
+    //     infoWindow.open($scope.map, marker);
+    //   });
+    // }
+
+
+    // AvailableFetchesService.all()
+      // .then(function(fetchArr){
+        // console.log(fetchArr.data);
+
+    // var markers = fetchArr.data;
+    //
+    //
+    // for(var i=0; i<markers.length; i++){
+    //   $scope.record = markers[i];
+    //
+    //
+    //     if(!$scope.record.dateClaimed && !$scope.record.dateClosed){
+    //      var markerPos = new google.maps.LatLng($scope.record.lat, $scope.record.lng);
+    //
+    //      // Add the markerto the map
+    //      var marker = new google.maps.Marker({
+    //         map: $scope.map,
+    //         animation: google.maps.Animation.DROP,
+    //         position: markerPos
+    //      });
+    //
+    //     var fetchObj = {};
+    //      $scope.fetchObj = fetchObj;
+    //      vm.item = $scope.record.item;
+    //      vm.address = $scope.record.address;
+    //
+    //      fetchObj['item'] = vm.item;
+    //      fetchObj['address'] = vm.address;
+    //
+    //      var contentString = "<div>" +
+    //     "<h4>" + "item: " + fetchObj.item + "</h4>" +
+    //     // "<p>" + "requested: " + $scope.record.dateRequested  + "</p>" +
+    //     // "<p>" + "claimed: " + $scope.record.dateClaimed  + "</p>" +
+    //     // "<p>" + "closed: " + $scope.record.dateClosed  + "</p>" +
+    //     // "<p>" + "requestor id: " + $scope.record.requestor_id  + "</p>" +
+    //     // "<p>" + "claimor id: " + $scope.record.claimor_id  + "</p>" +
+    //     "<p>" + "address: " + fetchObj.address  + "</p>" +
+    //     // "<p>" + "amount: " + $scope.record.paymentAmount  + "</p>" +
+    //
+    //   "<button class='button' ng-click='AvailableFetches.addClaimFetch(fetchObj)' data-tap-disabled ='true'>claim</button>" +
+    //     "</div>";
+    //
+    //     // must compile for button ng-click functionality
+    //     var compile = $compile(contentString)($scope);
+    //     var compileArr = compile[0];
+    //     // console.log(compileArr)
+    //     $scope.compileArr = compileArr
+    //      addInfoWindow(marker, compileArr);
+    //
+    //       vm.addInfoWindow = addInfoWindow;
+    //       function addInfoWindow(marker, message) {
+    //         var infoWindow = new google.maps.InfoWindow({
+    //          content: message
+    //        });
+    //       marker.addListener('click', function() {
+    //          infoWindow.open($scope.map, marker);
+    //        });
+    //      }
+    //
+    //      vm.addClaimFetch = addClaimFetch;
+    //      function addClaimFetch(fetchObj){
+    //        var fetchObjClaim = $scope.fetchObj;
+    //        console.log(fetchObjClaim)
+    //
+    //        FetchService.claimFetch(fetchObjClaim).then(function(response){
+    //          $location.path('/tab/home')
+    //      })
+    //    }
+    //
+    //
+    //      vm.showConfirmButton = function(fetchObj) {
+    //        var confirmPopup = $ionicPopup.confirm({
+    //          scope: $scope,
+    //          title: 'claim fetch',
+    //          template: 'Are you sure you want to claim this fetch?'
+    //        });
+    //
+    //        confirmPopup.then(function(res) {
+    //          if(res) {
+    //            var fetchObjClaim = $scope.fetchObj;
+    //            FetchService.claimFetch(fetchObjClaim).then(function(response){
+    //              $location.path('/tab/home');
+    //            });
+    //           }
+    //          else {
+    //            console.log('You are not sure');
+    //          }
+    //        });
+    //
+    //      };
+    //
+    //
+    //
+    //       }
+    //     }
 
 
 
 
 
-      vm.showConfirmButton = function(record) {
-
-        var confirmPopup = $ionicPopup.confirm({
-          scope: $scope,
-          title: 'claim fetch',
-          template: 'Are you sure you want to claim this fetch?'
-        });
-
-        confirmPopup.then(function(res) {
-          if(res) {
-            // console.log(record);
-
-            FetchService.claimFetch(record).then(function(response){
-              $location.path('/tab/home');
-            });
-           }
-          else {
-            console.log('You are not sure');
-          }
-        });
-
-      };
-    }
+      // });
 
 
-     vm.addInfoWindow = addInfoWindow;
-     function addInfoWindow(marker, message) {
-       var compile = $compile(message)($scope);
-       var compileArr = compile[0];
-      //  console.log(compileArr)
-       var infoWindow = new google.maps.InfoWindow({
-        content: compileArr
-      });
-     marker.addListener('click', function() {
-        infoWindow.open($scope.map, marker);
-      });
-    }
+
+
+
+      // vm.showConfirmButton = function(fetchObj) {
+      //   // console.log($scope)
+      //   console.log(fetchObj)
+      //   var confirmPopup = $ionicPopup.confirm({
+      //     scope: $scope,
+      //     title: 'claim fetch',
+      //     template: 'Are you sure you want to claim this fetch?'
+      //   });
+      //
+      //   confirmPopup.then(function(res) {
+      //     if(res) {
+      //       // console.log($scope);
+      //
+      //       var fetchObjClaim = $scope.fetchObj;
+      //       console.log($scope.fetchObj)
+      //       // console.log(recordInput)
+      //       // fetchInputObj(item) = record.item
+      //       FetchService.claimFetch(fetchObjClaim).then(function(response){
+      //         $location.path('/tab/home');
+      //       });
+      //      }
+      //     else {
+      //       console.log('You are not sure');
+      //     }
+      //   });
+      //
+      // };
+
+
+
+    //  vm.addInfoWindow = addInfoWindow;
+    //  function addInfoWindow(marker, message) {
+    //   //  var compile = $compile(message)($scope);
+    //   //  var compileArr = compile[0];
+    //   //  console.log(compileArr)
+    //    var infoWindow = new google.maps.InfoWindow({
+    //     content: message
+    //   });
+    //  marker.addListener('click', function() {
+    //     infoWindow.open($scope.map, marker);
+    //   });
+    // }
 
 
 
