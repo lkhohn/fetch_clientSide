@@ -64,15 +64,16 @@ angular.module('starter.services', [])
   .service('AvailableFetchesService', ['$http', 'dbURL', function($http, dbURL) {
     return {
       all : function(fetch) {
+        // withCredentials:true
         return $http.get(dbURL.url + '/availableFetches', fetch)
         .then(function(fetchObj) {
           // console.log(fetchObj);
           return fetchObj;
         }, function(response) {
           console.log(response);
-        });
+        })
+        }
       }
-      };
     }]);
 
 
@@ -113,7 +114,7 @@ function FetchService($http, dbURL){
     },
 
     postNewFetch: function(fetchObj) {
-      console.log(fetchObj);
+      // console.log(fetchObj);
         return $http.post(dbURL.url + '/fetches', fetchObj)
         .then(function(response){
           console.log(response);

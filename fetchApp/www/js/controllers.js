@@ -2,7 +2,7 @@ angular.module('starter.controllers', [])
 
 .controller('HomeCtrl', ['$scope', '$ionicPopup', '$timeout', '$location', 'Fetches', 'FetchService', 'UserHistoryService', HomeCtrl])
 
-.controller('AddFetchCtrl', ['$scope', '$location', 'FetchService', '$state', '$cordovaGeolocation', AddFetchCtrl])
+.controller('AddFetchCtrl', ['$scope', '$location', 'FetchService', '$state', '$cordovaGeolocation', 'AvailableFetchesService', AddFetchCtrl])
 
 .controller('FindFetchCtrl', ['$scope', 'Fetches', FindFetchCtrl])
 
@@ -90,7 +90,7 @@ function HomeCtrl($scope, $ionicPopup, $timeout, $location, Fetches, FetchServic
 }
 
 
-function AddFetchCtrl($scope, $location, FetchService, $state, $cordovaGeolocation) {
+function AddFetchCtrl($scope, $location, FetchService, $state, $cordovaGeolocation, AvailableFetchesService) {
   var vm = this;
 
 // autocomplete
@@ -200,21 +200,11 @@ var options = {timeout: 10000, enableHighAccuracy: true};
     // console.log(fetchObj);
     FetchService.postNewFetch(fetchObj).then(function(response){
       $location.path('/tab/home');
-      });
-    }
-
+        });
+      }
   }
 
 
-
-function FindFetchCtrl($scope, Fetches){
-  var vm = this;
-  vm.fetch = Fetches.all()
-  .then(function(fetchArr){
-    // console.log(fetchArr.data);
-    vm.fetches = fetchArr.data;
-  });
-}
 
 
 
@@ -222,11 +212,28 @@ function FindFetchCtrl($scope, Fetches){
 
 function AvailableFetches($scope, AvailableFetchesService, FetchService, $ionicPopup, $timeout, $location, $state, $cordovaGeolocation, $compile){
   var vm = this;
-  vm.fetch = AvailableFetchesService.all()
-  .then(function(fetchArr){
-    vm.fetches = fetchArr.data;
-    // console.log(fetchArr.data);
-});
+
+
+  // var socket = io.connect('https://mysterious-waters-23406.herokuapp.com');
+  // socket.on('connection', function (socket) {
+  //   console.log('alskfjalsk')
+  //   socket.on('new fetch', function(data){
+  //         console.log(data);
+  //   });
+  // });
+
+
+
+
+    //   // original without sockets
+      vm.fetch = AvailableFetchesService.all()
+      .then(function(fetchArr){
+        // console.log(fetchArr.data);
+        vm.fetches = fetchArr.data;
+    });
+
+
+
 // accordian to show fetch details
   $scope.toggleItem = function(fetch) {
     // console.log(fetch);
@@ -239,7 +246,6 @@ function AvailableFetches($scope, AvailableFetchesService, FetchService, $ionicP
 
 // confirm fetch claim
   vm.showConfirm = function() {
-    console.log(fetch)
     var confirmPopup = $ionicPopup.confirm({
       scope: $scope,
       title: 'claim fetch',
@@ -247,9 +253,8 @@ function AvailableFetches($scope, AvailableFetchesService, FetchService, $ionicP
     });
 
     confirmPopup.then(function(res) {
-
       if(res) {
-        console.log($scope);
+        // console.log($scope);
         var updateFetch = $scope.shownItem;
         FetchService.claimFetch(updateFetch).then(function(response){
           $location.path('/tab/home');
@@ -281,7 +286,7 @@ function AvailableFetches($scope, AvailableFetchesService, FetchService, $ionicP
 
     var mapOptions = {
       center: latLng,
-      zoom: 15,
+      zoom: 14,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     };
 
@@ -306,13 +311,15 @@ function AvailableFetches($scope, AvailableFetchesService, FetchService, $ionicP
     AvailableFetchesService.all()
       .then(function(fetchArr){
         // console.log(fetchArr.data);
+
     var markers = fetchArr.data;
+
 
     for(var i=0; i<markers.length; i++){
       // var record = markers[i];
       $scope.record = markers[i];
       // console.log($scope.record)
-      // console.log(record)
+
       // if(!record.dateClaimed && !record.dateClosed){
         if(!$scope.record.dateClaimed && !$scope.record.dateClosed){
         // console.log($scope.record)
@@ -326,15 +333,16 @@ function AvailableFetches($scope, AvailableFetchesService, FetchService, $ionicP
             position: markerPos
          });
 
+
          var contentString = "<div>" +
 
-        "<h4>" + "item: " + $scope.record.item + "</h4>" +
+        "<h4 ng-model='item'>" + "item: " + $scope.record.item + "</h4>" +
         // "<p>" + "requested: " + $scope.record.dateRequested  + "</p>" +
         // "<p>" + "claimed: " + $scope.record.dateClaimed  + "</p>" +
         // "<p>" + "closed: " + $scope.record.dateClosed  + "</p>" +
         // "<p>" + "requestor id: " + $scope.record.requestor_id  + "</p>" +
         // "<p>" + "claimor id: " + $scope.record.claimor_id  + "</p>" +
-        // "<p>" + "address: " + $scope.record.address  + "</p>" +
+        "<p ng-model='address'>" + "address: " + $scope.record.address  + "</p>" +
         // "<p>" + "amount: " + $scope.record.paymentAmount  + "</p>" +
 
 
@@ -346,18 +354,20 @@ function AvailableFetches($scope, AvailableFetchesService, FetchService, $ionicP
         // "<p>" +  "claimor id: {{ record.claimor_id }} </p>" +
         // "<p>" +  "address: {{ record.address }} </p>" +
         // "<p>" +  "amount: {{ record.paymentAmount }} </p>" +
-      "<button class='button' ng-click='AvailableFetches.showConfirmButton({item: record.item})'>claim</button>" +
+      "<button class='button' ng-click='AvailableFetches.showConfirmButton({item:item, address: address})'>claim</button>" +
         "</div>";
         // must compile for button ng-click functionality
-        console.log($scope)
-        var compile = $compile(contentString)($scope);
-        var compileArr = compile[0];
+        // console.log($scope)
+        // var compile = $compile(contentString)($scope);
+        // var compileArr = compile[0];
         // console.log(compileArr)
 
-         addInfoWindow(marker, compileArr);
+         addInfoWindow(marker, contentString);
           }
         }
       });
+
+
 
 
 
@@ -372,6 +382,7 @@ function AvailableFetches($scope, AvailableFetchesService, FetchService, $ionicP
         confirmPopup.then(function(res) {
           if(res) {
             // console.log(record);
+
             FetchService.claimFetch(record).then(function(response){
               $location.path('/tab/home');
             });
@@ -387,18 +398,32 @@ function AvailableFetches($scope, AvailableFetchesService, FetchService, $ionicP
 
      vm.addInfoWindow = addInfoWindow;
      function addInfoWindow(marker, message) {
+       var compile = $compile(message)($scope);
+       var compileArr = compile[0];
+      //  console.log(compileArr)
        var infoWindow = new google.maps.InfoWindow({
-        content: message
+        content: compileArr
       });
      marker.addListener('click', function() {
         infoWindow.open($scope.map, marker);
       });
     }
+
+
+
+
 }
 
 
 
-
+function FindFetchCtrl($scope, Fetches){
+  var vm = this;
+  vm.fetch = Fetches.all()
+  .then(function(fetchArr){
+    // console.log(fetchArr.data);
+    vm.fetches = fetchArr.data;
+  });
+}
 
 
 
@@ -413,6 +438,7 @@ function AccountCtrl($scope, $location, $state, Password, SigninService, AddUser
   .then(function(fetchArr){
     vm.fetches = fetchArr.data;
   });
+
  $scope.toggleItem= function(fetch) {
    if ($scope.isItemShown(fetch)) {
      $scope.shownItem = null;
