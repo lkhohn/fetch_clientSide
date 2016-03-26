@@ -1,6 +1,9 @@
 <ion-view view-title="Account">
   <ion-content class="padding center account">
 
+    <img class="accountLogo" src="./css/fetchLogo_correct_color.png"/>
+    <h4 class="accountHeader">sign up</h4>
+
 
 <form novalidate name="form" ng-submit="Account.signup({firstName: SUfirstName, lastName: SUlastName, email: SUemail, phoneNumber: SUphoneNumber, zipCode: SUzipCode, password: SUpassword})">
   <div class="list">
@@ -8,22 +11,22 @@
     <label class="item item-input item-floating-label" ng-class="{'has-error': form.email.$invalid && form.email.$dirty, 'has-success': form.email.$valid && form.email.$dirty}">
       <span class="input-label">Email</span>
       <input name="email" type="email" placeholder="Email" ng-model="SUemail"
-      class="form-control"
+      class="form-control no-border"
       ng-pattern="Account.regex"
       required>
-      <div class='help-block' ng-messages="form.email.$error" style="color:maroon" role="alert" ng-show="form.email.$touched">
+      <div class='help-block' ng-messages="form.email.$error" style="color:red" role="alert" ng-show="form.email.$touched">
        <div ng-message="required">You did not enter a field</div>
-       <div ng-message="pattern">Incorrect email format</div>
+       <div ng-pattern="pattern">Incorrect email format</div>
      </div>
     </label>
 
   <label class="item item-input item-floating-label" ng-class="{'has-error': form.firstName.$invalid && form.firstName.$dirty, 'has-success': form.firstName.$valid && form.firstName.$dirty}">
     <span class="input-label">First Name</span>
     <input name="firstName" type="text" placeholder="First name" ng-model="SUfirstName"
-    class="form-control"
+    class="form-control no-border"
     ng-minlength="2"
     required>
-    <div class='help-block' ng-messages="form.firstName.$error" style="color:maroon" role="alert" ng-show="form.firstName.$touched">
+    <div class='help-block' ng-messages="form.firstName.$error" style="color:red" role="alert" ng-show="form.firstName.$touched">
      <div ng-message="required">You did not enter a field</div>
      <div ng-message="minlength">Your field is too short</div>
    </div>
@@ -32,10 +35,10 @@
   <label class="item item-input item-floating-label" ng-class="{'has-error': form.lastName.$invalid && form.lastName.$dirty, 'has-success': form.lastName.$valid && form.lastName.$dirty}">
     <span class="input-label">Last Name</span>
     <input name="lastName" type="text" placeholder="Last name" ng-model="SUlastName"
-    class="form-control"
+    class="form-control no-border"
     ng-minlength="2"
     required>
-    <div class='help-block' ng-messages="form.lastName.$error" style="color:maroon" role="alert" ng-show="form.lastName.$touched">
+    <div class='help-block' ng-messages="form.lastName.$error" style="color:red" role="alert" ng-show="form.lastName.$touched">
      <div ng-message="required">You did not enter a field</div>
      <div ng-message="minlength">Your field is too short</div>
    </div>
@@ -47,30 +50,17 @@
   <label class="item item-input item-floating-label" ng-class="{'has-error': form.phoneNumber.$invalid && form.phoneNumber.$dirty, 'has-success': form.phoneNumber.$valid && form.phoneNumber.$dirty}">
     <span class="input-label">phone number</span>
     <input name="phoneNumber" type="text" placeholder="phone number" ng-model="SUphoneNumber"
-    class="form-control"
+    class="form-control no-border"
     ng-minlength="2"
     ng-maxlength="12"
     required>
-    <div class='help-block' ng-messages="form.phoneNumber.$error" style="color:maroon" role="alert" ng-show="form.phoneNumber.$touched">
+    <div class='help-block' ng-messages="form.phoneNumber.$error" style="color:red" role="alert" ng-show="form.phoneNumber.$touched">
      <div ng-message="required">You did not enter a field</div>
      <div ng-message="minlength">Your field is too short</div>
      <div ng-message="maxlength">Your field is too long</div>
    </div>
   </label>
 
-  <!-- <label class="item item-input item-floating-label" ng-class="{'has-error': form.zipCode.$invalid && form.zipCode.$dirty, 'has-success': form.zipCode.$valid && form.zipCode.$dirty}">
-    <span class="input-label">phone number</span>
-    <input name="zipCode" type="text" placeholder="zip code" ng-model="SUzipCode"
-    class="form-control"
-    ng-minlength="4"
-    ng-maxlength="6"
-    required>
-    <div class='help-block' ng-messages="form.zipCode.$error" style="color:maroon" role="alert" ng-show="form.zipCode.$touched">
-     <div ng-message="required">You did not enter a field</div>
-     <div ng-message="minlength">Your field is too short</div>
-     <div ng-message="maxlength">Your field is too long</div>
-   </div>
-  </label> -->
 
 <!--
 	<div class="form-group"
@@ -94,11 +84,11 @@
   <label class="item item-input item-floating-label" ng-class="{'has-error': isInputInvalid(form.password), 'has-success': isInputValid(form.password)}">
     <span class="input-label">Password</span>
     <input name="password" type="password" placeholder="Password" ng-model="SUpassword"
-    class="form-control"
+    class="form-control no-border"
     ng-minlength="5"
     ng-maxlength="25"
     required>
-    <div class='help-block' ng-messages="form.password.$error" style="color:maroon" role="alert" ng-show="form.password.$touched">
+    <div class='help-block' ng-messages="form.password.$error" style="color:red" role="alert" ng-show="form.password.$touched">
      <div ng-message="required">You did not enter a field</div>
      <div ng-message="minlength">Your field is too short</div>
      <div ng-message="maxlength">Your field is too long</div>
@@ -118,7 +108,7 @@
   <label class="item item-input item-floating-label">
     <span class="input-label">Confirm Password</span>
     <input name="confirmPassword" type="password" placeholder="Confirm password" ng-model="SUconfirmPassword"
-    class="form-control"
+    class="form-control no-border"
     required>
     <div ng-show="((form.password.$dirty && form.confirmPassword.$dirty) && (SUpassword != SUconfirmPassword))">
         <span>Password mismatched</span>

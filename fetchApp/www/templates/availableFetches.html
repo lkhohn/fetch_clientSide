@@ -9,19 +9,21 @@
 
     <div id="map" data-tap-disabled="true" ng-show="selection == 'map'"></div>
 
+
+    <!-- {{ AvailableFetches.fetches }} -->
+
+
     <div ng-show="selection == 'price'">
       <div class="list">
         <div class="item item-divider">available fetches</div>
         <ion-list>
           <ion-item ng-repeat="fetch in AvailableFetches.fetches | filter: { dateClaimed: '!', dateClosed: '!' } | filter: paymentAmount" class="item item-text-wrap">
-            <!-- <ion-item ng-repeat="fetch in AvailableFetches.fetches" class="item item-text-wrap"> -->
-
             <div ng-class="isItemShown(fetch) ? 'item-expand active' : 'item-expand inactive'">
               <h2>{{ fetch.item }}</h2>
               <p>requested: {{ fetch.dateRequested | date:'fullDate'  }}</p>
               <!-- <p>claimed: {{ fetch.dateClaimed | date:'fullDate'  }}</p> -->
               <!-- <p>closed: {{ fetch.dateClosed | date:'fullDate'  }}</p> -->
-              <!-- <p>requestor: {{ fetch.requestor_id }}</p> -->
+              <p>requestor: {{ fetch.requestor_id }}</p>
               <!-- <p>claimor: {{ fetch.claimor_id }}</p> -->
               <p>address: {{ fetch.address }}</p>
               <p>payment amount: {{ fetch.paymentAmount }}</p>
@@ -30,7 +32,7 @@
             </div>
             <div ng-click="toggleItem(fetch)" class="item-expand-footer">
               <i ng-class="isItemShown(fetch) ? 'ion-ios-minus-outline' : 'ion-ios-plus-outline'"></i>
-              {{ isGroupShown(fetch) }}
+              {{ isGroupShown(fetch) ? 'Less' : '' }}
             </div>
           </ion-item>
         </ion-list>

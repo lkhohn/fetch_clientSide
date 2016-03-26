@@ -30,6 +30,7 @@ angular.module('starter.services', [])
   };
 })
 
+// returns all fetches that the current user has claimed
 .service('UserHistoryService', ['$http', 'dbURL', function($http, dbURL){
   return {
     getHistory: function(user) {
@@ -43,6 +44,7 @@ angular.module('starter.services', [])
   };
 }])
 
+//  returns all fetches for the specific user
 .service('Fetches', ['$http', 'dbURL', function($http, dbURL) {
   return {
     all : function() {
@@ -60,14 +62,28 @@ angular.module('starter.services', [])
     };
   }])
 
+.service('ClaimableFetchService', ['$http', 'dbURL', function($http, dbURL){
+  return {
+    all : function(fetch) {
+      return $http.get(dbURL.url + '/fetches/claimableFetches', fetch)
+      .then(function(fetchObj){
+        // console.log(fetchObj);
+        return fetchObj;
+      }, function(response){
+        console.log(response);
+      });
+    }
+  };
+}])
 
+// returns all fetches regardless of current user
   .service('AvailableFetchesService', ['$http', 'dbURL', function($http, dbURL) {
     return {
       all : function(fetch) {
         // withCredentials:true
         return $http.get(dbURL.url + '/availableFetches', fetch)
         .then(function(fetchObj) {
-          // console.log(fetchObj);
+          console.log(fetchObj);
           return fetchObj;
         }, function(response) {
           console.log(response);
@@ -76,15 +92,17 @@ angular.module('starter.services', [])
       }
     }]);
 
-
+// heroku db connection
 function dbURL() {
   return {
     url: "https://mysterious-waters-23406.herokuapp.com"
   };
 }
 
+// current user can claim and close fetches, post fetches
 function FetchService($http, dbURL){
   return {
+    // getFetch isn't used
     getFetch:function(user){
       console.log(user);
       return $http.post(dbURL.url + '/fetches/', user)
@@ -109,7 +127,7 @@ function FetchService($http, dbURL){
       .then(function(response){
         console.log(response);
       }, function(error){
-        console.log(error)
+        console.log(error);
       });
     },
 
@@ -121,6 +139,25 @@ function FetchService($http, dbURL){
         }, function(error){
           console.log(error);
         });
+    },
+
+    updateFetch: function(fetchObj) {
+      return $http.put(dbURL.url + '/fetches/update/', fetchObj)
+      .then(function(response){
+        console.log(response);
+      }, function(error){
+        console.log(error);
+      });
+    },
+
+    deleteFetch: function(fetchObj) {
+      console.log(fetchObj)
+      return $http.post(dbURL.url + '/fetches/delete/', fetchObj)
+      .then(function(response){
+        console.log(response);
+      }, function(error){
+        console.log(error);
+      });
     }
   };
 }

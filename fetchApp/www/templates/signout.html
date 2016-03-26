@@ -4,57 +4,106 @@
     <h3>Profile</h3>
 
 
-      <div class="list">
-        <div class="item item-divider">fetches you have claimed from <br> other users that are closed</div>
-        <ion-list>
-          <ion-item ng-repeat="fetch in Account.fetches | filter: { dateClosed: '' }" class="item item-text-wrap">
-            <div ng-class="isItemShown(fetch) ? 'item-expand active' : 'item-expand inactive'">
-              <h2>{{ fetch.item }}</h2>
-              <p> requested: {{ fetch.dateRequested | date:'fullDate'  }}</p>
-              <p> claimed: {{ fetch.dateClaimed | date:'fullDate'  }}</p>
-              <p> closed: {{ fetch.dateClosed | date:'fullDate'  }}</p>
-              <p> requestor: {{ fetch.requestor_id }}</p>
-              <p> claimor: {{ fetch.claimor_id }}</p>
-              <p>address: {{ fetch.address }}</p>
-              <p>{{ fetch.paymentAmount }}</p>
-              <p>{{ fetch.paymentType }}</p>
 
-            </div>
-            <div ng-click="toggleItem(fetch)" class="item-expand-footer">
-              <i ng-class="isItemShown(fetch) ? 'ion-ios-minus-outline' : 'ion-ios-plus-outline'"></i>
-              {{ isGroupShown(fetch) ? 'Less' : 'More' }}
-            </div>
-          </ion-item>
-        </ion-list>
+
+
+
+    <div class="card">
+      <div class="item item-divider">
+       history of fetches you have claimed
       </div>
 
 
-       <div class="list">
-         <div class="item item-divider">fetches you have claimed<br> from other users & are not closed</div>
-         <ion-list>
-           <ion-item ng-repeat="fetch in Account.fetches | filter: { dateClosed: '!' }" class="item item-text-wrap">
-             <div ng-class="isItemShown(fetch) ? 'item-expand active' : 'item-expand inactive'">
-               <h2>{{ fetch.item }}</h2>
-               <p> requested: {{ fetch.dateRequested | date:'fullDate'  }}</p>
-               <p> claimed: {{ fetch.dateClaimed | date:'fullDate'  }}</p>
-               <p> closed: {{ fetch.dateClosed | date:'fullDate'  }}</p>
-               <p> requestor: {{ fetch.requestor_id }}</p>
-               <p> claimor: {{ fetch.claimor_id }}</p>
-               <p>address: {{ fetch.address }}</p>
+      <div class="item item-text-wrap">
+        <div class="list">
+          <div class="item item-divider">
+            have you delivered these? these still are closed by the receiving user
+          </div>
+          <ion-list>
+            <ion-item ng-repeat="fetch in Account.fetches | filter: { dateClosed: '!' }" class="item item-text-wrap">
+              <div ng-class="isItemShown(fetch) ? 'item-expand active' : 'item-expand inactive'">
+                <h2>{{ fetch.item }}</h2>
+                <p> requested: {{ fetch.dateRequested | date:'fullDate'  }}</p>
+                <p> claimed: {{ fetch.dateClaimed | date:'fullDate'  }}</p>
+                <p>address: {{ fetch.address }}</p>
                 <p>{{ fetch.paymentAmount }}</p>
-               <p>{{ fetch.paymentType }}</p>
+              </div>
+              <div ng-click="toggleItem(fetch)" class="item-expand-footer">
+                <i ng-class="isItemShown(fetch) ? 'ion-ios-minus-outline' : 'ion-ios-plus-outline'"></i>
+                {{ isGroupShown(fetch) ? 'Less' : '' }}
+              </div>
+            </ion-item>
+          </ion-list>
+        </div>
+      </div>
 
-             </div>
-             <div ng-click="toggleItem(fetch)" class="item-expand-footer">
-               <i ng-class="isItemShown(fetch) ? 'ion-ios-minus-outline' : 'ion-ios-plus-outline'"></i>
-               {{ isGroupShown(fetch) ? 'Less' : 'More' }}
-             </div>
-           </ion-item>
-         </ion-list>
-       </div>
+
+      <div class="item item-text-wrap">
+         <div class="list">
+           <div class="item item-divider">
+            good job! you've successfully deliveried these fetches!
+           </div>
+           <ion-list>
+             <ion-item ng-repeat="fetch in Account.fetches | filter: { dateClosed: '' }" class="item item-text-wrap">
+               <div ng-class="isItemShown(fetch) ? 'item-expand active' : 'item-expand inactive'">
+                 <h2>{{ fetch.item }}</h2>
+                 <p> requested: {{ fetch.dateRequested | date:'fullDate'  }}</p>
+                 <p> claimed: {{ fetch.dateClaimed | date:'fullDate'  }}</p>
+                 <p> closed: {{ fetch.dateClosed | date:'fullDate'  }}</p>
+                 <p>address: {{ fetch.address }}</p>
+                 <p>{{ fetch.paymentAmount }}</p>
+                 <p>{{ fetch.paymentType }}</p>
+               </div>
+               <div ng-click="toggleItem(fetch)" class="item-expand-footer">
+                 <i ng-class="isItemShown(fetch) ? 'ion-ios-minus-outline' : 'ion-ios-plus-outline'"></i>
+                 {{ isGroupShown(fetch) ? 'Less' : '' }}
+               </div>
+             </ion-item>
+           </ion-list>
+         </div>
+
+      </div>
+
+    </div>
 
 
-    <button class="button button-block signin-button" ng-click="Account.signout()">Sign Out</button>
+
+    <div class="card">
+      <div class="item item-divider">
+        awesome! <br> you got retrieved these fetches!
+      </div>
+
+
+      <div class="item item-text-wrap">
+        <div class="list">
+          <ion-list>
+            <ion-item ng-repeat="fetch in Account.fetches | filter: { dateClosed: '' }" class="item item-text-wrap">
+              <div ng-class="isItemShown(fetch) ? 'item-expand active' : 'item-expand inactive'">
+                <h2>{{ fetch.item }}</h2>
+                <p> requested: {{ fetch.dateRequested | date:'fullDate'  }}</p>
+                <p> claimed: {{ fetch.dateClaimed | date:'fullDate'  }}</p>
+                <p>address: {{ fetch.address }}</p>
+                <p>{{ fetch.paymentAmount }}</p>
+              </div>
+              <div ng-click="toggleItem(fetch)" class="item-expand-footer">
+                <i ng-class="isItemShown(fetch) ? 'ion-ios-minus-outline' : 'ion-ios-plus-outline'"></i>
+                {{ isGroupShown(fetch) ? 'Less' : '' }}
+              </div>
+            </ion-item>
+          </ion-list>
+        </div>
+      </div>
+
+
+
+    </div>
+
+
+
+
+
+
+    <button class="button button-block signin-button" ng-click="Account.signout()">sign in as a different user?</button>
 
   </ion-content>
 </ion-view>

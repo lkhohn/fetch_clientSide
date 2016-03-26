@@ -4,7 +4,7 @@
 .item-expand {
   position: relative;
   width: 100%;
-  max-height: 60px;
+  max-height: 25px;
   transition: max-height 0.1s ease-out;
   overflow: hidden;
 }
@@ -32,7 +32,7 @@
 }
 
 .item-expand.active {
-  max-height: 200px;
+  max-height: 500px;
   transition: max-height 0.3s ease-out;
 }
 
@@ -62,3 +62,60 @@
 
 
 /* LANDING PAGE */
+#landingPageMain{
+  background-image:url(https://images.unsplash.com/photo-1445129865778-9fcd1363cc0d?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&s=0dc76e4d1505d887017ba7cea5c9c86e);
+  background-position:center;
+ background-size:100% auto;
+}
+#landingPageHeaderSection{
+ background-color: transparent;
+ background:rgba(0,0,0,0.05);
+ border-color: transparent;
+ text-align: center;
+}
+.landingPageLogo {
+  width:2em;
+  height:2em;
+}
+.landingPageTitle {
+  display:inline;
+  color: #7fdbd4;
+}
+.landingPageSubTitle {
+  color:#36454F;
+}
+
+.landingPageAvailableFetches{
+  padding-top:15em;
+}
+
+#landingPageAvailableFetchesButton{
+  color: #7fdbd4;
+}
+
+/* signin & signout header */
+.accountLogo{
+  width:2em;
+  height:2em;
+}
+.accountHeader{
+  display:inline;
+  color: #7fdbd4;
+}
+
+/* signin page */
+.item-floating-label{
+  border-left:none;
+  border-right:none;
+}
+#firstFormInputField{
+  border-top:none;
+}
+.form-control {
+
+  border:0;
+}
+.no-border {
+    border: 0;
+    box-shadow: none;
+}
