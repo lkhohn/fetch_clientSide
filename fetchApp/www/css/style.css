@@ -119,3 +119,15 @@
     border: 0;
     box-shadow: none;
 }
+
+
+.modal{
+  height:50%;
+  width: 75%;
+  margin:15%;
+}
+/*#modal-backdrop .active {
+  -webkit-filter: blur(5px) grayscale(50%);
+  -webkit-transform: scale(0.9);
+
+}*/

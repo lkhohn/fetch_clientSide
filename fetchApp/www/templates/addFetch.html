@@ -1,5 +1,5 @@
 <ion-view view-title="add a fetch">
-  <ion-content class="padding AddFetch">
+  <ion-content class="padding AddFetch" id='addFetchMap'>
 
     <div id="map" data-tap-disabled="true"></div>
 
@@ -22,6 +22,8 @@
           <input type="text" placeholder="where are you located?" id="autocomplete" ng-model="address" name="address" AddFetch.disable-tap="true">
         </label>
 
+        <div id="confirmLocationSection" ng-show="confirmLocation">
+
 
         <label class="item item-input">
           <input type="text" placeholder="what do you need" ng-model="item" name="item">
@@ -32,11 +34,12 @@
           <input type="text" placeholder="how much will you pay?" id="requestedItemFee" ng-model="paymentAmount" name="paymentAmount">
         </label>
 
-        
+
       </div>
 
       <button type="submit" class="button" ng-disabled='!addFetchForm.$valid'>Submit</button>
 
+      </div>
     </form>
 
 

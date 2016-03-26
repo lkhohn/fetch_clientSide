@@ -1,0 +1,93 @@
+
+      <ion-modal-view class="product edit create AddFetch">
+
+
+  <ion-content has-bouncing="true">
+        <form class="form-horizontal" ng-submit="$parent.AddFetch.postNewFetch({item: item, paymentAmount: paymentAmount, lat: lat, lng: lng, address: address })" name="addFetchForm">
+
+
+          <ion-header-bar class="bar-positive fix-buttons">
+            <a class="button" ng-click="$parent.AddFetch.closeModal()">Cancel</a>
+            <h1 class="title">drop a fetch</h1>
+          </ion-header-bar>
+
+
+
+
+
+            <div class="row" ng-class="{'no-padding-top': !data.editItem}">
+              <div class="col">
+                <input type="hidden" name="lat" placeholder="lat" id="lat" ng-model="lat">
+                <input type="hidden" name="lng" placeholder="lng" id='lng' ng-model="lng">
+              </div>
+            </div>
+
+
+            <div class="row charity-row">
+              <div class="col col-10 vert-center">
+                <div class="charity large"></div>
+              </div>
+            </div>
+
+            <div class="row charity-row">
+              <div class="col col-10 vert-center">
+                <div class="charity large"></div>
+              </div>
+            </div>
+
+            <div class="row charity-row">
+              <div class="col col-10 vert-center">
+                <div class="charity large"></div>
+              </div>
+            </div>
+
+            <div class="row charity-row">
+              <div class="col col-10 vert-center">
+                <div class="charity large"></div>
+              </div>
+            </div>
+
+
+
+
+            <!-- <div class="row" ng-class="{'no-padding-top': !data.editItem}"> -->
+            <div class="row description-row">
+              <div class="col">
+                <label class="item item-input">
+                  <input type="text" placeholder="where are you located?" id="autocomplete" ng-model="address" name="address" AddFetch.disable-tap="true">
+                </label>
+              </div>
+            </div>
+
+
+            <div class="row description-row">
+              <div class="col">
+                <label class="item item-input">
+                  <input type="text" placeholder="what do you need" ng-model="item" name="item">
+                </label>
+              </div>
+            </div>
+
+
+
+            <div class="row description-row">
+              <div class="col">
+                <label class="item item-input">
+                  <input type="text" placeholder="how much will you pay?" id="requestedItemFee" ng-model="paymentAmount" name="paymentAmount">
+                </label>
+              </div>
+            </div>
+
+            <div class="row charity-row">
+              <div class="col col-10 vert-center">
+                <div class="charity large"></div>
+              </div>
+            </div>
+
+            <button type="submit" class="button" ng-disabled='!addFetchForm.$valid'>Submit</button>
+
+
+
+          </form>
+        </ion-content>
+      </ion-modal-view>

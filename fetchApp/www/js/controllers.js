@@ -2,7 +2,7 @@ angular.module('starter.controllers', [])
 
 .controller('HomeCtrl', ['$scope', '$ionicPopup', '$timeout', '$location', 'Fetches', 'FetchService', 'UserHistoryService', HomeCtrl])
 
-.controller('AddFetchCtrl', ['$scope', '$location', 'FetchService', '$state', '$cordovaGeolocation', 'AvailableFetchesService', AddFetchCtrl])
+.controller('AddFetchCtrl', ['$scope', '$location', 'FetchService', '$state', '$cordovaGeolocation', '$ionicModal', 'AvailableFetchesService', AddFetchCtrl])
 
 .controller('FindFetchCtrl', ['$scope', 'Fetches', FindFetchCtrl])
 
@@ -159,7 +159,7 @@ function HomeCtrl($scope, $ionicPopup, $timeout, $location, Fetches, FetchServic
 }
 
 
-function AddFetchCtrl($scope, $location, FetchService, $state, $cordovaGeolocation, AvailableFetchesService) {
+function AddFetchCtrl($scope, $location, FetchService, $state, $cordovaGeolocation, $ionicModal, AvailableFetchesService) {
   var vm = this;
 
 // autocomplete
@@ -191,6 +191,7 @@ function AddFetchCtrl($scope, $location, FetchService, $state, $cordovaGeolocati
 var options = {timeout: 10000, enableHighAccuracy: true};
 
 // var locationData = {};
+
 
   $cordovaGeolocation.getCurrentPosition(options).then(function(position){
 
@@ -317,6 +318,29 @@ var options = {timeout: 10000, enableHighAccuracy: true};
         // can make custom icons.... icon: image name
       });
 
+    // create info window to load current address
+    var infoWindow = new google.maps.InfoWindow();
+    infoWindow.open($scope.map, marker);
+
+
+        google.maps.event.addDomListener(infoWindow, 'click', function(){
+            console.log('this worked')
+        })
+
+
+// set info window with current address, then display modal
+  vm.setInfoWindow = function(){
+    infoWindow.setContent("<a id='location' ng-click='openModal()'>" + $scope.address + "</a>");
+
+    google.maps.event.addDomListener(infoWindow, 'domready', function(){
+      document.getElementById('location').addEventListener('click', function(){
+        vm.openModal();
+        // to display form without a modal
+       //     // $scope.confirmLocation = true;
+       //     // $scope.$apply();
+      });
+    });
+  };
 
 //update address field based on dragged pin
     google.maps.event.addListener(marker, 'dragend', function() {
@@ -338,6 +362,9 @@ var options = {timeout: 10000, enableHighAccuracy: true};
         if(status === google.maps.GeocoderStatus.OK){
           $scope.$apply(function(){
             $scope.address = results[0]['formatted_address'];
+              // infoWindow.setContent($scope.address);
+              vm.setInfoWindow();
+
           });
         }
       });
@@ -351,6 +378,7 @@ var options = {timeout: 10000, enableHighAccuracy: true};
 
 
       var geocoder = new google.maps.Geocoder();
+      $scope.confirmLocation = false;
 
        geocoder.geocode({'location': locationObject}, function(results, status) {
          if (status === google.maps.GeocoderStatus.OK) {
@@ -359,10 +387,28 @@ var options = {timeout: 10000, enableHighAccuracy: true};
             $scope.lat = locationObject.lat;
             $scope.lng = locationObject.lng;
 
+            vm.setInfoWindow();
+
           });
         }
       });
     });
+
+    $ionicModal.fromTemplateUrl('templates/addFetchModalForm.html', {
+          scope: $scope,
+          animation: 'slide-in-up'
+        }).then(function(modal) {
+          $scope.modal = modal;
+        });
+      vm.openModal = function(){
+        $scope.modal.show();
+      };
+      vm.closeModal = function(){
+        $scope.modal.hide();
+      };
+
+
+
   }, function(error){
     console.log("Could not get location");
   });
@@ -371,6 +417,7 @@ var options = {timeout: 10000, enableHighAccuracy: true};
   function postNewFetch(fetchObj){
     // console.log(fetchObj);
     FetchService.postNewFetch(fetchObj).then(function(response){
+      vm.closeModal();
       $location.path('/tab/home');
         });
       }
