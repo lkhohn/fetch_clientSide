@@ -1,4 +1,8 @@
 /* Empty. Add your own CSS if you like */
+.tab-item.tab-item-active, .tab-item.active, .tab-item.activated {
+  color: #7fdbd4;
+}
+
 
 /* home page for fetch details */
 .item-expand {
@@ -62,45 +66,68 @@
 
 
 /* LANDING PAGE */
-#landingPageMain{
-  background-image:url(https://images.unsplash.com/photo-1445129865778-9fcd1363cc0d?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&s=0dc76e4d1505d887017ba7cea5c9c86e);
-  background-position:center;
- background-size:100% auto;
-}
-#landingPageHeaderSection{
- background-color: transparent;
- background:rgba(0,0,0,0.05);
- border-color: transparent;
- text-align: center;
+/*#landingPageMain{*/
+  /*background-image:url(https://images.unsplash.com/photo-1445129865778-9fcd1363cc0d?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&s=0dc76e4d1505d887017ba7cea5c9c86e);*/
+  /*background-position:center;*/
+ /*background-size:100% auto;*/
+/*}*/
+/*#landingPageHeaderSection{*/
+ /*background-color: transparent;*/
+ /*background:rgba(0,0,0,0.05);*/
+ /*border-color: transparent;*/
+ /*text-align: center;*/
+/*}*/
+
+#landPageHeaderMain {
+  /*background-color:green;*/
+  margin:0;
+  top:0;
+  left:0;
+  width:100%;
 }
 .landingPageLogo {
-  width:2em;
-  height:2em;
+  width:8em;
+  height:8em;
+
 }
 .landingPageTitle {
-  display:inline;
-  color: #7fdbd4;
+  color: #36454F;
+
 }
 .landingPageSubTitle {
   color:#36454F;
 }
+.grayBackground{
+  background-color:#36454F;
+  padding-bottom:5em;
+}
 
-.landingPageAvailableFetches{
-  padding-top:15em;
+#landingPageMain {
+   margin:0;
+   top:0;
+   left:0;
+   padding-top:6em;
+   width: 100%;
 }
 
 #landingPageAvailableFetchesButton{
-  color: #7fdbd4;
+  color: #FFF;
+  background-color: #7FDBD4;
+}
+
+.bar-footer{
+  background-color:#36454F;
+  color: #FFF;
 }
 
 /* signin & signout header */
 .accountLogo{
-  width:2em;
-  height:2em;
+  width:6em;
+  height:6em;
 }
 .accountHeader{
   display:inline;
-  color: #7fdbd4;
+  color: #36454F;
 }
 
 /* signin page */
@@ -120,14 +147,67 @@
     box-shadow: none;
 }
 
+.accountSignUpQuestion{
+  padding-top:10em;
+  color: #36454F;
+
+}
+.signUpLink {
+  color:#7fdbd4;
+}
+
+
+
+
+
+/* add fetch modal */
+/*#location {
+  color: #36454F;
+}*/
 
 .modal{
-  height:50%;
-  width: 75%;
-  margin:15%;
+top:50%;
+bottom: 0;
+left: 0;
+right: 0;
+width: 100%;
 }
+#addFetchModalHeaderBar {
+  background-color: #36454F;
+  color:#FFF;
+
+}
+#addFetchModalSubmitButton {
+  background-color: #36454F;
+  color: #FFF;
+}
+
+/*add fetch info window */
+infoWindow {
+  color: #36454F;
+  border-radius: 2px 2px 0 0;
+  box-shadow: 0 1px 6px #36454F;
+  border: 1px solid #36454F;
+}
+
 /*#modal-backdrop .active {
   -webkit-filter: blur(5px) grayscale(50%);
   -webkit-transform: scale(0.9);
 
 }*/
+
+
+/* retrieve a fetch info window */
+
+#iw-container {
+   border-radius: 2px 2px 0 0;
+   box-shadow: 0 1px 6px #36454F;
+   border: 1px solid #36454F;
+}
+ .iw_title {
+  padding: 1em;
+  margin: 1px;
+  background-color: #36454F;
+  color: #FFF;
+  font-weight:bold; 
+ }

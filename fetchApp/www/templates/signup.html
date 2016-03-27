@@ -1,8 +1,19 @@
 <ion-view view-title="Account">
   <ion-content class="padding center account">
 
-    <img class="accountLogo" src="./css/fetchLogo_correct_color.png"/>
-    <h4 class="accountHeader">sign up</h4>
+
+        <div class='row row-center'>
+
+          <div class='col'>
+            <img class="accountLogo" src="./css/logo_GIMP_v3.png"/>
+          </div>
+
+          <div class='col col-75'>
+            <h1 class="accountHeader">fetch</h1>
+          </div>
+
+        </div>
+
 
 
 <form novalidate name="form" ng-submit="Account.signup({firstName: SUfirstName, lastName: SUlastName, email: SUemail, phoneNumber: SUphoneNumber, zipCode: SUzipCode, password: SUpassword})">

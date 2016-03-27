@@ -1,33 +1,51 @@
 <ion-view view-title="">
   <ion-content class="padding center account">
 
+    <div class='row row-center'>
 
-      <img class="accountLogo" src="./css/fetchLogo_correct_color.png"/>
-      <h4 class="accountHeader">sign in</h4>
+      <div class='col'>
+        <img class="accountLogo" src="./css/logo_GIMP_v3.png"/>
+      </div>
+
+      <div class='col col-75'>
+        <h1 class="accountHeader">fetch</h1>
+      </div>
+
+    </div>
 
 
     <form ng-submit="Account.signin({email: email, password: password})" name='signInForm'>
+
       <div class="list">
+
         <label class="item item-input item-floating-label" id="firstFormInputField">
           <span class="input-label">Email</span>
           <input name="email" type="email" placeholder="email" ng-model="email" required>
         </label>
+
         <label class="item item-input item-floating-label">
           <span class="input-label">Password</span>
           <input name="password" type="password" placeholder="password" ng-model="password" required>
         </label>
+
         <button type="submit" class="button button-block signin-button">Sign In</button>
 
-
       </div>
+
     </form>
 
+    <div class="accountSignUpQuestion">
 
-      <div class="item item-text">
-        <p>don't have an account?</p>
-        <a href="#/signup">sign up</a>
+
+      <div class="row row-center">
+        <div class="col col-offset-33">need an account?</div>
       </div>
 
+      <div class="row row-center">
+        <div class="col col-offset-33"><a href="#/signup" class='signUpLink'>sign up</a></div>
+      </div>
+
+</div>
 
   </ion-content>
 </ion-view>

@@ -669,7 +669,7 @@ function createMarker(markerPos, item, address, id, paymentAmount){
      var infoWindow = new google.maps.InfoWindow();
 
      var iwContent = '<div id="iw_container">' +
-        '<div>' + item + '<br />' + address + '<br />' + paymentAmount + '<br />' +
+        '<div>' + '<div class="iw_title">' + item + '</div>' + '<br />' + address + '<br />' + paymentAmount + '<br />' +
         '<button class="button" id="addClaimFetch" ng-click="AvailableFetches.showButtonConfirm(iwContent)">claim</button>' +
         '</div>' + '</div>';
 
@@ -740,15 +740,15 @@ function AccountCtrl($scope, $location, $state, Password, SigninService, AddUser
   vm.signout = signout;
 
 
-  vm.fetch = UserHistoryService.getHistory()
-  .then(function(fetchArr){
-    vm.fetches = fetchArr.data;
-  });
-
-  vm.fetch = ClaimableFetchService.all()
-  .then(function(fetchArr){
-    vm.fetches = fetchArr.data;
-  });
+  // vm.fetch = UserHistoryService.getHistory()
+  // .then(function(fetchArr){
+  //   vm.fetches = fetchArr.data;
+  // });
+  //
+  // vm.fetch = ClaimableFetchService.all()
+  // .then(function(fetchArr){
+  //   vm.fetches = fetchArr.data;
+  // });
 
 
  $scope.toggleItem= function(fetch) {

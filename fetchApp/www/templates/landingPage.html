@@ -2,31 +2,37 @@
 
   <ion-content class="padding Account">
 
+    <div class='row row-center' id="landPageHeaderMain">
 
-
-
-
-
-
-    <div class="item" id="landingPageHeaderSection">
-      <img class="landingPageLogo" src="./css/fetchLogo_correct_color.png"/>
-      <h1 class="landingPageTitle">fetch</h1>
-      <h4 class="landingPageSubTitle">go get it!</h4>
-    </div>
-
-
-
-<div id="landingPageMain">
-
-
-    <div class='landingPageAvailableFetches'>
-      <a href="#/availableFetches" class="button button-full button-light" id="landingPageAvailableFetchesButton">find available fetches</a>
-    </div>
-
-      <div class="bar bar-footer">
-        <a href="#/signup" class="button button-clear">sign up</a>
-        <a href="#/signin" class="button button-clear pull-right">sign in</a>
+      <div class='col'>
+        <img class="landingPageLogo" src="./css/logo_GIMP_v3.png"/>
       </div>
-</div>
-    </ion-content>
-  </ion-view>
+
+      <div class='col col-75'>
+        <h1 class="landingPageTitle">fetch</h1>
+        <h4 class="landingPageSubTitle">go get it!</h4>
+      </div>
+
+    </div>
+
+    <div class='grayBackground'>
+
+      <div class='row row-center'>
+        <img class='col' id='shoppingImg' src='./css/shoppingScreenShot.png' />
+      </div>
+
+      <div class="row row-center" id="landingPageMain">
+        <div class='col col-bottom'>
+          <a href="#/availableFetches" class="button button-full" id="landingPageAvailableFetchesButton">find a fetch</a>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="bar bar-footer">
+      <a href="#/signup" class="button button-clear">sign up</a>
+      <a href="#/signin" class="button button-clear pull-right">sign in</a>
+    </div>
+
+  </ion-content>
+</ion-view>

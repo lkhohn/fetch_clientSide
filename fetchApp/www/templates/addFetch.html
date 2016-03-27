@@ -17,12 +17,13 @@
       <!-- </label> -->
 
 
+      <div id="confirmLocationSection" ng-show="confirmLocation">
+
 
         <label class="item item-input">
           <input type="text" placeholder="where are you located?" id="autocomplete" ng-model="address" name="address" AddFetch.disable-tap="true">
         </label>
 
-        <div id="confirmLocationSection" ng-show="confirmLocation">
 
 
         <label class="item item-input">
@@ -35,9 +36,11 @@
         </label>
 
 
+        <button type="submit" class="button" ng-disabled='!addFetchForm.$valid'>Submit</button>
+
+
       </div>
 
-      <button type="submit" class="button" ng-disabled='!addFetchForm.$valid'>Submit</button>
 
       </div>
     </form>
