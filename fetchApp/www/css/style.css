@@ -66,47 +66,37 @@
 
 
 /* LANDING PAGE */
-/*#landingPageMain{*/
-  /*background-image:url(https://images.unsplash.com/photo-1445129865778-9fcd1363cc0d?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&s=0dc76e4d1505d887017ba7cea5c9c86e);*/
-  /*background-position:center;*/
- /*background-size:100% auto;*/
-/*}*/
-/*#landingPageHeaderSection{*/
- /*background-color: transparent;*/
- /*background:rgba(0,0,0,0.05);*/
- /*border-color: transparent;*/
- /*text-align: center;*/
-/*}*/
-
 #landPageHeaderMain {
-  /*background-color:green;*/
+  padding-top:4em;
   margin:0;
   top:0;
   left:0;
   width:100%;
 }
 .landingPageLogo {
-  width:8em;
-  height:8em;
-
+  width:10em;
+  height:10em;
 }
 .landingPageTitle {
   color: #36454F;
+  font-size:4em;
+}
 
-}
-.landingPageSubTitle {
-  color:#36454F;
-}
+ .landingPageSubTitle {
+   color: #36454F;
+   font-size:2em;
+ }
+
 .grayBackground{
   background-color:#36454F;
-  padding-bottom:5em;
+  padding-bottom:1em;
 }
 
 #landingPageMain {
-   margin:0;
+   margin-top:6em;
    top:0;
    left:0;
-   padding-top:6em;
+   padding-top:10em;
    width: 100%;
 }
 
@@ -156,8 +146,19 @@
   color:#7fdbd4;
 }
 
-
-
+/* signout/history */
+.ion-chevron-right {
+  background-color: #36454F;
+  color:#FFF;
+}
+.ion-chevron-right.active {
+  background-color: #36454F;
+  color:#7fdbd4;
+}
+.signout-button{
+  background-color: #36454F;
+  color:#FFF;
+}
 
 
 /* add fetch modal */
@@ -209,5 +210,5 @@ infoWindow {
   margin: 1px;
   background-color: #36454F;
   color: #FFF;
-  font-weight:bold; 
+  font-weight:bold;
  }

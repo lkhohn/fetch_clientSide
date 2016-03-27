@@ -57,6 +57,8 @@ function HomeCtrl($scope, $ionicPopup, $timeout, $location, Fetches, FetchServic
     return $scope.shownItem === fetch;
   };
 
+
+
 // close button to update dateClosed
   vm.showClosed = function() {
     var confirmPopup = $ionicPopup.confirm({
@@ -740,15 +742,30 @@ function AccountCtrl($scope, $location, $state, Password, SigninService, AddUser
   vm.signout = signout;
 
 
-  // vm.fetch = UserHistoryService.getHistory()
-  // .then(function(fetchArr){
-  //   vm.fetches = fetchArr.data;
-  // });
-  //
-  // vm.fetch = ClaimableFetchService.all()
-  // .then(function(fetchArr){
-  //   vm.fetches = fetchArr.data;
-  // });
+  vm.fetch = UserHistoryService.getHistory()
+  .then(function(fetchArr){
+    vm.fetches = fetchArr.data;
+  });
+
+  vm.fetch = ClaimableFetchService.all()
+  .then(function(fetchArr){
+    vm.fetches = fetchArr.data;
+  });
+
+
+
+  // display fetch history
+  // vm.deliveryFetches = false;
+  // vm.retrievedFetches = false;
+  vm.fetchDeliveryHistoryDisplay = function(){
+    $scope.deliveryFetches = true;
+    $scope.retrievedFetches = false;
+  }
+
+  vm.fetchRetrievedHistoryDisplay = function(){
+    $scope.deliveryFetches = false;
+    $scope.retrievedFetches = true;
+  }
 
 
  $scope.toggleItem= function(fetch) {
