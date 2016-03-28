@@ -5,7 +5,7 @@
 
       <ion-header-bar class="bar-positive fix-buttons" id='addFetchModalHeaderBar'>
         <h1 class="title">drop a fetch</h1>
-        <a class="button" id='addFetchModalHeaderBar' ng-click="$parent.AddFetch.closeModal()">Cancel</a>
+        <a class="button" id='addFetchModalHeaderCancelButton' ng-click="$parent.AddFetch.closeModal()">Cancel</a>
       </ion-header-bar>
 
       <div class="row" ng-class="{'no-padding-top': !data.editItem}">
@@ -59,7 +59,7 @@
       <div class="row description-row">
         <div class="col">
           <label class="item item-input">
-            <input type="text" placeholder="how much will you pay?" id="requestedItemFee" ng-model="paymentAmount" name="paymentAmount">
+            <input type="number" placeholder="how much are you willing to pay?" id="requestedItemFee" ng-model="paymentAmount" name="paymentAmount">
           </label>
         </div>
       </div>
@@ -71,7 +71,7 @@
       </div>
       <div class='row'>
         <div class='col col-center'>
-          <button type="submit" class="button" id='addFetchModalSubmitButton'>Submit</button>    
+          <button type="submit" class="button" id='addFetchModalSubmitButton'>Submit</button>
         </div>
       </div>
 

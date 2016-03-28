@@ -1,40 +1,42 @@
-<!-- AVAILABLE FETCHES.HTML PAGE IS USED FOR THIS -->
+<!-- FOR UNSIGNED-IN USER -->
+<ion-view view-title="" cache-view="false">
+  <ion-content class="padding LandingPageFindFetch">
+
+    <div id="map" data-tap-disabled="true"></div>
+    <ion-list>
+      <!-- <ion-radio name="map" ng-model="selection" value="map">search by map</ion-radio> -->
+      <ion-radio name="price" ng-model="selection" value="price">filter by price</ion-radio>
+    </ion-list>
 
 
-<ion-view view-title="find a fetch">
-  <ion-content class="padding center FindFetch">
 
-    <h3>available fetches</h3>
-      <div class="card">
-      <div class="item item-text-wrap">
-        <ul ng-repeat="fetch in FindFetch.fetches" ng-if="!fetch.dateClosed">
-          <li><a href="#/tab/fetchDetails/{{fetch.id}}">{{fetch.item}}</a></li>
-          <li>date requested: {{fetch.dateRequested | date:'fullDate' }}</li>
-          <li>date claimed: {{fetch.dateClaimed | date:'fullDate' }}</li>
-          <li>date closed: {{fetch.dateClosed | date:'fullDate' }}</li>
-          <!-- <li>payment amount: {{fetch.paymentAmount}}</li> -->
-          <!-- <li>payment type: {{fetch.paymentType}}</li> -->
-          <!-- <li>zipcode: {{fetch.zipCode}}</li> -->
-        </ul>
+
+
+
+
+
+
+
+    <div ng-show="selection == 'price'">
+      <div class="list">
+        <div class="item item-divider">available fetches</div>
+        <ion-list>
+          <ion-item ng-repeat="fetch in LandingPageFindFetch.fetches | filter: { dateClaimed: '!', dateClosed: '!' } | filter: paymentAmount" class="item item-text-wrap">
+            <div ng-class="isItemShown(fetchSearch) ? 'item-expand active' : 'item-expand inactive'">
+              <h2>{{ fetch.item }}</h2>
+              <p>requested: {{ fetch.dateRequested | date:'fullDate'  }}</p>
+              <p>address: {{ fetch.address }}</p>
+              <p>payment amount: ${{ fetch.paymentAmount }}</p>
+              <button class="button" ng-click="LandingPageFindFetch.showConfirm(fetch)">claim</button>
+            </div>
+            <div ng-click="toggleItem(fetch)" class="item-expand-footer">
+              <i ng-class="isItemShown(fetch) ? 'ion-ios-minus-outline' : 'ion-ios-plus-outline'"></i>
+              {{ isGroupShown(fetch) ? 'Less' : '' }}
+            </div>
+          </ion-item>
+        </ion-list>
       </div>
     </div>
 
-
-    <h3>claimed fetches</h3>
-      <div class="card" >
-      <div class="item item-text-wrap">
-        <ul ng-repeat="fetch in FindFetch.fetches" ng-if="fetch.dateClosed">
-          <li>{{fetch.item}}</li>
-          <li>date requested: {{fetch.dateRequested | date:'fullDate' }}</li>
-          <li>date claimed: {{fetch.dateClaimed | date:'fullDate' }}</li>
-          <li>date closed: {{fetch.dateClosed | date:'fullDate' }}</li>
-          <!-- <li>payment amount: {{fetch.paymentAmount}}</li> -->
-          <!-- <li>payment type: {{fetch.paymentType}}</li> -->
-          <!-- <li>zipcode: {{fetch.zipCode}}</li> -->
-        </ul>
-      </div>
-    </div>
-
-
-  </ion-content>
-</ion-view>
+    </ion-content>
+  </ion-view>

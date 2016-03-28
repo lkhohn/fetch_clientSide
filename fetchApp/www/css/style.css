@@ -1,4 +1,9 @@
 /* Empty. Add your own CSS if you like */
+body {
+  font-family: 'Ubuntu', sans-serif;
+  color: #36454F;
+}
+
 .tab-item.tab-item-active, .tab-item.active, .tab-item.activated {
   color: #7fdbd4;
 }
@@ -41,9 +46,7 @@
 }
 
 
-/* DEMO */
 .item-expand-footer {
-  /*color: red;*/
   margin-top: 10px;
 }
 
@@ -63,23 +66,39 @@
     height: 100%;
 }
 
+/* ALL normal buttons */
+.button {
+  background-color: #36454F;
+  color:#FFF;
+}
+
 
 
 /* LANDING PAGE */
 #landPageHeaderMain {
-  padding-top:4em;
   margin:0;
   top:0;
   left:0;
   width:100%;
 }
+
+#landPageSubHeader{
+  padding-bottom:4em;
+  margin:0;
+  top:0;
+  left:0;
+  width:100%;
+  text-align:center;
+}
+
 .landingPageLogo {
   width:10em;
   height:10em;
 }
+
 .landingPageTitle {
   color: #36454F;
-  font-size:4em;
+  font-size:5em;
 }
 
  .landingPageSubTitle {
@@ -87,18 +106,16 @@
    font-size:2em;
  }
 
-.grayBackground{
-  background-color:#36454F;
-  padding-bottom:1em;
-}
 
 #landingPageMain {
-   margin-top:6em;
    top:0;
    left:0;
-   padding-top:10em;
+   padding-top:7em;
+   padding-bottom:7em;
    width: 100%;
+   background-color:#36454F;
 }
+
 
 #landingPageAvailableFetchesButton{
   color: #FFF;
@@ -110,15 +127,7 @@
   color: #FFF;
 }
 
-/* signin & signout header */
-.accountLogo{
-  width:6em;
-  height:6em;
-}
-.accountHeader{
-  display:inline;
-  color: #36454F;
-}
+
 
 /* signin page */
 .item-floating-label{
@@ -129,59 +138,52 @@
   border-top:none;
 }
 .form-control {
-
   border:0;
 }
 .no-border {
-    border: 0;
-    box-shadow: none;
+  border: 0;
+  box-shadow: none;
 }
-
 .accountSignUpQuestion{
-  padding-top:10em;
-  color: #36454F;
-
+  padding-top:8em;
 }
 .signUpLink {
   color:#7fdbd4;
 }
 
+
+
 /* signout/history */
 .ion-chevron-right {
   background-color: #36454F;
   color:#FFF;
+  margin-bottom:1em;
 }
 .ion-chevron-right.active {
   background-color: #36454F;
   color:#7fdbd4;
 }
-.signout-button{
-  background-color: #36454F;
-  color:#FFF;
-}
 
 
 /* add fetch modal */
-/*#location {
-  color: #36454F;
-}*/
 
 .modal{
-top:50%;
-bottom: 0;
-left: 0;
-right: 0;
-width: 100%;
+  top:15%;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
 }
 #addFetchModalHeaderBar {
   background-color: #36454F;
   color:#FFF;
+}
 
+#addFetchModalHeaderCancelButton {
+background-color: #36454F;
+  color:#7FDBD4;
 }
-#addFetchModalSubmitButton {
-  background-color: #36454F;
-  color: #FFF;
-}
+
 
 /*add fetch info window */
 infoWindow {
@@ -191,15 +193,7 @@ infoWindow {
   border: 1px solid #36454F;
 }
 
-/*#modal-backdrop .active {
-  -webkit-filter: blur(5px) grayscale(50%);
-  -webkit-transform: scale(0.9);
-
-}*/
-
-
 /* retrieve a fetch info window */
-
 #iw-container {
    border-radius: 2px 2px 0 0;
    box-shadow: 0 1px 6px #36454F;
@@ -212,3 +206,34 @@ infoWindow {
   color: #FFF;
   font-weight:bold;
  }
+
+
+/* popup */
+.popup-head {
+  background-color: #36454F;
+}
+
+.popup-title {
+  color: #FFF;
+}
+
+.button.button-positive{
+  background-color: #7FDBD4;
+  color: #FFF;
+  font-weight:bold;
+}
+.button.button-positive:hover {
+  color: #FFF;
+  font-weight:bold;
+  background-color: #36454F;
+}
+.button.button-positive:activated {
+  color: #FFF;
+  font-weight:bold;
+  background-color: #36454F
+}
+
+.button.button-default {
+  background-color:#FFF;
+  color:#36454F;
+}

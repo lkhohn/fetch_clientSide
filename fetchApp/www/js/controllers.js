@@ -1,18 +1,196 @@
 angular.module('starter.controllers', [])
 
+.controller('LandingPageCtrl', ['$scope', '$ionicPopup', '$timeout', '$location', '$state', '$cordovaGeolocation', '$compile', 'AvailableFetchesService', LandingPageCtrl])
+
 .controller('HomeCtrl', ['$scope', '$ionicPopup', '$timeout', '$location', 'Fetches', 'FetchService', 'UserHistoryService', HomeCtrl])
 
-.controller('AddFetchCtrl', ['$scope', '$location', 'FetchService', '$state', '$cordovaGeolocation', '$ionicModal', 'AvailableFetchesService', AddFetchCtrl])
-
-.controller('FindFetchCtrl', ['$scope', 'Fetches', FindFetchCtrl])
+.controller('AddFetchCtrl', ['$scope', '$location', 'FetchService', '$state', '$cordovaGeolocation', '$ionicModal', '$ionicHistory', 'AvailableFetchesService', AddFetchCtrl])
 
 .controller('AvailableFetches', ['$scope', 'AvailableFetchesService','ClaimableFetchService', 'FetchService', '$ionicPopup', '$timeout', '$location', '$state', '$cordovaGeolocation', '$compile', AvailableFetches])
 
-.controller('AccountCtrl', ['$scope', '$location', '$state', 'Password', 'SigninService', 'AddUserService', 'UserHistoryService', 'ClaimableFetchService', AccountCtrl]);
+.controller('AccountCtrl', ['$scope', '$location', '$state', 'SigninService', 'AddUserService', AccountCtrl])
 
+.controller('UserProfileCtrl', ['$scope', '$location', '$state', 'Fetches', 'UserHistoryService', UserProfileCtrl]);
+
+
+function LandingPageCtrl($scope, $ionicPopup, $timeout, $location, $state, $cordovaGeolocation, $compile, AvailableFetchesService){
+  var vm = this;
+
+  vm.fetch = AvailableFetchesService.all()
+  .then(function(fetchArr){
+    vm.fetches = fetchArr.data;
+  });
+
+
+  var socket = io.connect('https://mysterious-waters-23406.herokuapp.com');
+  // console.log(socket);
+  socket.on('connect', function (socket) {
+    // console.log('connection');
+  });
+  // socket.on('check', function(data){
+  //   console.log(data);
+  // });
+  socket.on('update', function(newFetch){
+    vm.fetches.push(newFetch);
+    $scope.$apply();
+  });
+
+
+// accordian to show fetch details
+  $scope.toggleItem = function(fetch) {
+    // console.log(fetch);
+    if ($scope.isItemShown(fetch)) {
+      $scope.shownItem = null;
+    } else {
+      $scope.shownItem = fetch;
+    }
+  };
+
+// confirm fetch claim
+  vm.showConfirm = function() {
+    var confirmPopup = $ionicPopup.confirm({
+      scope: $scope,
+      title: 'retrieve a fetch',
+      template: 'you must be signed in to retrieve a fetch'
+    });
+
+    confirmPopup.then(function(res) {
+      if(res) {
+          $location.path('/signin');
+       }
+      else {
+        console.log('You are not sure');
+      }
+    });
+  };
+
+  $scope.isItemShown = function(fetch) {
+    return $scope.shownItem === fetch;
+  };
+
+  vm.initialize = initialize;
+
+  function initialize() {
+  // display map
+  var options = {timeout: 10000, enableHighAccuracy: true};
+
+  $cordovaGeolocation.getCurrentPosition(options).then(function(position){
+
+    var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+    var mapOptions = {
+      center: latLng,
+      zoom: 14,
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      styles: styleArray
+    };
+
+    $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+    //Wait until the map is loaded
+    google.maps.event.addListenerOnce($scope.map, 'idle', function(){
+
+    var fetchData = $scope.LandingPageFindFetch.fetches;
+
+      // socket for adding new fetch marker
+      var newFetchArray = [];
+        socket.on('update', function(newFetch){
+          newFetchArray.push(newFetch);
+          loadMarkers(newFetchArray);
+          emptyNewFetchArray(newFetchArray);
+        });
+
+        function emptyNewFetchArray(newFetchArray){
+          newFetchArray.pop();
+          // console.log(newFetchArray);
+        }
+
+    loadMarkers(fetchData);
+
+    });
+  }, function(error){
+    console.log("Could not get location");
+  });
+}
+
+  vm.initialize();
+
+  vm.loadMarkers = loadMarkers;
+  function loadMarkers(fetchData){
+
+    for(var i=0; i<fetchData.length; i++){
+      if(!fetchData[i].dateClaimed && !fetchData[i].dateClosed){
+        var markerPos = new google.maps.LatLng(fetchData[i].lat, fetchData[i].lng);
+        var item = fetchData[i].item;
+        var address = fetchData[i].address;
+        var id = fetchData[i].id;
+        var paymentAmount = fetchData[i].paymentAmount;
+
+        createMarker(markerPos, item, address, id, paymentAmount);
+      }
+    }
+  }
+
+function createMarker(markerPos, item, address, id, paymentAmount){
+  var marker = new google.maps.Marker({
+    map: $scope.map,
+    animation: google.maps.Animation.DROP,
+    position: markerPos,
+    item: item,
+    address: address,
+    id: id,
+    paymentAmount: paymentAmount
+ });
+
+   google.maps.event.addListener(marker, 'click', function(){
+    //  console.log(marker);
+
+     var infoWindow = new google.maps.InfoWindow();
+
+     var iwContent = '<div id="iw_container">' +
+        '<div>' + '<div class="iw_title">' + item + '</div>' + '<br />' + address + '<br />' + 'cost: $' + paymentAmount + '<br />' +
+        '<button class="button" id="addClaimFetch" ng-click="LandingPageFindFetch.showButtonConfirm(iwContent)">claim</button>' +
+        '</div>' + '</div>';
+
+        var compile = $compile(iwContent)($scope);
+        // var compileArr = compile[0];
+        // console.log(compileArr)
+
+      // including content to the infowindow
+      infoWindow.setContent(compile[0]);
+
+      // opening the infowindow in the current map and at the current marker location
+      infoWindow.open($scope.map, marker);
+
+
+      // confirm fetch claim
+        vm.showButtonConfirm = function() {
+          var confirmPopup = $ionicPopup.confirm({
+            scope: $scope,
+            title: 'retrieve a fetch',
+            template: 'you must be signed in to retrieve a fetch'
+          });
+
+          confirmPopup.then(function(res) {
+            if(res) {
+              // addClaimFetch();
+              $location.path('/signin')
+             }
+            else {
+              console.log('You are not sure');
+            }
+          });
+        };
+
+
+    });
+  }
+
+}
 
 function HomeCtrl($scope, $ionicPopup, $timeout, $location, Fetches, FetchService, UserHistoryService){
   var vm = this;
+
 
   vm.fetch = Fetches.all()
   .then(function(fetchArr){
@@ -90,7 +268,7 @@ function HomeCtrl($scope, $ionicPopup, $timeout, $location, Fetches, FetchServic
 
      var myPopup = $ionicPopup.show({
        template: "<div>"  + $scope.shownItem.item + "<input type='text' ng-model='data.item'>" + "<br /> " +
-       $scope.shownItem.address + "<input type='text' ng-model='data.address'>" + "<br />" +
+       $scope.shownItem.address + "<input type='text' ng-model='data.address'>" + "<br />" + "cost: $" +
        $scope.shownItem.paymentAmount + "<input type='text' ng-model='data.paymentAmount'>" + "<br />" + "</div>",
        title: $scope.shownItem.item,
        subTitle: 'edit your fetch',
@@ -161,7 +339,7 @@ function HomeCtrl($scope, $ionicPopup, $timeout, $location, Fetches, FetchServic
 }
 
 
-function AddFetchCtrl($scope, $location, FetchService, $state, $cordovaGeolocation, $ionicModal, AvailableFetchesService) {
+function AddFetchCtrl($scope, $location, FetchService, $state, $cordovaGeolocation, $ionicModal, $ionicHistory, AvailableFetchesService) {
   var vm = this;
 
 // autocomplete
@@ -199,106 +377,6 @@ var options = {timeout: 10000, enableHighAccuracy: true};
 
     var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
-    var styleArray = [
-    {
-        "featureType": "administrative",
-        "elementType": "all",
-        "stylers": [
-            {
-                "visibility": "on"
-            },
-            {
-                "lightness": 33
-            }
-        ]
-    },
-    {
-        "featureType": "landscape",
-        "elementType": "all",
-        "stylers": [
-            {
-                "color": "#f2e5d4"
-            }
-        ]
-    },
-    {
-        "featureType": "poi.park",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "color": "#c5dac6"
-            }
-        ]
-    },
-    {
-        "featureType": "poi.park",
-        "elementType": "labels",
-        "stylers": [
-            {
-                "visibility": "on"
-            },
-            {
-                "lightness": 20
-            }
-        ]
-    },
-    {
-        "featureType": "road",
-        "elementType": "all",
-        "stylers": [
-            {
-                "lightness": 20
-            }
-        ]
-    },
-    {
-        "featureType": "road.highway",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "color": "#c5c6c6"
-            }
-        ]
-    },
-    {
-        "featureType": "road.arterial",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "color": "#e4d7c6"
-            }
-        ]
-    },
-    {
-        "featureType": "road.local",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "color": "#fbfaf7"
-            }
-        ]
-    },
-    {
-        "featureType": "water",
-        "elementType": "all",
-        "stylers": [
-            {
-                "visibility": "on"
-            },
-            {
-                "color": "#7fdbd4"
-            }
-        ]
-    }
-];
-
-
-
-
-
-
-
-
 
     var mapOptions = {
       center: latLng,
@@ -326,7 +404,7 @@ var options = {timeout: 10000, enableHighAccuracy: true};
 
 
         google.maps.event.addDomListener(infoWindow, 'click', function(){
-            console.log('this worked')
+            console.log('this worked');
         })
 
 
@@ -419,6 +497,7 @@ var options = {timeout: 10000, enableHighAccuracy: true};
   function postNewFetch(fetchObj){
     // console.log(fetchObj);
     FetchService.postNewFetch(fetchObj).then(function(response){
+      $ionicHistory.clearCache();
       vm.closeModal();
       $location.path('/tab/home');
         });
@@ -441,19 +520,13 @@ function AvailableFetches($scope, AvailableFetchesService, ClaimableFetchService
     vm.fetches = fetchArr.data;
   });
 
-  // vm.fetch = AvailableFetchesService.all()
-  // .then(function(fetchArr){
-  //   vm.fetches = fetchArr.data;
-  // });
 
   var socket = io.connect('https://mysterious-waters-23406.herokuapp.com');
   // console.log(socket);
   socket.on('connect', function (socket) {
-    console.log('connection');
+    // console.log('connection');
   });
-  // socket.on('check', function(data){
-  //   console.log(data);
-  // });
+
   socket.on('update', function(newFetch){
     vm.fetches.push(newFetch);
     $scope.$apply();
@@ -506,99 +579,6 @@ function AvailableFetches($scope, AvailableFetchesService, ClaimableFetchService
 
     var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
-    var styleArray = [
-    {
-        "featureType": "administrative",
-        "elementType": "all",
-        "stylers": [
-            {
-                "visibility": "on"
-            },
-            {
-                "lightness": 33
-            }
-        ]
-    },
-    {
-        "featureType": "landscape",
-        "elementType": "all",
-        "stylers": [
-            {
-                "color": "#f2e5d4"
-            }
-        ]
-    },
-    {
-        "featureType": "poi.park",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "color": "#c5dac6"
-            }
-        ]
-    },
-    {
-        "featureType": "poi.park",
-        "elementType": "labels",
-        "stylers": [
-            {
-                "visibility": "on"
-            },
-            {
-                "lightness": 20
-            }
-        ]
-    },
-    {
-        "featureType": "road",
-        "elementType": "all",
-        "stylers": [
-            {
-                "lightness": 20
-            }
-        ]
-    },
-    {
-        "featureType": "road.highway",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "color": "#c5c6c6"
-            }
-        ]
-    },
-    {
-        "featureType": "road.arterial",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "color": "#e4d7c6"
-            }
-        ]
-    },
-    {
-        "featureType": "road.local",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "color": "#fbfaf7"
-            }
-        ]
-    },
-    {
-        "featureType": "water",
-        "elementType": "all",
-        "stylers": [
-            {
-                "visibility": "on"
-            },
-            {
-                "color": "#7fdbd4"
-            }
-        ]
-    }
-];
-
     var mapOptions = {
       center: latLng,
       zoom: 14,
@@ -636,8 +616,6 @@ function AvailableFetches($scope, AvailableFetchesService, ClaimableFetchService
 
   vm.initialize();
 
-
-
   vm.loadMarkers = loadMarkers;
   function loadMarkers(fetchData){
 
@@ -666,12 +644,11 @@ function createMarker(markerPos, item, address, id, paymentAmount){
  });
 
    google.maps.event.addListener(marker, 'click', function(){
-    //  console.log(marker);
 
      var infoWindow = new google.maps.InfoWindow();
 
      var iwContent = '<div id="iw_container">' +
-        '<div>' + '<div class="iw_title">' + item + '</div>' + '<br />' + address + '<br />' + paymentAmount + '<br />' +
+        '<div>' + '<div class="iw_title">' + item + '</div>' + '<br />' + address + '<br />' + 'cost: $' + paymentAmount + '<br />' +
         '<button class="button" id="addClaimFetch" ng-click="AvailableFetches.showButtonConfirm(iwContent)">claim</button>' +
         '</div>' + '</div>';
 
@@ -685,12 +662,11 @@ function createMarker(markerPos, item, address, id, paymentAmount){
       // opening the infowindow in the current map and at the current marker location
       infoWindow.open($scope.map, marker);
 
-
       // confirm fetch claim
         vm.showButtonConfirm = function() {
           var confirmPopup = $ionicPopup.confirm({
             scope: $scope,
-            title: 'claim fetch',
+            title: item,
             template: 'Are you sure you want to claim this fetch?'
           });
 
@@ -704,7 +680,6 @@ function createMarker(markerPos, item, address, id, paymentAmount){
           });
         };
 
-
       vm.addClaimFetch = addClaimFetch;
       function addClaimFetch(iwContent){
         var fetchObjClaim = {
@@ -712,8 +687,7 @@ function createMarker(markerPos, item, address, id, paymentAmount){
           address: marker.address,
           id: marker.id
         };
-        // console.log(fetchObjClaim);
-        // console.log(marker.item);
+
         FetchService.claimFetch(fetchObjClaim).then(function(response){
                $location.path('/tab/home');
         });
@@ -724,61 +698,11 @@ function createMarker(markerPos, item, address, id, paymentAmount){
 
 
 
-function FindFetchCtrl($scope, Fetches){
-  var vm = this;
-  vm.fetch = Fetches.all()
-  .then(function(fetchArr){
-    // console.log(fetchArr.data);
-    vm.fetches = fetchArr.data;
-  });
-}
 
-
-
-function AccountCtrl($scope, $location, $state, Password, SigninService, AddUserService, UserHistoryService, ClaimableFetchService){
+function AccountCtrl($scope, $location, $state, SigninService, AddUserService){
   var vm = this;
   vm.signin = signin;
   vm.signup = signup;
-  vm.signout = signout;
-
-
-  vm.fetch = UserHistoryService.getHistory()
-  .then(function(fetchArr){
-    vm.fetches = fetchArr.data;
-  });
-
-  vm.fetch = ClaimableFetchService.all()
-  .then(function(fetchArr){
-    vm.fetches = fetchArr.data;
-  });
-
-
-
-  // display fetch history
-  // vm.deliveryFetches = false;
-  // vm.retrievedFetches = false;
-  vm.fetchDeliveryHistoryDisplay = function(){
-    $scope.deliveryFetches = true;
-    $scope.retrievedFetches = false;
-  }
-
-  vm.fetchRetrievedHistoryDisplay = function(){
-    $scope.deliveryFetches = false;
-    $scope.retrievedFetches = true;
-  }
-
-
- $scope.toggleItem= function(fetch) {
-   if ($scope.isItemShown(fetch)) {
-     $scope.shownItem = null;
-   } else {
-     $scope.shownItem = fetch;
-   }
- };
- $scope.isItemShown = function(fetch) {
-   return $scope.shownItem === fetch;
- };
-
 
   function signin(user){
     SigninService.signin(user).then(function(response){
@@ -792,61 +716,154 @@ function AccountCtrl($scope, $location, $state, Password, SigninService, AddUser
 
   function signup(user) {
     var vm = this;
-    console.log(user);
-    // AddUserService.signup(user).then(function(response){
-    //   $location.path('/tab/account');
-    // });
-    this.regex = /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i;
-
-
-    $scope.$watch('user.password', function(pass) {
-      // console.log(Password.getStrength(pass))
-    	$scope.passwordStrength = Password.getStrength(pass);
-
-    	if($scope.isPasswordWeak()) {
-        if($scope.form !== undefined && $scope.form.password !== undefined){
-    		    $scope.form.password.$setValidity('strength', false);
-        }
-        // else {
-        //   $scope.form.password = "";
-        //   $scope.form.password.$setValidity('strength', false);
-        // }
-    	} else {
-    		$scope.form.password.$setValidity('strength', true);
-    	}
-    });
-
-    $scope.isPasswordWeak = function() {
-      if($scope.form !== undefined && $scope.form.password !== undefined){
-        return $scope.passwordStrength < 20;
-      }
-      else {
-        return true;
-      }
-
-    };
-    $scope.isPasswordOk = function() {
-    	return $scope.passwordStrength >= 20 && $scope.passwordStrength <= 50;
-    };
-    $scope.isPasswordStrong = function() {
-    	return $scope.passwordStrength > 50;
-    };
-    $scope.isInputValid = function(input) {
-    	return input.$dirty && input.$valid;
-    };
-    $scope.isInputInvalid = function(input) {
-    	return input.$dirty && input.$invalid;
-    };
-
 
     AddUserService.signup(user).then(function(response){
       $location.path('/signin');
     });
   }
 
+}
+
+
+function UserProfileCtrl($scope, $location, $state, Fetches, UserHistoryService){
+  var vm = this;
+
+  vm.signout = signout;
   function signout() {
     localStorage.setItem('Authorization', null);
     $location.path('/signin');
     vm.loggedStatus = false;
-  }
+    }
+
+
+    vm.fetch = UserHistoryService.getHistory()
+    .then(function(fetchArr){
+      vm.fetches = fetchArr.data;
+    });
+
+    vm.claimedFetch = Fetches.all()
+    .then(function(fetchArr){
+      vm.claimedFetches = fetchArr.data;
+      console.log(fetchArr.data)
+    });
+
+
+    // display fetch history
+    vm.fetchDeliveryHistoryDisplay = function(){
+      $scope.deliveryFetches = true;
+      $scope.retrievedFetches = false;
+    };
+
+    vm.fetchRetrievedHistoryDisplay = function(){
+      $scope.deliveryFetches = false;
+      $scope.retrievedFetches = true;
+    };
+
+
+   $scope.toggleItem= function(fetch) {
+     if ($scope.isItemShown(fetch)) {
+       $scope.shownItem = null;
+     } else {
+       $scope.shownItem = fetch;
+     }
+   };
+   $scope.isItemShown = function(fetch) {
+     return $scope.shownItem === fetch;
+   };
+
 }
+
+
+
+var styleArray = [
+{
+    "featureType": "administrative",
+    "elementType": "all",
+    "stylers": [
+        {
+            "visibility": "on"
+        },
+        {
+            "lightness": 33
+        }
+    ]
+},
+{
+    "featureType": "landscape",
+    "elementType": "all",
+    "stylers": [
+        {
+            "color": "#f2e5d4"
+        }
+    ]
+},
+{
+    "featureType": "poi.park",
+    "elementType": "geometry",
+    "stylers": [
+        {
+            "color": "#c5dac6"
+        }
+    ]
+},
+{
+    "featureType": "poi.park",
+    "elementType": "labels",
+    "stylers": [
+        {
+            "visibility": "on"
+        },
+        {
+            "lightness": 20
+        }
+    ]
+},
+{
+    "featureType": "road",
+    "elementType": "all",
+    "stylers": [
+        {
+            "lightness": 20
+        }
+    ]
+},
+{
+    "featureType": "road.highway",
+    "elementType": "geometry",
+    "stylers": [
+        {
+            "color": "#c5c6c6"
+        }
+    ]
+},
+{
+    "featureType": "road.arterial",
+    "elementType": "geometry",
+    "stylers": [
+        {
+            "color": "#e4d7c6"
+        }
+    ]
+},
+{
+    "featureType": "road.local",
+    "elementType": "geometry",
+    "stylers": [
+        {
+            "color": "#fbfaf7"
+        }
+    ]
+},
+{
+    "featureType": "water",
+    "elementType": "all",
+    "stylers": [
+        {
+            "visibility": "on"
+        },
+        {
+            "color": "#7fdbd4"
+        }
+    ]
+}
+];

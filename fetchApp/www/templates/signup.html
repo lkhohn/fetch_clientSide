@@ -2,32 +2,33 @@
   <ion-content class="padding center account">
 
 
-        <div class='row row-center'>
 
-          <div class='col'>
-            <img class="accountLogo" src="./css/logo_GIMP_v3.png"/>
-          </div>
+<div class='row row-center' id="landPageHeaderMain">
 
-          <div class='col col-75'>
-            <h1 class="accountHeader">fetch</h1>
-          </div>
+  <div class='col-34'>
+    <img class="landingPageLogo" src="./css/logo_GIMP_v3.png"/>
+  </div>
 
-        </div>
+  <div class='col col-75'>
+    <h1 class="landingPageTitle">fetch</h1>
+  </div>
+
+</div>
 
 
 
 <form novalidate name="form" ng-submit="Account.signup({firstName: SUfirstName, lastName: SUlastName, email: SUemail, phoneNumber: SUphoneNumber, zipCode: SUzipCode, password: SUpassword})">
   <div class="list">
 
-    <label class="item item-input item-floating-label" ng-class="{'has-error': form.email.$invalid && form.email.$dirty, 'has-success': form.email.$valid && form.email.$dirty}">
+    <label class="item item-input item-floating-label" ng-class="{'has-error': form.email.$invalid && form.email.$dirty, 'has-success': form.email.$valid && form.email.$dirty}" id="firstFormInputField">
       <span class="input-label">Email</span>
       <input name="email" type="email" placeholder="Email" ng-model="SUemail"
       class="form-control no-border"
-      ng-pattern="Account.regex"
+      ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/"
       required>
       <div class='help-block' ng-messages="form.email.$error" style="color:red" role="alert" ng-show="form.email.$touched">
        <div ng-message="required">You did not enter a field</div>
-       <div ng-pattern="pattern">Incorrect email format</div>
+       <div ng-message="pattern">Incorrect email format</div>
      </div>
     </label>
 
@@ -60,7 +61,7 @@
 
   <label class="item item-input item-floating-label" ng-class="{'has-error': form.phoneNumber.$invalid && form.phoneNumber.$dirty, 'has-success': form.phoneNumber.$valid && form.phoneNumber.$dirty}">
     <span class="input-label">phone number</span>
-    <input name="phoneNumber" type="text" placeholder="phone number" ng-model="SUphoneNumber"
+    <input name="phoneNumber" type="number" placeholder="phone number" ng-model="SUphoneNumber"
     class="form-control no-border"
     ng-minlength="2"
     ng-maxlength="12"
@@ -122,11 +123,11 @@
     class="form-control no-border"
     required>
     <div ng-show="((form.password.$dirty && form.confirmPassword.$dirty) && (SUpassword != SUconfirmPassword))">
-        <span>Password mismatched</span>
+        <span style="color:red">Password mismatched</span>
     </div>
   </label>
 
-    <button type="submit" class="button" ng-click='checkSignup=!checkSignup' ng-disabled='!form.$valid'>Submit</button>
+    <button type="submit" class="button button-block" ng-click='checkSignup=!checkSignup' ng-disabled='!form.$valid'>Submit</button>
 
 
 
