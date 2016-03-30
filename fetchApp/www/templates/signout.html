@@ -1,19 +1,20 @@
-<ion-view view-title="">
+<ion-view view-title="fetch">
   <ion-content class="padding center UserProfileCtrl">
 
-    <h3>history</h3>
+    <h3>successful fetch history</h3>
+
 
     <div class='row'>
-        <a class="button icon-right ion-chevron-right" ng-class="{'active': deliveryFetches === true}" ng-click='UserProfileCtrl.fetchDeliveryHistoryDisplay()'>dropped fetches</a>
+        <a class="button icon-right ion-chevron-right" ng-class="{'active': deliveryFetches === true}" ng-click='UserProfileCtrl.fetchDeliveryHistoryDisplay()'>retrieved fetches</a>
     </div>
     <div class='row'>
-        <a class="button icon-right ion-chevron-right" ng-class="{'active': retrievedFetches === true}" ng-click='UserProfileCtrl.fetchRetrievedHistoryDisplay()'>retrieved fetches</a>
+        <a class="button icon-right ion-chevron-right" ng-class="{'active': retrievedFetches === true}" ng-click='UserProfileCtrl.fetchRetrievedHistoryDisplay()'>dropped fetches</a>
     </div>
 
 
     <div class="card" ng-show='deliveryFetches'>
-      <div class="item item-divider">
-        dropped fetches
+      <div class="item item-divider" id="homePageItemDivider">
+        retrieved fetches
       </div>
       <div class="item item-text-wrap">
         <div class="list">
@@ -25,7 +26,7 @@
                 <p> claimed: {{ fetch.dateClaimed | date:'fullDate'  }}</p>
                 <p> closed: {{ fetch.dateClosed | date:'fullDate'  }}</p>
                 <p> address: {{ fetch.address }}</p>
-                <p>cost: $ {{ fetch.paymentAmount }}</p>
+                <p>reward: $ {{ fetch.paymentAmount }}</p>
               </div>
               <div ng-click="toggleItem(fetch)" class="item-expand-footer">
                 <i ng-class="isItemShown(fetch) ? 'ion-ios-minus-outline' : 'ion-ios-plus-outline'"></i>
@@ -40,8 +41,8 @@
 
 
     <div class="card" ng-show="retrievedFetches">
-      <div class="item item-divider">
-        retrieved fetches
+      <div class="item item-divider" id="homePageItemDivider">
+        dropped fetches
       </div>
       <div class="item item-text-wrap">
         <div class="list">
@@ -53,7 +54,7 @@
                 <p> claimed: {{ claimedFetch.dateClaimed | date:'fullDate'  }}</p>
                 <p> closed: {{ claimedFetch.dateClosed | date:'fullDate'  }}</p>
                 <p> address: {{ claimedFetch.address }}</p>
-                <p> cost: $ {{ claimedFetch.paymentAmount }}</p>
+                <p> reward: $ {{ claimedFetch.paymentAmount }}</p>
               </div>
               <div ng-click="toggleItem(claimedFetch)" class="item-expand-footer">
                 <i ng-class="isItemShown(claimedFetch) ? 'ion-ios-minus-outline' : 'ion-ios-plus-outline'"></i>
@@ -64,6 +65,12 @@
         </div>
       </div>
     </div>
+
+    <!-- <div class='row row-center' id='signoutSection'>
+      <div class='col col-center'>
+        <p ng-model='UserProfileCtrl.userName'>signed in as {{ UserProfileCtrl.userNameDetails }}</p>
+      </div>
+    </div> -->
 
     <button class="button button-block signout-button" ng-click="UserProfileCtrl.signout()">sign in as a different user?</button>
 

@@ -1,19 +1,19 @@
 angular.module('starter.controllers', [])
 
-.controller('LandingPageCtrl', ['$scope', '$ionicPopup', '$timeout', '$location', '$state', '$cordovaGeolocation', '$compile', 'AvailableFetchesService', LandingPageCtrl])
+.controller('LandingPageCtrl', ['$scope', '$ionicPopup', '$timeout', '$location', '$state', '$cordovaGeolocation', '$compile', '$ionicLoading', 'AvailableFetchesService', LandingPageCtrl])
 
-.controller('HomeCtrl', ['$scope', '$ionicPopup', '$timeout', '$location', 'Fetches', 'FetchService', 'UserHistoryService', HomeCtrl])
+.controller('HomeCtrl', ['$scope', '$ionicPopup', '$timeout', '$location', '$ionicModal', '$ionicHistory', 'Fetches', 'FetchService', 'UserHistoryService', 'UserInformation', 'RetrievingFetchContactInfo', HomeCtrl])
 
-.controller('AddFetchCtrl', ['$scope', '$location', 'FetchService', '$state', '$cordovaGeolocation', '$ionicModal', '$ionicHistory', 'AvailableFetchesService', AddFetchCtrl])
+.controller('AddFetchCtrl', ['$scope', '$location', 'FetchService', '$state', '$cordovaGeolocation', '$ionicModal', '$ionicHistory', '$ionicLoading', 'AvailableFetchesService', AddFetchCtrl])
 
-.controller('AvailableFetches', ['$scope', 'AvailableFetchesService','ClaimableFetchService', 'FetchService', '$ionicPopup', '$timeout', '$location', '$state', '$cordovaGeolocation', '$compile', AvailableFetches])
+.controller('AvailableFetches', ['$scope', 'AvailableFetchesService','ClaimableFetchService', 'FetchService', '$ionicPopup', '$timeout', '$location', '$state', '$cordovaGeolocation', '$compile', '$ionicLoading', AvailableFetches])
 
-.controller('AccountCtrl', ['$scope', '$location', '$state', 'SigninService', 'AddUserService', AccountCtrl])
+.controller('AccountCtrl', ['$scope', '$location', '$state', '$ionicLoading', 'SigninService', 'AddUserService', AccountCtrl])
 
-.controller('UserProfileCtrl', ['$scope', '$location', '$state', 'Fetches', 'UserHistoryService', UserProfileCtrl]);
+.controller('UserProfileCtrl', ['$scope', '$location', '$state', 'Fetches', 'UserHistoryService', 'UserInformation', UserProfileCtrl]);
 
 
-function LandingPageCtrl($scope, $ionicPopup, $timeout, $location, $state, $cordovaGeolocation, $compile, AvailableFetchesService){
+function LandingPageCtrl($scope, $ionicPopup, $timeout, $location, $state, $cordovaGeolocation, $compile, $ionicLoading, AvailableFetchesService){
   var vm = this;
 
   vm.fetch = AvailableFetchesService.all()
@@ -74,7 +74,21 @@ function LandingPageCtrl($scope, $ionicPopup, $timeout, $location, $state, $cord
   // display map
   var options = {timeout: 10000, enableHighAccuracy: true};
 
+  $scope.show = function() {
+    $ionicLoading.show({
+      template: '<p>loading...</p><ion-spinner></ion-spinner>'
+    });
+  };
+
+  $scope.show($ionicLoading);
+
+  $scope.hide = function(){
+         $ionicLoading.hide();
+   };
+
   $cordovaGeolocation.getCurrentPosition(options).then(function(position){
+
+    $scope.hide($ionicLoading);
 
     var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
@@ -148,9 +162,10 @@ function createMarker(markerPos, item, address, id, paymentAmount){
      var infoWindow = new google.maps.InfoWindow();
 
      var iwContent = '<div id="iw_container">' +
-        '<div>' + '<div class="iw_title">' + item + '</div>' + '<br />' + address + '<br />' + 'cost: $' + paymentAmount + '<br />' +
-        '<button class="button" id="addClaimFetch" ng-click="LandingPageFindFetch.showButtonConfirm(iwContent)">claim</button>' +
+        '<div>' + '<div class="iw_title">' + item + '</div>' + '<br />'  + '<div style="margin-bottom:1.25em">' + address + '<br />' + 'reward: $' + paymentAmount + '<br />' + '</div>' +
+        '<button class="button" id="addClaimFetch" style="background-color:#7FDBD4" ng-click="LandingPageFindFetch.showButtonConfirm(iwContent)">retrieve</button>' +
         '</div>' + '</div>';
+
 
         var compile = $compile(iwContent)($scope);
         // var compileArr = compile[0];
@@ -188,21 +203,128 @@ function createMarker(markerPos, item, address, id, paymentAmount){
 
 }
 
-function HomeCtrl($scope, $ionicPopup, $timeout, $location, Fetches, FetchService, UserHistoryService){
+function HomeCtrl($scope, $ionicPopup, $timeout, $location, $ionicModal, $ionicHistory, Fetches, FetchService, UserHistoryService, UserInformation, RetrievingFetchContactInfo){
   var vm = this;
-
 
   vm.fetch = Fetches.all()
   .then(function(fetchArr){
     vm.fetches = fetchArr.data;
+    var data = fetchArr.data;
+    tossedFetches(data);
+    tossedToBeClosed(data);
+
   });
 
   //show user claimed fetches
-  vm.userClaimedFetch = UserHistoryService.getHistory()
-  .then(function(fetchArr){
-    // console.log(fetchArr.data);
-    vm.userClaimedFetches = fetchArr.data;
+
+  vm.userInformation = RetrievingFetchContactInfo.all()
+  .then(function(userDataArr){
+    // console.log(userDataArr.data);
+    vm.userClaimedFetches = userDataArr.data;
+    var data = userDataArr.data;
+    retrievedFetches(data);
   });
+
+
+
+// direction/map for fetches user is retrieving
+  $ionicModal.fromTemplateUrl('templates/mapDirections.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(modalMap) {
+      $scope.modalMap = modalMap;
+    });
+
+    vm.mapPopup = function(){
+      $scope.modalMap.show();
+      var markerPos = new google.maps.LatLng($scope.shownItem.lat, $scope.shownItem.lng);
+      initMap(markerPos);
+      };
+
+    vm.closeModalMap = function(){
+      $scope.modalMap.hide();
+    };
+
+vm.initMap = initMap;
+  function initMap(markerPos) {
+    var map = new google.maps.Map(document.getElementById('mapDirection'), {
+      center: markerPos,
+      zoom: 15
+    });
+
+    var marker = new google.maps.Marker({
+      position: markerPos,
+      map: map,
+      title: $scope.shownItem.address
+    });
+
+    var infowindow = new google.maps.InfoWindow({
+      content: $scope.shownItem.address
+    });
+
+    infowindow.open(map, marker);
+  }
+
+
+  // display fetch history
+  vm.tossedFetches = tossedFetches;
+  function tossedFetches(data){
+    var tossedFetchCount = [];
+    if(data.length === 0){
+      vm.noTossedFetches = true;
+    } else {
+      for(var i=0; i<data.length; i++){
+        if(data[i].dateClosed === null && data[i].dateClaimed === null){
+          tossedFetchCount.push(data[i]);
+          if(tossedFetchCount.length === 0 ){
+            vm.noTossedFetches = true;
+          } else {
+            vm.noTossedFetches = false;
+          }
+        }
+      }
+    }
+  }
+
+  vm.tossedToBeClosed = tossedToBeClosed;
+  function tossedToBeClosed(data){
+    var needToBeClosedFetchCount = [];
+    // console.log(data);
+    if(data.length===0) {
+      vm.fetchToBeClosed = true;
+    } else {
+      for(var i=0; i<data.length; i++){
+      if(data[i].dateClosed === null && data[i].dateClaimed != null){
+        needToBeClosedFetchCount.push(data[i]);
+        if(needToBeClosedFetchCount.length === 0){
+          vm.fetchToBeClosed = true;
+        }
+      }
+    }
+  }
+}
+
+  vm.retrievedFetches = retrievedFetches;
+  function retrievedFetches(data){
+    var retrievedFetchesArr = [];
+    if(data.length === 0){
+      vm.retrievedFetches = true;
+    } else {
+      for(var i=0; i<data.length; i++){
+        if(data[i].dateClosed === null){
+          retrievedFetchesArr.push(data[i]);
+          if(retrievedFetches.length === 0 ){
+            vm.retrievedFetches = true;
+          } else {
+            vm.retrievedFetches = false;
+          }
+        }
+      }
+    }
+  }
+
+
+
 
 
   var socket = io.connect('https://mysterious-waters-23406.herokuapp.com');
@@ -241,8 +363,8 @@ function HomeCtrl($scope, $ionicPopup, $timeout, $location, Fetches, FetchServic
   vm.showClosed = function() {
     var confirmPopup = $ionicPopup.confirm({
       scope: $scope,
-      title: 'claim fetch',
-      template: 'Are you sure you want to claim this fetch?'
+      title: 'close fetch',
+      template: 'confirm reciept of your fetch'
     });
 
     confirmPopup.then(function(res) {
@@ -259,68 +381,46 @@ function HomeCtrl($scope, $ionicPopup, $timeout, $location, Fetches, FetchServic
   };
 
 
-   vm.showFetchPopup = function(fetch) {
-     $scope.data = {
-       item: $scope.shownItem.item,
-       address: $scope.shownItem.address,
-       paymentAmount: $scope.shownItem.paymentAmount
-     };
+  $ionicModal.fromTemplateUrl('templates/updateFetchModalForm.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(modal) {
+      $scope.modal = modal;
+    });
 
-     var myPopup = $ionicPopup.show({
-       template: "<div>"  + $scope.shownItem.item + "<input type='text' ng-model='data.item'>" + "<br /> " +
-       $scope.shownItem.address + "<input type='text' ng-model='data.address'>" + "<br />" + "cost: $" +
-       $scope.shownItem.paymentAmount + "<input type='text' ng-model='data.paymentAmount'>" + "<br />" + "</div>",
-       title: $scope.shownItem.item,
-       subTitle: 'edit your fetch',
-       scope: $scope,
-       buttons: [
-         { text: 'Cancel' },
-         {
-           text: '<b>Save</b>',
-           type: 'button-positive',
-           onTap: function(e) {
-               if (!$scope.data) {
-               //don't allow the user to close unless he enters wifi password
-               e.preventDefault();
-             } else {
-               return $scope.data;
+    vm.openModal = function(){
+      $scope.modal.show();
+      vm.fetchUpdateData = $scope.shownItem
+    };
+    vm.closeModal = function(){
+      $scope.modal.hide();
+  };
 
-             }
-           }
-         }
-       ]
-     });
 
-     myPopup.then(function(res) {
-       if(res){
-        //  console.log('Tapped!', res);
-         $scope.shownItem.item = $scope.data.item;
-         $scope.shownItem.address = $scope.data.address;
-         $scope.shownItem.paymentAmount = $scope.data.paymentAmount;
-         updateFetchInput();
-       }
-       else {
-          console.log('you did not want to save');
-       }
-     });
-   };
+   vm.updateFetchInput = updateFetchInput;
+   function updateFetchInput(updateItem){
+     console.log(updateItem)
+    if(updateItem.item !== null){
+      $scope.shownItem.item = updateItem.item;
+    } else if(updateItem.paymenAmount !== null){
+      $scope.shownItem.paymentAmount = updateItem.paymentAmount;
+    } else if(updateItem.address !== null) {
+      $scope.shownItem.address = updateItem.address;
+    };
 
-    vm.updateFetchInput = updateFetchInput;
-    function updateFetchInput(){
-      // console.log($scope.shownItem)
-       var updateItem = $scope.shownItem;
-       FetchService.updateFetch(updateItem).then(function(data){
-         console.log('this worked');
-       });
+     var updateFetch = $scope.shownItem;
+      FetchService.updateFetch(updateFetch).then(function(data){
+        $ionicHistory.clearCache();
+        vm.closeModal();
+
+      });
     }
-
-
 
 
      vm.showDeleteConfirm = function() {
         var confirmPopup = $ionicPopup.confirm({
           title: $scope.shownItem.item,
-          template: 'are you sure you want to delete?'
+          template: "are you sure you want to delete?" + "<br />" + "<br />" + "no one will be able to retrieve it!" + "<br />"
         });
 
         confirmPopup.then(function(res) {
@@ -339,7 +439,7 @@ function HomeCtrl($scope, $ionicPopup, $timeout, $location, Fetches, FetchServic
 }
 
 
-function AddFetchCtrl($scope, $location, FetchService, $state, $cordovaGeolocation, $ionicModal, $ionicHistory, AvailableFetchesService) {
+function AddFetchCtrl($scope, $location, FetchService, $state, $cordovaGeolocation, $ionicModal, $ionicHistory, $ionicLoading, AvailableFetchesService) {
   var vm = this;
 
 // autocomplete
@@ -370,10 +470,21 @@ function AddFetchCtrl($scope, $location, FetchService, $state, $cordovaGeolocati
 // display map
 var options = {timeout: 10000, enableHighAccuracy: true};
 
-// var locationData = {};
+$scope.show = function() {
+  $ionicLoading.show({
+    template: '<p>loading...</p><ion-spinner></ion-spinner>'
+  });
+};
 
+$scope.show($ionicLoading);
+
+$scope.hide = function(){
+       $ionicLoading.hide();
+ };
 
   $cordovaGeolocation.getCurrentPosition(options).then(function(position){
+
+    $scope.hide($ionicLoading);
 
     var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
@@ -386,7 +497,6 @@ var options = {timeout: 10000, enableHighAccuracy: true};
     };
 
     $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
-
     //Wait until the map is loaded
     google.maps.event.addListenerOnce($scope.map, 'idle', function(){
       //drop pin
@@ -398,19 +508,26 @@ var options = {timeout: 10000, enableHighAccuracy: true};
         // can make custom icons.... icon: image name
       });
 
+
     // create info window to load current address
     var infoWindow = new google.maps.InfoWindow();
     infoWindow.open($scope.map, marker);
 
+    google.maps.event.addDomListener(infoWindow, 'click', function(){
+        console.log('this worked');
+    })
 
-        google.maps.event.addDomListener(infoWindow, 'click', function(){
-            console.log('this worked');
-        })
-
+    // reload info window if clicked X
+    google.maps.event.addListener(marker, 'click', function(){
+      infoWindow.open($scope.map, marker);
+    })
 
 // set info window with current address, then display modal
   vm.setInfoWindow = function(){
-    infoWindow.setContent("<a id='location' ng-click='openModal()'>" + $scope.address + "</a>");
+    infoWindow.setContent("<div id='iw_container'>" + "<div class='iw_title'>" + "fetch delivery location" + "</div>" + "<div style='margin:1em'>" +
+    "<a id='location' ng-click='openModal()' style='color:#7FDBD4; font-weight: bold; font-size:1.5em'>" +  $scope.address + "</a>" + "</div>" + "</div>");
+    // infoWindow.setContent("<div id='iw_container'>" + "<div class='iw_title'>" + "set drop location" + "</div>"
+    // + "<a id='location' ng-click='openModal()'>" + $scope.address + "</a>" + "</div>");
 
     google.maps.event.addDomListener(infoWindow, 'domready', function(){
       document.getElementById('location').addEventListener('click', function(){
@@ -450,6 +567,7 @@ var options = {timeout: 10000, enableHighAccuracy: true};
       });
     });
   });
+
 
   // convert latLng to address
       var locationData = JSON.stringify(marker.position);
@@ -510,7 +628,7 @@ var options = {timeout: 10000, enableHighAccuracy: true};
 
 
 
-function AvailableFetches($scope, AvailableFetchesService, ClaimableFetchService, FetchService, $ionicPopup, $timeout, $location, $state, $cordovaGeolocation, $compile){
+function AvailableFetches($scope, AvailableFetchesService, ClaimableFetchService, FetchService, $ionicPopup, $timeout, $location, $state, $cordovaGeolocation, $compile, $ionicLoading){
   var vm = this;
 
   vm.fetches = [];
@@ -519,6 +637,11 @@ function AvailableFetches($scope, AvailableFetchesService, ClaimableFetchService
   .then(function(fetchArr){
     vm.fetches = fetchArr.data;
   });
+  $scope.show = function() {
+    $ionicLoading.show({
+      template: '<p>loading...</p><ion-spinner></ion-spinner>'
+    });
+  };
 
 
   var socket = io.connect('https://mysterious-waters-23406.herokuapp.com');
@@ -575,7 +698,15 @@ function AvailableFetches($scope, AvailableFetchesService, ClaimableFetchService
   // display map
   var options = {timeout: 10000, enableHighAccuracy: true};
 
+  $scope.show($ionicLoading);
+
+  $scope.hide = function(){
+         $ionicLoading.hide();
+   };
+
   $cordovaGeolocation.getCurrentPosition(options).then(function(position){
+
+    $scope.hide($ionicLoading);
 
     var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
@@ -648,8 +779,8 @@ function createMarker(markerPos, item, address, id, paymentAmount){
      var infoWindow = new google.maps.InfoWindow();
 
      var iwContent = '<div id="iw_container">' +
-        '<div>' + '<div class="iw_title">' + item + '</div>' + '<br />' + address + '<br />' + 'cost: $' + paymentAmount + '<br />' +
-        '<button class="button" id="addClaimFetch" ng-click="AvailableFetches.showButtonConfirm(iwContent)">claim</button>' +
+        '<div>' + '<div class="iw_title">' + item + '</div>' + '<br />' + '<div style="margin-bottom:1.25em">' + address + '<br />' + 'reward: $' + paymentAmount + '<br />' + '</div>' +
+        '<button class="button" id="addClaimFetch" style="background-color:#7FDBD4" ng-click="AvailableFetches.showButtonConfirm(iwContent)">claim</button>' +
         '</div>' + '</div>';
 
         var compile = $compile(iwContent)($scope);
@@ -698,16 +829,30 @@ function createMarker(markerPos, item, address, id, paymentAmount){
 
 
 
-
-function AccountCtrl($scope, $location, $state, SigninService, AddUserService){
+function AccountCtrl($scope, $location, $state, $ionicLoading, SigninService, AddUserService){
   var vm = this;
   vm.signin = signin;
   vm.signup = signup;
 
+
+
   function signin(user){
     SigninService.signin(user).then(function(response){
+
+      $scope.show = function() {
+        $ionicLoading.show({
+          template: '<p>loading...</p><ion-spinner></ion-spinner>'
+        });
+      };
+      $scope.show($ionicLoading);
+
+      $scope.hide = function(){
+             $ionicLoading.hide();
+       };
+
       localStorage.setItem('Authorization', 'Bearer ' + response.data.token);
       // $location.path('/tab/home');
+      $scope.hide($ionicLoading);
       $state.go('tab.home');
 
       vm.loggedStatus = true;
@@ -715,17 +860,34 @@ function AccountCtrl($scope, $location, $state, SigninService, AddUserService){
   }
 
   function signup(user) {
-    var vm = this;
-
+    console.log(user)
     AddUserService.signup(user).then(function(response){
-      $location.path('/signin');
+
+
+      $scope.show = function() {
+        $ionicLoading.show({
+          template: '<p>loading...</p><ion-spinner></ion-spinner>'
+        });
+      };
+      $scope.show($ionicLoading);
+
+      $scope.hide = function(){
+             $ionicLoading.hide();
+       };
+
+      localStorage.setItem('Authorization', 'Bearer ' + response.data.token);
+
+      $ionicLoading.hide();
+
+      $state.go('tab.home');
+      vm.loggedStatus = true;
     });
   }
 
 }
 
 
-function UserProfileCtrl($scope, $location, $state, Fetches, UserHistoryService){
+function UserProfileCtrl($scope, $location, $state, Fetches, UserHistoryService, UserInformation){
   var vm = this;
 
   vm.signout = signout;
@@ -735,17 +897,42 @@ function UserProfileCtrl($scope, $location, $state, Fetches, UserHistoryService)
     vm.loggedStatus = false;
     }
 
+   // 
+  //  vm.userName = UserInformation.all()
+  //  .then(function(data){
+  //    console.log(data);
+  //    vm.userNameDetails = data.data[0].email;
+  //  });
 
+    vm.fetches = [];
+    vm.claimedFetches = [];
+
+    var socket = io.connect('https://mysterious-waters-23406.herokuapp.com');
+    // console.log(socket);
+    socket.on('connect', function (socket) {
+      // console.log('connection');
+    });
+
+    socket.on('update', function(newFetch){
+      vm.fetches.push(newFetch);
+      $scope.$apply();
+    });
+
+// claimor_id is the current user
     vm.fetch = UserHistoryService.getHistory()
     .then(function(fetchArr){
       vm.fetches = fetchArr.data;
     });
 
+// requestor_id is the current user
     vm.claimedFetch = Fetches.all()
     .then(function(fetchArr){
       vm.claimedFetches = fetchArr.data;
-      console.log(fetchArr.data)
+      // console.log(fetchArr.data);
     });
+
+
+
 
 
     // display fetch history
@@ -770,6 +957,7 @@ function UserProfileCtrl($scope, $location, $state, Fetches, UserHistoryService)
    $scope.isItemShown = function(fetch) {
      return $scope.shownItem === fetch;
    };
+
 
 }
 

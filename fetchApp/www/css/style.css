@@ -5,10 +5,12 @@ body {
 }
 
 .tab-item.tab-item-active, .tab-item.active, .tab-item.activated {
-  color: #7fdbd4;
+  color: #7FDBD4;
 }
 
-
+.title {
+  color: #7FDBD4;
+}
 /* home page for fetch details */
 .item-expand {
   position: relative;
@@ -56,6 +58,7 @@ body {
 
 
 
+
 /* MAP on add a fetch */
 .scroll {
     height: 100%;
@@ -63,7 +66,7 @@ body {
 
 #map {
     width: 100%;
-    height: 100%;
+    height: 80%;
 }
 
 /* ALL normal buttons */
@@ -120,6 +123,7 @@ body {
 #landingPageAvailableFetchesButton{
   color: #FFF;
   background-color: #7FDBD4;
+  font-size:2em;
 }
 
 .bar-footer{
@@ -151,7 +155,9 @@ body {
   color:#7fdbd4;
 }
 
-
+#signUpLinkSection {
+  font-size:1.25em;
+}
 
 /* signout/history */
 .ion-chevron-right {
@@ -162,6 +168,9 @@ body {
 .ion-chevron-right.active {
   background-color: #36454F;
   color:#7fdbd4;
+}
+#signoutSection {
+  margin-top:4em;
 }
 
 
@@ -195,16 +204,11 @@ infoWindow {
 
 /* retrieve a fetch info window */
 #iw-container {
-   border-radius: 2px 2px 0 0;
-   box-shadow: 0 1px 6px #36454F;
-   border: 1px solid #36454F;
 }
  .iw_title {
-  padding: 1em;
-  margin: 1px;
-  background-color: #36454F;
-  color: #FFF;
-  font-weight:bold;
+  padding-top: 1em;
+  color: #36454F;
+  font-size:1.5em;
  }
 
 
@@ -230,10 +234,47 @@ infoWindow {
 .button.button-positive:activated {
   color: #FFF;
   font-weight:bold;
-  background-color: #36454F
+  background-color: #36454F;
 }
 
 .button.button-default {
   background-color:#FFF;
   color:#36454F;
+}
+
+
+
+/* HOME PAGE */
+.item-divider{
+  background-color:#36454F;
+  color: #FFF;
+}
+
+#homePageText {
+  color: #36454F;
+}
+
+.ion-ios-minus-outline {
+  color:#7FDBD4;
+  font-size:2em;
+}
+
+.ion-ios-plus-outline {
+  color:#36454F;
+  font-size:2em;
+}
+
+li {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 2px;
+  margin-left:2em;
+}
+#mapDirection {
+  height:50%;
+  width:100%;
+}
+#addressMapDirection{
+  color:#7FDBD4;
+  text-decoration:underline;
 }

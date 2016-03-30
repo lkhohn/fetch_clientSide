@@ -3,7 +3,9 @@ angular.module('starter.services', [])
 .service('FetchService', ['$http', 'dbURL', FetchService])
 .service('SigninService', ['$http', 'dbURL', SigninService])
 .service('AddUserService', ['$http', 'dbURL', AddUserService])
+.service('UserInformation', ['$http', 'dbURL', UserInformation])
 
+.service('RetrievingFetchContactInfo', ['$http', 'dbURL', RetrievingFetchContactInfo])
 .service("AuthInterceptor", function($location, $q) {
   return {
     request: function(config) {
@@ -34,6 +36,7 @@ angular.module('starter.services', [])
 .service('UserHistoryService', ['$http', 'dbURL', function($http, dbURL){
   return {
     getHistory: function(user) {
+      // console.log(user);
       return $http.get(dbURL.url + '/fetches/userHistory', user)
       .then(function(data){
         return data;
@@ -87,9 +90,9 @@ angular.module('starter.services', [])
           return fetchObj;
         }, function(response) {
           console.log(response);
-        })
+        });
         }
-      }
+      };
     }]);
 
 // heroku db connection
@@ -178,7 +181,22 @@ function SigninService($http, dbURL){
 function AddUserService($http, dbURL){
   return {
     signup: function(user){
+      console.log(user)
         return $http.post(dbURL.url + '/users/signup', user)
+        .then(function(response){
+          console.log(response)
+          return response;
+        }, function(error){
+          return error;
+        });
+      }
+    };
+  }
+
+  function UserInformation($http, dbURL){
+    return {
+      all: function(user){
+        return $http.get(dbURL.url + '/fetches/userInformation', user)
         .then(function(response){
           return response;
         }, function(error){
@@ -187,3 +205,17 @@ function AddUserService($http, dbURL){
       }
     };
   }
+
+ function RetrievingFetchContactInfo($http, dbURL){
+   return {
+     all: function(user){
+       return $http.get(dbURL.url + '/fetches/retrievingFetchContactInfo', user)
+       .then(function(response){
+        //  console.log(response);
+         return response;
+       }, function(error){
+         return error;
+       });
+     }
+   };
+ }

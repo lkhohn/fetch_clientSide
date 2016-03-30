@@ -1,20 +1,15 @@
 <!-- FOR UNSIGNED-IN USER -->
-<ion-view view-title="" cache-view="false">
+<ion-view view-title="fetch" cache-view="false">
   <ion-content class="padding LandingPageFindFetch">
 
     <div id="map" data-tap-disabled="true"></div>
     <ion-list>
       <!-- <ion-radio name="map" ng-model="selection" value="map">search by map</ion-radio> -->
       <ion-radio name="price" ng-model="selection" value="price">filter by price</ion-radio>
+      <!-- <div class='ion-chevron-down'> -->
+
+      </div>
     </ion-list>
-
-
-
-
-
-
-
-
 
 
     <div ng-show="selection == 'price'">
@@ -22,17 +17,17 @@
         <div class="item item-divider">available fetches</div>
         <ion-list>
           <ion-item ng-repeat="fetch in LandingPageFindFetch.fetches | filter: { dateClaimed: '!', dateClosed: '!' } | filter: paymentAmount" class="item item-text-wrap">
-            <div ng-class="isItemShown(fetchSearch) ? 'item-expand active' : 'item-expand inactive'">
+            <!-- <div ng-class="isItemShown(fetchSearch) ? 'item-expand active' : 'item-expand inactive'"> -->
               <h2>{{ fetch.item }}</h2>
               <p>requested: {{ fetch.dateRequested | date:'fullDate'  }}</p>
+              <p>reward: ${{ fetch.paymentAmount }}</p>
               <p>address: {{ fetch.address }}</p>
-              <p>payment amount: ${{ fetch.paymentAmount }}</p>
               <button class="button" ng-click="LandingPageFindFetch.showConfirm(fetch)">claim</button>
-            </div>
-            <div ng-click="toggleItem(fetch)" class="item-expand-footer">
+            </div>?
+            <!-- <div ng-click="toggleItem(fetch)" class="item-expand-footer">
               <i ng-class="isItemShown(fetch) ? 'ion-ios-minus-outline' : 'ion-ios-plus-outline'"></i>
               {{ isGroupShown(fetch) ? 'Less' : '' }}
-            </div>
+            </div> -->
           </ion-item>
         </ion-list>
       </div>
