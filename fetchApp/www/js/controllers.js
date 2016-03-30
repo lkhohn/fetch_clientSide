@@ -897,12 +897,13 @@ function UserProfileCtrl($scope, $location, $state, Fetches, UserHistoryService,
     vm.loggedStatus = false;
     }
 
-   // 
-  //  vm.userName = UserInformation.all()
-  //  .then(function(data){
-  //    console.log(data);
-  //    vm.userNameDetails = data.data[0].email;
-  //  });
+console.log($scope)
+   //
+   vm.userName = UserInformation.all()
+   .then(function(data){
+     console.log(data);
+     vm.userNameDetails = data.data[0].email;
+   });
 
     vm.fetches = [];
     vm.claimedFetches = [];
