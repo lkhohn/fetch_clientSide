@@ -95,8 +95,9 @@ body {
 }
 
 .landingPageLogo {
-  width:10em;
-  height:10em;
+  margin-left:0.5em;
+  width:6em;
+  height:6em;
 }
 
 .landingPageTitle {
@@ -114,7 +115,7 @@ body {
    top:0;
    left:0;
    padding-top:7em;
-   padding-bottom:7em;
+   padding-bottom:10em;
    width: 100%;
    background-color:#36454F;
 }
