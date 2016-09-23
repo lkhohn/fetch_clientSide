@@ -1,17 +1,13 @@
-/* Empty. Add your own CSS if you like */
 body {
   font-family: 'Ubuntu', sans-serif;
   color: #36454F;
 }
-
 .tab-item.tab-item-active, .tab-item.active, .tab-item.activated {
   color: #7FDBD4;
 }
-
 .title {
   color: #7FDBD4;
 }
-/* home page for fetch details */
 .item-expand {
   position: relative;
   width: 100%;
@@ -19,7 +15,6 @@ body {
   transition: max-height 0.1s ease-out;
   overflow: hidden;
 }
-
 .item-expand.inactive:after {
   content: "";
   position: absolute;
@@ -41,50 +36,33 @@ body {
   background-image: -ms-linear-gradient(bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
   background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
 }
-
 .item-expand.active {
   max-height: 500px;
   transition: max-height 0.3s ease-out;
 }
-
-
 .item-expand-footer {
   margin-top: 10px;
 }
-
 .item-expand-footer i {
   margin-right: 10px;
 }
-
-
-
-
-/* MAP on add a fetch */
 .scroll {
-    height: 100%;
+  height: 100%;
 }
-
 #map {
-    width: 100%;
-    height: 80%;
+  width: 100%;
+  height: 80%;
 }
-
-/* ALL normal buttons */
 .button {
   background-color: #36454F;
   color:#FFF;
 }
-
-
-
-/* LANDING PAGE */
 #landPageHeaderMain {
   margin:0;
   top:0;
   left:0;
   width:100%;
 }
-
 #landPageSubHeader{
   padding-bottom:4em;
   margin:0;
@@ -93,48 +71,36 @@ body {
   width:100%;
   text-align:center;
 }
-
 .landingPageLogo {
   margin-left:0.5em;
   width:6em;
   height:6em;
 }
-
 .landingPageTitle {
   color: #36454F;
   font-size:5em;
 }
-
  .landingPageSubTitle {
-   color: #36454F;
-   font-size:2em;
+  color: #36454F;
+  font-size:2em;
  }
-
-
 #landingPageMain {
-   top:0;
-   left:0;
-   padding-top:7em;
-   padding-bottom:10em;
-   width: 100%;
-   background-color:#36454F;
+  top:0;
+  left:0;
+  padding-top:7em;
+  padding-bottom:10em;
+  width: 100%;
+  background-color:#36454F;
 }
-
-
 #landingPageAvailableFetchesButton{
   color: #FFF;
   background-color: #7FDBD4;
   font-size:2em;
 }
-
 .bar-footer{
   background-color:#36454F;
   color: #FFF;
 }
-
-
-
-/* signin page */
 .item-floating-label{
   border-left:none;
   border-right:none;
@@ -155,12 +121,9 @@ body {
 .signUpLink {
   color:#7fdbd4;
 }
-
 #signUpLinkSection {
   font-size:1.25em;
 }
-
-/* signout/history */
 .ion-chevron-right {
   background-color: #36454F;
   color:#FFF;
@@ -173,10 +136,6 @@ body {
 #signoutSection {
   margin-top:4em;
 }
-
-
-/* add fetch modal */
-
 .modal{
   top:15%;
   bottom: 0;
@@ -188,40 +147,27 @@ body {
   background-color: #36454F;
   color:#FFF;
 }
-
 #addFetchModalHeaderCancelButton {
 background-color: #36454F;
   color:#7FDBD4;
 }
-
-
-/*add fetch info window */
 infoWindow {
   color: #36454F;
   border-radius: 2px 2px 0 0;
   box-shadow: 0 1px 6px #36454F;
   border: 1px solid #36454F;
 }
-
-/* retrieve a fetch info window */
-#iw-container {
-}
  .iw_title {
   padding-top: 1em;
   color: #36454F;
   font-size:1.5em;
  }
-
-
-/* popup */
 .popup-head {
   background-color: #36454F;
 }
-
 .popup-title {
   color: #FFF;
 }
-
 .button.button-positive{
   background-color: #7FDBD4;
   color: #FFF;
