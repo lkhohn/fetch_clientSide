@@ -8,7 +8,7 @@ angular.module('starter.services', [])
 .service('RetrievingFetchContactInfo', ['$http', 'dbURL', RetrievingFetchContactInfo])
 .service('Fetches', ['$http', 'dbURL', Fetches])
 .service('ClaimableFetchService', ['$http', 'dbURL', ClaimableFetchService])
-.service('AvailableFetchesService', ['$http', 'dbURL', AvailableFetchesService]);
+.service('AvailableFetchesService', ['$http', 'dbURL', AvailableFetchesService])
 .service('FetchService', ['$http', 'dbURL', FetchService]);
 
 function dbURL() {
