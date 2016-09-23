@@ -21,8 +21,7 @@ function LandingPageCtrl($scope, $ionicPopup, $timeout, $location, $state, $cord
     vm.fetches = fetchArr.data;
   });
 
-
-  var socket = io.connect('https://mysterious-waters-23406.herokuapp.com');
+  var socket = io.connect(connectionURL);
   // console.log(socket);
   socket.on('connect', function (socket) {
     // console.log('connection');
@@ -325,9 +324,7 @@ vm.initMap = initMap;
 
 
 
-
-
-  var socket = io.connect('https://mysterious-waters-23406.herokuapp.com');
+  var socket = io.connect(connectionURL);
   // console.log(socket);
   socket.on('connect', function (socket) {
     // console.log('connection');
@@ -643,8 +640,7 @@ function AvailableFetches($scope, AvailableFetchesService, ClaimableFetchService
     });
   };
 
-
-  var socket = io.connect('https://mysterious-waters-23406.herokuapp.com');
+  var socket = io.connect(connectionURL);
   // console.log(socket);
   socket.on('connect', function (socket) {
     // console.log('connection');
@@ -908,7 +904,7 @@ console.log($scope)
     vm.fetches = [];
     vm.claimedFetches = [];
 
-    var socket = io.connect('https://mysterious-waters-23406.herokuapp.com');
+    var socket = io.connect(connectionURL);
     // console.log(socket);
     socket.on('connect', function (socket) {
       // console.log('connection');
@@ -1056,3 +1052,7 @@ var styleArray = [
     ]
 }
 ];
+
+var connectionURL = 'http://localhost:3000';
+// var connectionURL = 'https://mysterious-waters-23406.herokuapp.com';
+
