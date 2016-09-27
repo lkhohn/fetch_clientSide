@@ -99,7 +99,7 @@ angular.module('starter.services', [])
 function dbURL() {
   return {
     // url: "https://mysterious-waters-23406.herokuapp.com"
-    url: "http://localhost:3000"
+    url: "http://localhost:2000"
   };
 }
 
