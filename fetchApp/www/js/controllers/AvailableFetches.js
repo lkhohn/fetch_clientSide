@@ -1,12 +1,12 @@
 'use strict';
 
 angular.module('starter.controllers')
-	.controller('AvailableFetches', ['$scope', 'AvailableFetchesService','ClaimableFetchService', 'FetchService', '$ionicPopup', '$timeout', '$location', '$state', '$cordovaGeolocation', '$compile', '$ionicLoading','styleArray', AvailableFetches]);
+	.controller('AvailableFetches', ['$scope', 'AvailableFetchesService','ClaimableFetchService', 'FetchService', '$ionicPopup', '$timeout', '$location', '$state', '$cordovaGeolocation', '$compile', '$ionicLoading','dbURL','styleArray', AvailableFetches]);
 
 
-function AvailableFetches($scope, AvailableFetchesService, ClaimableFetchService, FetchService, $ionicPopup, $timeout, $location, $state, $cordovaGeolocation, $compile, $ionicLoading, styleArray){
+function AvailableFetches($scope, AvailableFetchesService, ClaimableFetchService, FetchService, $ionicPopup, $timeout, $location, $state, $cordovaGeolocation, $compile, $ionicLoading, dbURL, styleArray){
   var vm = this;
-  var connectionURL = 'http://localhost:2000';
+
   vm.fetches = [];
 
   vm.fetch = ClaimableFetchService.all()
@@ -19,7 +19,7 @@ function AvailableFetches($scope, AvailableFetchesService, ClaimableFetchService
     });
   };
 
-  var socket = io.connect(connectionURL);
+  var socket = io.connect(dbURL.url);
   // console.log(socket);
   socket.on('connect', function (socket) {
     // console.log('connection');

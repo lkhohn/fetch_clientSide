@@ -1,13 +1,12 @@
 'use strict';
 
 angular.module('starter.controllers')
-  .controller('HomeCtrl', ['$scope', '$ionicPopup', '$timeout', '$location', '$ionicModal', '$ionicHistory', 'Fetches', 'FetchService', 'UserHistoryService', 'UserInformation', 'RetrievingFetchContactInfo', HomeCtrl]);
+  .controller('HomeCtrl', ['$scope', '$ionicPopup', '$timeout', '$location', '$ionicModal', '$ionicHistory', 'Fetches', 'FetchService', 'UserHistoryService', 'UserInformation', 'RetrievingFetchContactInfo', 'dbURL', HomeCtrl]);
 
 
 
-function HomeCtrl($scope, $ionicPopup, $timeout, $location, $ionicModal, $ionicHistory, Fetches, FetchService, UserHistoryService, UserInformation, RetrievingFetchContactInfo){
+function HomeCtrl($scope, $ionicPopup, $timeout, $location, $ionicModal, $ionicHistory, Fetches, FetchService, UserHistoryService, UserInformation, RetrievingFetchContactInfo, dbURL){
   var vm = this;
-  var connectionURL = 'http://localhost:2000';
 
   vm.fetch = Fetches.all()
   .then(function(fetchArr){
@@ -128,7 +127,7 @@ vm.initMap = initMap;
 
 
 
-  var socket = io.connect(connectionURL);
+  var socket = io.connect(dbURL.url);
   // console.log(socket);
   socket.on('connect', function (socket) {
     // console.log('connection');
@@ -191,7 +190,7 @@ vm.initMap = initMap;
 
     vm.openModal = function(){
       $scope.modal.show();
-      vm.fetchUpdateData = $scope.shownItem
+      vm.fetchUpdateData = $scope.shownItem;
     };
     vm.closeModal = function(){
       $scope.modal.hide();

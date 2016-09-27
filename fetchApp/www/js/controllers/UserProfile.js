@@ -1,12 +1,11 @@
 'use strict';
 
 angular.module('starter.controllers')
-	.controller('UserProfileCtrl', ['$scope', '$location', '$state', 'Fetches', 'UserHistoryService', 'UserInformation', UserProfileCtrl]);
+	.controller('UserProfileCtrl', ['$scope', '$location', '$state', 'Fetches', 'UserHistoryService', 'UserInformation', 'dbURL', UserProfileCtrl]);
 
 
-function UserProfileCtrl($scope, $location, $state, Fetches, UserHistoryService, UserInformation){
+function UserProfileCtrl($scope, $location, $state, Fetches, UserHistoryService, UserInformation, dbURL){
   var vm = this;
-  var connectionURL = 'http://localhost:2000';
   
   vm.signout = signout;
   function signout() {
@@ -26,7 +25,7 @@ function UserProfileCtrl($scope, $location, $state, Fetches, UserHistoryService,
     vm.fetches = [];
     vm.claimedFetches = [];
 
-    var socket = io.connect(connectionURL);
+    var socket = io.connect(dbURL.url);
     // console.log(socket);
     socket.on('connect', function (socket) {
       // console.log('connection');

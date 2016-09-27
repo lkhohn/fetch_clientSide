@@ -1,19 +1,18 @@
 'use strict';
 
 angular.module('starter.controllers')
-  .controller('LandingPageCtrl', ['$scope', '$ionicPopup', '$timeout', '$location', '$state', '$cordovaGeolocation', '$compile', '$ionicLoading', 'AvailableFetchesService', 'styleArray', LandingPageCtrl]);
+  .controller('LandingPageCtrl', ['$scope', '$ionicPopup', '$timeout', '$location', '$state', '$cordovaGeolocation', '$compile', '$ionicLoading', 'AvailableFetchesService','dbURL', 'styleArray', LandingPageCtrl]);
 
 
-function LandingPageCtrl($scope, $ionicPopup, $timeout, $location, $state, $cordovaGeolocation, $compile, $ionicLoading, AvailableFetchesService, styleArray){
+function LandingPageCtrl($scope, $ionicPopup, $timeout, $location, $state, $cordovaGeolocation, $compile, $ionicLoading, AvailableFetchesService, dbURL, styleArray){
   var vm = this;
-  var connectionURL = 'http://localhost:2000';
   
   vm.fetch = AvailableFetchesService.all()
   .then(function(fetchArr){
     vm.fetches = fetchArr.data;
   });
 
-  var socket = io.connect(connectionURL);
+  var socket = io.connect(dbURL.url);
   // console.log(socket);
   socket.on('connect', function (socket) {
     // console.log('connection');
