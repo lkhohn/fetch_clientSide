@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('starter.controllers')
-	.controller('AvailableFetches', ['$scope', 'AvailableFetchesService','ClaimableFetchService', 'FetchService', '$ionicPopup', '$timeout', '$location', '$state', '$cordovaGeolocation', '$compile', '$ionicLoading', AvailableFetches]);
+	.controller('AvailableFetches', ['$scope', 'AvailableFetchesService','ClaimableFetchService', 'FetchService', '$ionicPopup', '$timeout', '$location', '$state', '$cordovaGeolocation', '$compile', '$ionicLoading','styleArray', AvailableFetches]);
 
 
-function AvailableFetches($scope, AvailableFetchesService, ClaimableFetchService, FetchService, $ionicPopup, $timeout, $location, $state, $cordovaGeolocation, $compile, $ionicLoading){
+function AvailableFetches($scope, AvailableFetchesService, ClaimableFetchService, FetchService, $ionicPopup, $timeout, $location, $state, $cordovaGeolocation, $compile, $ionicLoading, styleArray){
   var vm = this;
   var connectionURL = 'http://localhost:2000';
   vm.fetches = [];
@@ -202,96 +202,3 @@ function createMarker(markerPos, item, address, id, paymentAmount){
   }
 }
 
-
-var styleArray = [
-{
-    "featureType": "administrative",
-    "elementType": "all",
-    "stylers": [
-        {
-            "visibility": "on"
-        },
-        {
-            "lightness": 33
-        }
-    ]
-},
-{
-    "featureType": "landscape",
-    "elementType": "all",
-    "stylers": [
-        {
-            "color": "#f2e5d4"
-        }
-    ]
-},
-{
-    "featureType": "poi.park",
-    "elementType": "geometry",
-    "stylers": [
-        {
-            "color": "#c5dac6"
-        }
-    ]
-},
-{
-    "featureType": "poi.park",
-    "elementType": "labels",
-    "stylers": [
-        {
-            "visibility": "on"
-        },
-        {
-            "lightness": 20
-        }
-    ]
-},
-{
-    "featureType": "road",
-    "elementType": "all",
-    "stylers": [
-        {
-            "lightness": 20
-        }
-    ]
-},
-{
-    "featureType": "road.highway",
-    "elementType": "geometry",
-    "stylers": [
-        {
-            "color": "#c5c6c6"
-        }
-    ]
-},
-{
-    "featureType": "road.arterial",
-    "elementType": "geometry",
-    "stylers": [
-        {
-            "color": "#e4d7c6"
-        }
-    ]
-},
-{
-    "featureType": "road.local",
-    "elementType": "geometry",
-    "stylers": [
-        {
-            "color": "#fbfaf7"
-        }
-    ]
-},
-{
-    "featureType": "water",
-    "elementType": "all",
-    "stylers": [
-        {
-            "visibility": "on"
-        },
-        {
-            "color": "#7fdbd4"
-        }
-    ]
-}
-];

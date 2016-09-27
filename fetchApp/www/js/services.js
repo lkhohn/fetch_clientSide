@@ -4,6 +4,7 @@ angular.module('starter.services', [])
 .service('SigninService', ['$http', 'dbURL', SigninService])
 .service('AddUserService', ['$http', 'dbURL', AddUserService])
 .service('UserInformation', ['$http', 'dbURL', UserInformation])
+.service('styleArray', [styleArray])
 
 .service('RetrievingFetchContactInfo', ['$http', 'dbURL', RetrievingFetchContactInfo])
 .service("AuthInterceptor", function($location, $q) {
@@ -219,4 +220,99 @@ function AddUserService($http, dbURL){
        });
      }
    };
+ }
+
+ function styleArray() {
+  return [
+      {
+          "featureType": "administrative",
+          "elementType": "all",
+          "stylers": [
+              {
+                  "visibility": "on"
+              },
+              {
+                  "lightness": 33
+              }
+          ]
+      },
+      {
+          "featureType": "landscape",
+          "elementType": "all",
+          "stylers": [
+              {
+                  "color": "#f2e5d4"
+              }
+          ]
+      },
+      {
+          "featureType": "poi.park",
+          "elementType": "geometry",
+          "stylers": [
+              {
+                  "color": "#c5dac6"
+              }
+          ]
+      },
+      {
+          "featureType": "poi.park",
+          "elementType": "labels",
+          "stylers": [
+              {
+                  "visibility": "on"
+              },
+              {
+                  "lightness": 20
+              }
+          ]
+      },
+      {
+          "featureType": "road",
+          "elementType": "all",
+          "stylers": [
+              {
+                  "lightness": 20
+              }
+          ]
+      },
+      {
+          "featureType": "road.highway",
+          "elementType": "geometry",
+          "stylers": [
+              {
+                  "color": "#c5c6c6"
+              }
+          ]
+      },
+      {
+          "featureType": "road.arterial",
+          "elementType": "geometry",
+          "stylers": [
+              {
+                  "color": "#e4d7c6"
+              }
+          ]
+      },
+      {
+          "featureType": "road.local",
+          "elementType": "geometry",
+          "stylers": [
+              {
+                  "color": "#fbfaf7"
+              }
+          ]
+      },
+      {
+          "featureType": "water",
+          "elementType": "all",
+          "stylers": [
+              {
+                  "visibility": "on"
+              },
+              {
+                  "color": "#7fdbd4"
+              }
+          ]
+      }
+    ];
  }
