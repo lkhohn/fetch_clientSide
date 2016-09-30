@@ -1,37 +1,54 @@
-<ion-view view-title="add a fetch">
-  <ion-content class="padding center addFetch">
+<ion-view view-title="fetch" cache-view="false">
+  <ion-content class="padding AddFetch" id='addFetchMap'>
 
-    <form class="form-horizontal" ng-submit="AddFetch.postNewFetch({item: item, paymentAmount: paymentAmount, paymentType: paymentType})" name="addFetchForm">
+    <div id="map" data-tap-disabled="true"></div>
+
+
+    <form class="form-horizontal" ng-submit="AddFetch.postNewFetch({item: item, paymentAmount: paymentAmount, lat: lat, lng: lng, address: address })" name="addFetchForm">
       <div class="list">
+
+      <!-- <label class="item item-input"> -->
+        <!-- <input type="text" name="lat" placeholder="lat" id="lat" ng-model="lat"> -->
+        <input type="hidden" name="lat" placeholder="lat" id="lat" ng-model="lat">
+      <!-- </label> -->
+      <!-- <label class="item item-input"> -->
+        <!-- <input type="text" name="lng" placeholder="lng" id='lng' ng-model="lng"> -->
+        <input type="hidden" name="lng" placeholder="lng" id='lng' ng-model="lng">
+      <!-- </label> -->
+
+
+      <div id="confirmLocationSection" ng-show="confirmLocation">
+
+
+        <label class="item item-input">
+          <input type="text" placeholder="where are you located?" id="autocomplete" ng-model="address" name="address" AddFetch.disable-tap="true">
+        </label>
+
+
 
         <label class="item item-input">
           <input type="text" placeholder="what do you need" ng-model="item" name="item">
         </label>
 
-        <label class="item item-input">
-          <input type="text" placeholder="where are you located?" id="autocomplete" onFocus="AddFetch.initialize()" ng-model="location" name="location">
-        </label>
 
         <label class="item item-input">
-          <input type="text" placeholder="how much will you pay?" id="requestedItemFee" ng-model="paymentAmount" name="paymentAmount">
+          <input type="text" placeholder="how much are you willing to pay?" id="requestedItemFee" ng-model="paymentAmount" name="paymentAmount">
         </label>
 
-        <label class="item item-input item-select">
-          <div class="input-label" id="paymentSelect" ng-model="paymentType" name="paymentType">
-            payment type
-          </div>
-          <select>
-            <option>bitcoin</option>
-            <option selected>stripe</option>
-            <option>cash</option>
-          </select>
-        </label>
+
+        <button type="submit" class="button" ng-disabled='!addFetchForm.$valid'>Submit</button>
+
 
       </div>
 
-      <button type="submit" class="button" ng-disabled='!addFetchForm.$valid'>Submit</button>
 
+      </div>
     </form>
+
+
+
+
+
 
   </ion-content>
 </ion-view>

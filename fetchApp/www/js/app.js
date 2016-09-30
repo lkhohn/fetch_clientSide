@@ -5,9 +5,18 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'starter.factories', 'ngMessages'])
+angular.module('starter', ['ionic','ionic.service.core', 'starter.controllers', 'starter.services', 'starter.factories', 'ngMessages', 'ngCordova'])
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
+    var push = new Ionic.Push({
+         "debug": true
+       });
+
+       push.register(function(token) {
+         console.log("Device token:",token.token);
+       });
+
+
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
@@ -30,6 +39,36 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   // Each state's controller can be found in controllers.js
   $stateProvider
 
+  .state('landingPage', {
+     url: '/landingPage',
+     templateUrl: 'templates/landingPage.html',
+     controller: 'AccountCtrl as Account'
+   })
+
+   .state('signin', {
+      url: '/signin',
+      templateUrl: 'templates/signin.html',
+      controller: 'AccountCtrl as Account'
+    })
+
+    .state('signup', {
+       url: '/signup',
+       templateUrl: 'templates/signup.html',
+       controller: 'AccountCtrl as Account'
+     })
+
+     .state('findFetch', {
+        url: '/findFetch',
+        templateUrl: 'templates/findFetch.html',
+        controller: 'LandingPageCtrl as LandingPageFindFetch'
+      })
+
+    .state('availableFetches', {
+      url: '/availableFetches',
+      templateUrl: 'templates/availableFetches.html',
+      controller: 'AvailableFetches as AvailableFetches'
+    })
+
   // setup an abstract state for the tabs directive
     .state('tab', {
     url: '/tab',
@@ -41,17 +80,18 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 
   .state('tab.home', {
     url: '/home',
+    cache: false,
     views: {
       'home': {
         templateUrl: 'templates/home.html',
         controller: 'HomeCtrl as Home'
-
       }
     }
   })
 
   .state('tab.addFetch', {
       url: '/addFetch',
+      chache:false,
       views: {
         'addFetch': {
           templateUrl: 'templates/addFetch.html',
@@ -59,39 +99,29 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         }
       }
     })
+
     .state('tab.findFetch', {
-      cache: false,
       url: '/findFetch',
       views: {
         'findFetch': {
-          templateUrl: 'templates/findFetch.html',
-          controller: 'FindFetchCtrl as FindFetch'
+          templateUrl: 'templates/availableFetches.html',
+          controller: 'AvailableFetches as AvailableFetches'
         }
       }
     })
 
-    .state('tab.fetchDetails', {
-      url: '/fetchDetails/:fetch_id',
-      views: {
-        'findFetch': {
-          templateUrl: 'templates/fetchDetails.html',
-          controller: 'FetchDetailCtrl as FetchDetail'
-        }
-      }
-    })
-
-  .state('tab.account', {
-    url: '/account',
+  .state('tab.signout', {
+    url: '/signout',
     views: {
-      'account': {
-        templateUrl: 'templates/account.html',
-        controller: 'AccountCtrl as Account'
+      'signout': {
+        templateUrl: 'templates/signout.html',
+        controller: 'UserProfileCtrl as UserProfileCtrl'
       }
     }
   });
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/tab/home');
+  $urlRouterProvider.otherwise('/landingPage');
   $httpProvider.interceptors.push("AuthInterceptor");
 
 });

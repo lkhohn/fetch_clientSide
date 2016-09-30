@@ -1,21 +1,103 @@
-<ion-view view-title="Home">
+<ion-view view-title='fetch'>
   <ion-content class="padding Home">
-    <h3>HOME</h3>
 
-    <div class="list">
-
-      <div class="item item-divider">available fetches</div>
-        <ul  ng-repeat="fetch in Home.fetches" ng-if="!fetch.dateClosed">
-          <li><a class="item" href="#/tab/fetchDetails/{{fetch.id}}">{{fetch.item}}</a></li>
-        </ul>
-
-      <div class="item item-divider">closed fetches</div>
-        <ul ng-repeat="fetch in Home.fetches" ng-if="fetch.dateClosed">
-          <li><a class="item" href="#/tab/fetchDetails/{{fetch.id}}">{{fetch.item}}</a></li>
-        </ul>
-
-
+    <div class="card">
+      <div class="item item-divider" id="homePageItemDivider">
+      tossed fetches
+      </div>
+      <div class="item item-text-wrap" ng-show="Home.noTossedFetches">
+        you do not have any tossed fetches! <br />
+        if you need something, toss a fetch for others to retrieve it for you <br />
+        <a href="/#/tab/addFetch">toss a fetch</a>
+      </div>
+      <div class="item item-text-wrap" ng-hide="Home.noTossedFetches">
+        <div class="list">
+          <ion-list>
+            <ion-item ng-repeat="fetch in Home.fetches | filter: { dateClaimed: '!', dateClosed: '!' }" class="item item-text-wrap">
+              <div ng-class="isItemShown(fetch) ? 'item-expand active' : 'item-expand inactive'">
+                <h2>{{ fetch.item }}</h2>
+                <p>date added: {{ fetch.dateRequested | date:'fullDate'  }}</p>
+                <p>reward: $ {{ fetch.paymentAmount }}</p>
+                <p>address: {{ fetch.address }}</p>
+                <button class="button" ng-click="Home.openModal(fetch)">edit</button>
+                <button class="button" ng-click="Home.showDeleteConfirm(fetch)">delete</button>
+              </div>
+              <div ng-click="toggleItem(fetch)" class="item-expand-footer">
+                <i ng-class="isItemShown(fetch) ? 'ion-ios-minus-outline' : 'ion-ios-plus-outline'"></i>
+                {{ isGroupShown(fetch) ? 'Less' : '' }}
+              </div>
+            </ion-item>
+          </ion-list>
+        </div>
+      </div>
     </div>
+
+
+    <div class="card">
+      <div class="item item-divider" id="homePageItemDivider">
+        have you received these fetches?
+      </div>
+      <div class="item item-text-wrap" ng-show='Home.fetchToBeClosed'>
+         if your tossed fetch is claimed, it will show up here. <br />
+        once you've received the tossed fetch, close it here to confirm receipt
+      </div>
+      <div class="item item-text-wrap" id="homePageText">
+        <div class="list">
+          <ion-list>
+            <ion-item ng-repeat="fetch in Home.fetches | filter: { dateClosed: '!', dateClaimed:'' }" class="item item-text-wrap">
+              <div ng-class="isItemShown(fetch) ? 'item-expand active' : 'item-expand inactive'">
+                <h2>{{ fetch.item }}</h2>
+                <p> requested: {{ fetch.dateRequested | date:'fullDate'  }}</p>
+                <p> claimed: {{ fetch.dateClaimed | date:'fullDate'  }}</p>
+                <p> reward: $ {{ fetch.paymentAmount }}</p>
+                <p> address: {{ fetch.address }}</p>
+                <button class="button" ng-click="Home.showClosed(fetch)">confirm receipt</button>
+              </div>
+              <div ng-click="toggleItem(fetch)" class="item-expand-footer">
+                <i ng-class="isItemShown(fetch) ? 'ion-ios-minus-outline' : 'ion-ios-plus-outline'"></i>
+                {{ isGroupShown(fetch) ? 'Less' : '' }}
+              </div>
+            </ion-item>
+          </ion-list>
+        </div>
+      </div>
+    </div>
+
+     <div class="card">
+        <div class="item item-divider" id="homePageItemDivider">
+          fetches you are retrieving
+        </div>
+        <div class="item item-text-wrap" ng-show="Home.retrievedFetches">
+          you haven't retrieved any fetches for other users! <br />
+          <a href="/#/tab/findFetch">retrieve a fetch</a>
+        </div>
+        <div class="item item-text-wrap" ng-hide="Home.retrievedFetches">
+          <div class="list">
+          <ion-list>
+            <ion-item ng-repeat="userClaimedFetch in Home.userClaimedFetches | filter: { dateClosed: '!' }" class="item item-text-wrap">
+              <div ng-class="isItemShown(userClaimedFetch) ? 'item-expand active' : 'item-expand inactive'">
+                <h2>{{ userClaimedFetch.item }}</h2>
+                <p> requested: {{ userClaimedFetch.dateRequested | date:'fullDate'  }}</p>
+                <p> claimed: {{ userClaimedFetch.dateClaimed | date:'fullDate'  }}</p>
+                <p> reward: $ {{ userClaimedFetch.paymentAmount }}</p>
+                <p ng-click='Home.mapPopup(userClaimedFetch)' id='addressMapDirection'> address: {{ userClaimedFetch.address }}</p>
+                <p> contact information: </p>
+                <ul>
+                  <li>email: {{ userClaimedFetch.email }}</li>
+                  <li>phone: {{ userClaimedFetch.phoneNumber }}</li>
+                  <li>name: {{ userClaimedFetch.firstName }} {{ userClaimedFetch.lastName }}</li>
+                </ul>
+              </div>
+              <div ng-click="toggleItem(userClaimedFetch)" class="item-expand-footer">
+                <i ng-class="isItemShown(userClaimedFetch) ? 'ion-ios-minus-outline' : 'ion-ios-plus-outline'"></i>
+                {{ isGroupShown(userClaimedFetch) ? 'Less' : '' }}
+              </div>
+            </ion-item>
+          </ion-list>
+        </div>
+      </div>
+    </div>
+
 
   </ion-content>
 </ion-view>

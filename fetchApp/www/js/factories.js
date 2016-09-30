@@ -1,9 +1,6 @@
 angular.module('starter.factories', [])
 .factory('Password', function (){
 
-// }
-// function Password() {
-
 		function getStrength(pass) {
 	    var score = 0;
 	    if (!pass)

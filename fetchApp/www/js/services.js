@@ -1,8 +1,12 @@
 angular.module('starter.services', [])
-.service('FetchService', ['$http', FetchService])
-.service('SigninService', ['$http', SigninService])
-.service('AddUserService', ['$http', AddUserService])
+.service('dbURL', [dbURL])
+.service('FetchService', ['$http', 'dbURL', FetchService])
+.service('SigninService', ['$http', 'dbURL', SigninService])
+.service('AddUserService', ['$http', 'dbURL', AddUserService])
+.service('UserInformation', ['$http', 'dbURL', UserInformation])
+.service('styleArray', [styleArray])
 
+.service('RetrievingFetchContactInfo', ['$http', 'dbURL', RetrievingFetchContactInfo])
 .service("AuthInterceptor", function($location, $q) {
   return {
     request: function(config) {
@@ -29,10 +33,26 @@ angular.module('starter.services', [])
   };
 })
 
-.service('Fetches', ['$http', function($http) {
+// returns all fetches that the current user has claimed
+.service('UserHistoryService', ['$http', 'dbURL', function($http, dbURL){
+  return {
+    getHistory: function(user) {
+      // console.log(user);
+      return $http.get(dbURL.url + '/fetches/userHistory', user)
+      .then(function(data){
+        return data;
+      }, function(response) {
+        console.log(response);
+      });
+    }
+  };
+}])
+
+//  returns all fetches for the specific user
+.service('Fetches', ['$http', 'dbURL', function($http, dbURL) {
   return {
     all : function() {
-      return $http.get('http://localhost:3000/fetches/', fetch)
+      return $http.get(dbURL.url + '/fetches/', fetch)
       .then(function(fetchObj) {
         // console.log(fetchObj);
         return fetchObj;
@@ -44,60 +64,113 @@ angular.module('starter.services', [])
     //   fetchObj.splice(fetchObj.indexOf(fetch), 1);
     // };
     };
-  }]);
+  }])
 
-function FetchService($http){
+.service('ClaimableFetchService', ['$http', 'dbURL', function($http, dbURL){
   return {
+    all : function(fetch) {
+      return $http.get(dbURL.url + '/fetches/claimableFetches', fetch)
+      .then(function(fetchObj){
+        // console.log(fetchObj);
+        return fetchObj;
+      }, function(response){
+        console.log(response);
+      });
+    }
+  };
+}])
+
+// returns all fetches regardless of current user
+  .service('AvailableFetchesService', ['$http', 'dbURL', function($http, dbURL) {
+    return {
+      all : function(fetch) {
+        // withCredentials:true
+        return $http.get(dbURL.url + '/availableFetches', fetch)
+        .then(function(fetchObj) {
+          console.log(fetchObj);
+          return fetchObj;
+        }, function(response) {
+          console.log(response);
+        });
+        }
+      };
+    }]);
+
+// heroku db connection
+function dbURL() {
+  return {
+    // url: "https://mysterious-waters-23406.herokuapp.com"
+    url: "http://localhost:2000"
+  };
+}
+
+// current user can claim and close fetches, post fetches
+function FetchService($http, dbURL){
+  return {
+    // getFetch isn't used
     getFetch:function(user){
       console.log(user);
-      return $http.post('http://localhost:3000/fetches/user/', user)
+      return $http.post(dbURL.url + '/fetches/', user)
         .then(function(response){
           console.log(response);
         }, function(error){
           console.log(error);
         });
       },
-    // showAvailFetches: function(fetch){
-    //     return $http.get('http://localhost:3000/fetches/', fetch)
-    //     .then(function(response){
-    //       console.log(response);
-    //       return response;
-    //     }, function(error){
-    //       console.log(error);
-    //     });
-    //   },
-    // getFetchDetails: function(id) {
-    //   console.log(id);
-    //   return $http.get('http://localhost:3000/' + id)
-    //   .then(function(response){
-    //     console.log(response);
-    //   }, function(error){
-    //     console.log(error);
-    //   });
-    // },
-    postNewFetch: function(fetchObj) {
-      console.log(fetchObj);
-        return $http.post('http://localhost:3000/fetches', fetchObj)
+
+    claimFetch: function(fetch){
+      return $http.put(dbURL.url + '/fetches/claim/', fetch)
         .then(function(response){
           console.log(response);
         }, function(error){
           console.log(error);
         });
+    },
+
+    closeFetch: function(fetch){
+      return $http.put(dbURL.url + '/fetches/close/', fetch)
+      .then(function(response){
+        console.log(response);
+      }, function(error){
+        console.log(error);
+      });
+    },
+
+    postNewFetch: function(fetchObj) {
+      // console.log(fetchObj);
+        return $http.post(dbURL.url + '/fetches', fetchObj)
+        .then(function(response){
+          console.log(response);
+        }, function(error){
+          console.log(error);
+        });
+    },
+
+    updateFetch: function(fetchObj) {
+      return $http.put(dbURL.url + '/fetches/update/', fetchObj)
+      .then(function(response){
+        console.log(response);
+      }, function(error){
+        console.log(error);
+      });
+    },
+
+    deleteFetch: function(fetchObj) {
+      console.log(fetchObj)
+      return $http.post(dbURL.url + '/fetches/delete/', fetchObj)
+      .then(function(response){
+        console.log(response);
+      }, function(error){
+        console.log(error);
+      });
     }
-    // ,
-    // deleteFetch: function(id) {
-    //   return $http.delete('http://localhost:3000/' + id);
-    // },
-    // editFetch: function(id, editObj) {
-    //   return $http.put('http://localhost:3000/' + id, editObj);
-    // }
   };
 }
 
-function SigninService($http){
+function SigninService($http, dbURL){
   return {
     signin: function(user){
-        return $http.post('http://localhost:3000/users/signin', user)
+        return $http.post(dbURL.url + '/users/signin', user)
         .then(function(response){
           return response;
         }, function(error){
@@ -107,10 +180,25 @@ function SigninService($http){
   };
 }
 
-function AddUserService($http){
+function AddUserService($http, dbURL){
   return {
     signup: function(user){
-        return $http.post('http://localhost:3000/users/signup', user)
+      console.log(user)
+        return $http.post(dbURL.url + '/users/signup', user)
+        .then(function(response){
+          console.log(response)
+          return response;
+        }, function(error){
+          return error;
+        });
+      }
+    };
+  }
+
+  function UserInformation($http, dbURL){
+    return {
+      all: function(user){
+        return $http.get(dbURL.url + '/fetches/userInformation', user)
         .then(function(response){
           return response;
         }, function(error){
@@ -119,3 +207,112 @@ function AddUserService($http){
       }
     };
   }
+
+ function RetrievingFetchContactInfo($http, dbURL){
+   return {
+     all: function(user){
+       return $http.get(dbURL.url + '/fetches/retrievingFetchContactInfo', user)
+       .then(function(response){
+        //  console.log(response);
+         return response;
+       }, function(error){
+         return error;
+       });
+     }
+   };
+ }
+
+ function styleArray() {
+  return [
+      {
+          "featureType": "administrative",
+          "elementType": "all",
+          "stylers": [
+              {
+                  "visibility": "on"
+              },
+              {
+                  "lightness": 33
+              }
+          ]
+      },
+      {
+          "featureType": "landscape",
+          "elementType": "all",
+          "stylers": [
+              {
+                  "color": "#f2e5d4"
+              }
+          ]
+      },
+      {
+          "featureType": "poi.park",
+          "elementType": "geometry",
+          "stylers": [
+              {
+                  "color": "#c5dac6"
+              }
+          ]
+      },
+      {
+          "featureType": "poi.park",
+          "elementType": "labels",
+          "stylers": [
+              {
+                  "visibility": "on"
+              },
+              {
+                  "lightness": 20
+              }
+          ]
+      },
+      {
+          "featureType": "road",
+          "elementType": "all",
+          "stylers": [
+              {
+                  "lightness": 20
+              }
+          ]
+      },
+      {
+          "featureType": "road.highway",
+          "elementType": "geometry",
+          "stylers": [
+              {
+                  "color": "#c5c6c6"
+              }
+          ]
+      },
+      {
+          "featureType": "road.arterial",
+          "elementType": "geometry",
+          "stylers": [
+              {
+                  "color": "#e4d7c6"
+              }
+          ]
+      },
+      {
+          "featureType": "road.local",
+          "elementType": "geometry",
+          "stylers": [
+              {
+                  "color": "#fbfaf7"
+              }
+          ]
+      },
+      {
+          "featureType": "water",
+          "elementType": "all",
+          "stylers": [
+              {
+                  "visibility": "on"
+              },
+              {
+                  "color": "#7fdbd4"
+              }
+          ]
+      }
+    ];
+ }
