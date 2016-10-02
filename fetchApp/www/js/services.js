@@ -99,8 +99,8 @@ angular.module('starter.services', [])
 // heroku db connection
 function dbURL() {
   return {
-    url: "https://mysterious-waters-23406.herokuapp.com"
-    // url: "http://localhost:2000"
+    // url: "https://mysterious-waters-23406.herokuapp.com"
+    url: "http://localhost:2000"
   };
 }
 
