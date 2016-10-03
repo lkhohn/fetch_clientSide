@@ -1,13 +1,13 @@
 'use strict';
 
 angular.module('starter.controllers')
-  .controller('LandingPageCtrl', ['$scope', '$ionicPopup', '$timeout', '$location', '$state', '$cordovaGeolocation', '$compile', '$ionicLoading', 'AvailableFetchesService','dbURL', 'styleArray', LandingPageCtrl]);
+  .controller('LandingPageCtrl', ['$scope', '$ionicPopup', '$timeout', '$location', '$state', '$cordovaGeolocation', '$compile', '$ionicLoading', 'FetchService','dbURL', 'styleArray', LandingPageCtrl]);
 
 
-function LandingPageCtrl($scope, $ionicPopup, $timeout, $location, $state, $cordovaGeolocation, $compile, $ionicLoading, AvailableFetchesService, dbURL, styleArray){
+function LandingPageCtrl($scope, $ionicPopup, $timeout, $location, $state, $cordovaGeolocation, $compile, $ionicLoading, FetchService, dbURL, styleArray){
   var vm = this;
   
-  vm.fetch = AvailableFetchesService.all()
+  vm.fetch = FetchService.all()
   .then(function(fetchArr){
     vm.fetches = fetchArr.data;
   });
