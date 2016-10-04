@@ -1,14 +1,14 @@
 'use strict';
 
 angular.module('starter.controllers')
-  .controller('HomeCtrl', ['$scope', '$ionicPopup', '$timeout', '$location', '$ionicModal', '$ionicHistory', 'Fetches', 'FetchService', 'UserHistoryService', 'UserInformation', 'RetrievingFetchContactInfo', 'dbURL', HomeCtrl]);
+  .controller('HomeCtrl', ['$scope', '$ionicPopup', '$timeout', '$location', '$ionicModal', '$ionicHistory', 'FetchService', 'UserInformation', 'RetrievingFetchContactInfo', 'dbURL', HomeCtrl]);
 
 
 
-function HomeCtrl($scope, $ionicPopup, $timeout, $location, $ionicModal, $ionicHistory, Fetches, FetchService, UserHistoryService, UserInformation, RetrievingFetchContactInfo, dbURL){
+function HomeCtrl($scope, $ionicPopup, $timeout, $location, $ionicModal, $ionicHistory, FetchService, UserInformation, RetrievingFetchContactInfo, dbURL){
   var vm = this;
 
-  vm.fetch = Fetches.all()
+  vm.fetch = UserInformation.allFetches()
   .then(function(fetchArr){
     vm.fetches = fetchArr.data;
     var data = fetchArr.data;
@@ -134,11 +134,11 @@ vm.initMap = initMap;
   });
   socket.on('claimOrClose', function(newFetch){
     // console.log(newFetch);
-    vm.fetch = Fetches.all()
+    vm.fetch = UserInformation.allFetches()
     .then(function(fetchArr){
       vm.fetches = fetchArr.data;
     });
-    vm.userClaimedFetch = UserHistoryService.getHistory()
+    vm.userClaimedFetch = UserInformation.getHistory()
     .then(function(fetchArr){
       vm.userClaimedFetches = fetchArr.data;
     });

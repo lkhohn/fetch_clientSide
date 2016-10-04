@@ -1,0 +1,88 @@
+<ion-modal-view class="product edit create Home">
+  <ion-content has-bouncing="true">
+    <form class="form-horizontal" ng-submit="$parent.Home.updateFetchInput({item: fetchUpdateData.item, paymentAmount: fetchUpdateData.paymentAmount, address: fetchUpdateData.address })">
+      <!-- <form class="form-horizontal" ng-submit="$parent.Home.updateFetchInput({item: fetchUpdateData.item })"> -->
+
+      <ion-header-bar class="bar-positive fix-buttons" id='addFetchModalHeaderBar'>
+        <h1 class="title">update a fetch</h1>
+        <a class="button" id='addFetchModalHeaderCancelButton' ng-click="$parent.Home.closeModal()">Cancel</a>
+      </ion-header-bar>
+
+
+
+      <div class="row" ng-class="{'no-padding-top': !data.editItem}">
+        <div class="col">
+          <input type="hidden" name="lat" placeholder="lat" id="lat" ng-model="lat">
+          <input type="hidden" name="lng" placeholder="lng" id='lng' ng-model="lng">
+        </div>
+      </div>
+<!-- {{Home.fetches}} -->
+      <div class="row charity-row">
+        <div class="col col-10 vert-center">
+          <div class="charity large"></div>
+        </div>
+      </div>
+
+      <div class="row charity-row">
+        <div class="col col-10 vert-center">
+          <div class="charity large"></div>
+        </div>
+      </div>
+
+      <div class="row charity-row">
+        <div class="col col-10 vert-center">
+          <div class="charity large"></div>
+        </div>
+      </div>
+
+      <div class="row charity-row">
+        <div class="col col-10 vert-center">
+          <div class="charity large"></div>
+        </div>
+      </div>
+
+      <div class="row description-row">
+        <div class="col">
+          <span class="input-label">item: {{Home.fetchUpdateData.item}}</span>
+          <label class="item item-input">
+            <input type="text" ng-model="fetchUpdateData.item">
+          </label>
+        </div>
+      </div>
+
+
+      <div class="row description-row">
+        <div class="col">
+          <span class="input-label">reward: {{ Home.fetchUpdateData.paymentAmount }}</span>
+          <label class="item item-input">
+            <input type="number" ng-model="fetchUpdateData.paymentAmount">
+          </label>
+        </div>
+      </div>
+
+
+      <div class="row description-row">
+        <div class="col">
+          <span class="input-label">address: {{ Home.fetchUpdateData.address }}</span>
+          <label class="item item-input">
+            <input type="text" ng-model="fetchUpdateData.address">
+          </label>
+        </div>
+      </div>
+
+
+      <div class="row charity-row">
+        <div class="col col-10 vert-center">
+          <div class="charity large"></div>
+        </div>
+      </div>
+      <div class='row'>
+        <div class='col col-center'>
+          <button type="submit" class="button" id='addFetchModalSubmitButton'>update</button>
+        </div>
+      </div>
+
+
+    </form>
+  </ion-content>
+</ion-modal-view>
