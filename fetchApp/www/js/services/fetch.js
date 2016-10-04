@@ -10,13 +10,24 @@ function FetchService($http, dbURL){
       // returns all fetches regardless of current user
       // withCredentials:true
       return $http.get(dbURL.url + '/availableFetches', fetch)
-      .then(function(fetchObj) {
-        console.log(fetchObj);
-        return fetchObj;
-      }, function(response) {
-        console.log(response);
-      });
+        .then(function(fetchObj) {
+          console.log(fetchObj);
+          return fetchObj;
+        }, function(response) {
+          console.log(response);
+        });
     },
+
+    allClaimable : function(fetch) {
+      return $http.get(dbURL.url + '/fetches/claimableFetches', fetch)
+        .then(function(fetchObj){
+          // console.log(fetchObj);
+          return fetchObj;
+        }, function(response){
+          console.log(response);
+        });
+    },
+
     // getFetch isn't used
     getFetch:function(user){
       console.log(user);
@@ -39,16 +50,16 @@ function FetchService($http, dbURL){
 
     closeFetch: function(fetch){
       return $http.put(dbURL.url + '/fetches/close/', fetch)
-      .then(function(response){
-        console.log(response);
-      }, function(error){
-        console.log(error);
-      });
+        .then(function(response){
+          console.log(response);
+        }, function(error){
+          console.log(error);
+        });
     },
 
     postNewFetch: function(fetchObj) {
       // console.log(fetchObj);
-        return $http.post(dbURL.url + '/fetches', fetchObj)
+      return $http.post(dbURL.url + '/fetches', fetchObj)
         .then(function(response){
           console.log(response);
         }, function(error){
@@ -58,20 +69,20 @@ function FetchService($http, dbURL){
 
     updateFetch: function(fetchObj) {
       return $http.put(dbURL.url + '/fetches/update/', fetchObj)
-      .then(function(response){
-        console.log(response);
-      }, function(error){
-        console.log(error);
-      });
+        .then(function(response){
+          console.log(response);
+        }, function(error){
+          console.log(error);
+        });
     },
 
     deleteFetch: function(fetchObj) {
       return $http.post(dbURL.url + '/fetches/delete/', fetchObj)
-      .then(function(response){
-        console.log(response);
-      }, function(error){
-        console.log(error);
-      });
+        .then(function(response){
+          console.log(response);
+        }, function(error){
+          console.log(error);
+        });
     }
   };
 }

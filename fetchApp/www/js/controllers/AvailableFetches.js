@@ -1,15 +1,15 @@
 'use strict';
 
 angular.module('starter.controllers')
-	.controller('AvailableFetches', ['$scope', 'AvailableFetchesService','ClaimableFetchService', 'FetchService', '$ionicPopup', '$timeout', '$location', '$state', '$cordovaGeolocation', '$compile', '$ionicLoading','dbURL','styleArray', AvailableFetches]);
+	.controller('AvailableFetches', ['$scope', 'FetchService', '$ionicPopup', '$timeout', '$location', '$state', '$cordovaGeolocation', '$compile', '$ionicLoading','dbURL','styleArray', AvailableFetches]);
 
 
-function AvailableFetches($scope, AvailableFetchesService, ClaimableFetchService, FetchService, $ionicPopup, $timeout, $location, $state, $cordovaGeolocation, $compile, $ionicLoading, dbURL, styleArray){
+function AvailableFetches($scope, FetchService, $ionicPopup, $timeout, $location, $state, $cordovaGeolocation, $compile, $ionicLoading, dbURL, styleArray){
   var vm = this;
 
   vm.fetches = [];
 
-  vm.fetch = ClaimableFetchService.all()
+  vm.fetch = FetchService.allClaimable()
   .then(function(fetchArr){
     vm.fetches = fetchArr.data;
   });
