@@ -1,11 +1,11 @@
 'use strict';
 
 angular.module('starter.controllers')
-  .controller('HomeCtrl', ['$scope', '$ionicPopup', '$timeout', '$location', '$ionicModal', '$ionicHistory', 'FetchService', 'UserHistoryService', 'UserInformation', 'RetrievingFetchContactInfo', 'dbURL', HomeCtrl]);
+  .controller('HomeCtrl', ['$scope', '$ionicPopup', '$timeout', '$location', '$ionicModal', '$ionicHistory', 'FetchService', 'UserInformation', 'RetrievingFetchContactInfo', 'dbURL', HomeCtrl]);
 
 
 
-function HomeCtrl($scope, $ionicPopup, $timeout, $location, $ionicModal, $ionicHistory, FetchService, UserHistoryService, UserInformation, RetrievingFetchContactInfo, dbURL){
+function HomeCtrl($scope, $ionicPopup, $timeout, $location, $ionicModal, $ionicHistory, FetchService, UserInformation, RetrievingFetchContactInfo, dbURL){
   var vm = this;
 
   vm.fetch = UserInformation.allFetches()
@@ -138,7 +138,7 @@ vm.initMap = initMap;
     .then(function(fetchArr){
       vm.fetches = fetchArr.data;
     });
-    vm.userClaimedFetch = UserHistoryService.getHistory()
+    vm.userClaimedFetch = UserInformation.getHistory()
     .then(function(fetchArr){
       vm.userClaimedFetches = fetchArr.data;
     });

@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('starter.controllers')
-	.controller('UserProfileCtrl', ['$scope', '$location', '$state', 'UserHistoryService', 'UserInformation', 'dbURL', UserProfileCtrl]);
+	.controller('UserProfileCtrl', ['$scope', '$location', '$state', 'UserInformation', 'dbURL', UserProfileCtrl]);
 
 
-function UserProfileCtrl($scope, $location, $state, UserHistoryService, UserInformation, dbURL){
+function UserProfileCtrl($scope, $location, $state, UserInformation, dbURL){
   var vm = this;
   
   vm.signout = signout;
@@ -35,7 +35,7 @@ function UserProfileCtrl($scope, $location, $state, UserHistoryService, UserInfo
   });
 
   // claimor_id is the current user
-  vm.fetch = UserHistoryService.getHistory()
+  vm.fetch = UserInformation.getHistory()
   .then(function(fetchArr){
     vm.fetches = fetchArr.data;
   });

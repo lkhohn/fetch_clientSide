@@ -5,7 +5,7 @@ angular.module('starter.services')
 
 function UserInformation($http, dbURL){
   return {
-    
+
     all: function(user){
       return $http.get(dbURL.url + '/fetches/userInformation', user)
       .then(function(response){
@@ -23,7 +23,18 @@ function UserInformation($http, dbURL){
       }, function(response) {
         console.error(new Error(response));
       });
+    },
+
+    getHistory: function(user) {
+      // console.log(user);
+      return $http.get(dbURL.url + '/fetches/userHistory', user)
+      .then(function(data){
+        return data;
+      }, function(response) {
+        console.log(response);
+      });
     }
+    
     // this.remove = function(fetch) {
     //   fetchObj.splice(fetchObj.indexOf(fetch), 1);
     // };
