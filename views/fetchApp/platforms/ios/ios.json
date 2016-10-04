@@ -1,0 +1,39 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {
+            "config.xml": {
+                "parents": {
+                    "/*": [
+                        {
+                            "xml": "<feature name=\"CardIO\"><param name=\"ios-package\" onload=\"false\" value=\"CardIOCordovaPlugin\" /></feature>",
+                            "count": 1
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "installed_plugins": {
+        "card.io.cordova.mobilesdk": {
+            "PACKAGE_NAME": "com.fetch.social"
+        }
+    },
+    "dependent_plugins": {},
+    "modules": [
+        {
+            "file": "plugins/card.io.cordova.mobilesdk/www/cdv-plugin-card-io.js",
+            "id": "card.io.cordova.mobilesdk.CardIO",
+            "pluginId": "card.io.cordova.mobilesdk",
+            "clobbers": [
+                "CardIO"
+            ]
+        }
+    ],
+    "plugin_metadata": {
+        "card.io.cordova.mobilesdk": "2.1.0"
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "card.io.cordova.mobilesdk": {
+            "PACKAGE_NAME": "com.fetch.social"
+        }
+    },
+    "dependent_plugins": {}
+}

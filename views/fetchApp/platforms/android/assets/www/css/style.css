@@ -1,0 +1,281 @@
+/* Empty. Add your own CSS if you like */
+body {
+  font-family: 'Ubuntu', sans-serif;
+  color: #36454F;
+}
+
+.tab-item.tab-item-active, .tab-item.active, .tab-item.activated {
+  color: #7FDBD4;
+}
+
+.title {
+  color: #7FDBD4;
+}
+/* home page for fetch details */
+.item-expand {
+  position: relative;
+  width: 100%;
+  max-height: 25px;
+  transition: max-height 0.1s ease-out;
+  overflow: hidden;
+}
+
+.item-expand.inactive:after {
+  content: "";
+  position: absolute;
+  bottom: 0px;
+  left: 0;
+  height: 15px;
+  width: 100%;
+  display: block;
+  background-image: -webkit-gradient(
+    linear,
+    left top,
+    left bottom,
+    color-stop(0, rgba(255, 255, 255, 0)),
+    color-stop(1, rgba(255, 255, 255, 1))
+  );
+  background-image: -o-linear-gradient(bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
+  background-image: -moz-linear-gradient(bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
+  background-image: -webkit-linear-gradient(left, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
+  background-image: -ms-linear-gradient(bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
+}
+
+.item-expand.active {
+  max-height: 500px;
+  transition: max-height 0.3s ease-out;
+}
+
+
+.item-expand-footer {
+  margin-top: 10px;
+}
+
+.item-expand-footer i {
+  margin-right: 10px;
+}
+
+
+
+
+/* MAP on add a fetch */
+.scroll {
+    height: 100%;
+}
+
+#map {
+    width: 100%;
+    height: 80%;
+}
+
+/* ALL normal buttons */
+.button {
+  background-color: #36454F;
+  color:#FFF;
+}
+
+
+
+/* LANDING PAGE */
+#landPageHeaderMain {
+  margin:0;
+  top:0;
+  left:0;
+  width:100%;
+}
+
+#landPageSubHeader{
+  padding-bottom:4em;
+  margin:0;
+  top:0;
+  left:0;
+  width:100%;
+  text-align:center;
+}
+
+.landingPageLogo {
+  margin-left:0.5em;
+  width:6em;
+  height:6em;
+}
+
+.landingPageTitle {
+  color: #36454F;
+  font-size:5em;
+}
+
+ .landingPageSubTitle {
+   color: #36454F;
+   font-size:2em;
+ }
+
+
+#landingPageMain {
+   top:0;
+   left:0;
+   padding-top:7em;
+   padding-bottom:10em;
+   width: 100%;
+   background-color:#36454F;
+}
+
+
+#landingPageAvailableFetchesButton{
+  color: #FFF;
+  background-color: #7FDBD4;
+  font-size:2em;
+}
+
+.bar-footer{
+  background-color:#36454F;
+  color: #FFF;
+}
+
+
+
+/* signin page */
+.item-floating-label{
+  border-left:none;
+  border-right:none;
+}
+#firstFormInputField{
+  border-top:none;
+}
+.form-control {
+  border:0;
+}
+.no-border {
+  border: 0;
+  box-shadow: none;
+}
+.accountSignUpQuestion{
+  padding-top:8em;
+}
+.signUpLink {
+  color:#7fdbd4;
+}
+
+#signUpLinkSection {
+  font-size:1.25em;
+}
+
+/* signout/history */
+.ion-chevron-right {
+  background-color: #36454F;
+  color:#FFF;
+  margin-bottom:1em;
+}
+.ion-chevron-right.active {
+  background-color: #36454F;
+  color:#7fdbd4;
+}
+#signoutSection {
+  margin-top:4em;
+}
+
+
+/* add fetch modal */
+
+.modal{
+  top:15%;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+}
+#addFetchModalHeaderBar {
+  background-color: #36454F;
+  color:#FFF;
+}
+
+#addFetchModalHeaderCancelButton {
+background-color: #36454F;
+  color:#7FDBD4;
+}
+
+
+/*add fetch info window */
+infoWindow {
+  color: #36454F;
+  border-radius: 2px 2px 0 0;
+  box-shadow: 0 1px 6px #36454F;
+  border: 1px solid #36454F;
+}
+
+/* retrieve a fetch info window */
+#iw-container {
+}
+ .iw_title {
+  padding-top: 1em;
+  color: #36454F;
+  font-size:1.5em;
+ }
+
+
+/* popup */
+.popup-head {
+  background-color: #36454F;
+}
+
+.popup-title {
+  color: #FFF;
+}
+
+.button.button-positive{
+  background-color: #7FDBD4;
+  color: #FFF;
+  font-weight:bold;
+}
+.button.button-positive:hover {
+  color: #FFF;
+  font-weight:bold;
+  background-color: #36454F;
+}
+.button.button-positive:activated {
+  color: #FFF;
+  font-weight:bold;
+  background-color: #36454F;
+}
+
+.button.button-default {
+  background-color:#FFF;
+  color:#36454F;
+}
+
+
+
+/* HOME PAGE */
+.item-divider{
+  background-color:#36454F;
+  color: #FFF;
+}
+
+#homePageText {
+  color: #36454F;
+}
+
+.ion-ios-minus-outline {
+  color:#7FDBD4;
+  font-size:2em;
+}
+
+.ion-ios-plus-outline {
+  color:#36454F;
+  font-size:2em;
+}
+
+li {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 2px;
+  margin-left:2em;
+}
+#mapDirection {
+  height:50%;
+  width:100%;
+}
+#addressMapDirection{
+  color:#7FDBD4;
+  text-decoration:underline;
+}

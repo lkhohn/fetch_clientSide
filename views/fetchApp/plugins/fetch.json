@@ -1,0 +1,11 @@
+{
+    "card.io.cordova.mobilesdk": {
+        "source": {
+            "type": "git",
+            "url": "https://github.com/card-io/card.io-Cordova-Plugin",
+            "subdir": "."
+        },
+        "is_top_level": true,
+        "variables": {}
+    }
+}

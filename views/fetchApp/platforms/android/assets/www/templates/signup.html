@@ -1,0 +1,139 @@
+<ion-view view-title="">
+  <ion-content class="padding center account">
+
+
+
+<div class='row row-center' id="landPageHeaderMain">
+
+  <div class='col-34'>
+    <img class="landingPageLogo" src="./css/logo_GIMP_v3.png"/>
+  </div>
+
+  <div class='col col-75'>
+    <h1 class="landingPageTitle">fetch</h1>
+  </div>
+
+</div>
+
+
+
+<form novalidate name="form" ng-submit="Account.signup({firstName: SUfirstName, lastName: SUlastName, email: SUemail, phoneNumber: SUphoneNumber, password: SUpassword})">
+  <div class="list">
+
+    <label class="item item-input item-floating-label" ng-class="{'has-error': form.email.$invalid && form.email.$dirty, 'has-success': form.email.$valid && form.email.$dirty}" id="firstFormInputField">
+      <span class="input-label">email</span>
+      <input name="email" type="email" placeholder="email" ng-model="SUemail"
+      class="form-control no-border"
+      ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/"
+      required>
+      <div class='help-block' ng-messages="form.email.$error" style="color:red" role="alert" ng-show="form.email.$touched">
+       <div ng-message="required">you did not enter a field</div>
+       <div ng-message="pattern">incorrect email format</div>
+     </div>
+    </label>
+
+  <label class="item item-input item-floating-label" ng-class="{'has-error': form.firstName.$invalid && form.firstName.$dirty, 'has-success': form.firstName.$valid && form.firstName.$dirty}">
+    <span class="input-label">first name</span>
+    <input name="firstName" type="text" placeholder="first name" ng-model="SUfirstName"
+    class="form-control no-border"
+    ng-minlength="2"
+    required>
+    <div class='help-block' ng-messages="form.firstName.$error" style="color:red" role="alert" ng-show="form.firstName.$touched">
+     <div ng-message="required">uou did not enter a field</div>
+     <div ng-message="minlength">your field is too short</div>
+   </div>
+  </label>
+
+  <label class="item item-input item-floating-label" ng-class="{'has-error': form.lastName.$invalid && form.lastName.$dirty, 'has-success': form.lastName.$valid && form.lastName.$dirty}">
+    <span class="input-label">last name</span>
+    <input name="lastName" type="text" placeholder="last name" ng-model="SUlastName"
+    class="form-control no-border"
+    ng-minlength="2"
+    required>
+    <div class='help-block' ng-messages="form.lastName.$error" style="color:red" role="alert" ng-show="form.lastName.$touched">
+     <div ng-message="required">you did not enter a field</div>
+     <div ng-message="minlength">your field is too short</div>
+   </div>
+  </label>
+
+
+
+
+  <label class="item item-input item-floating-label" ng-class="{'has-error': form.phoneNumber.$invalid && form.phoneNumber.$dirty, 'has-success': form.phoneNumber.$valid && form.phoneNumber.$dirty}">
+    <span class="input-label">phone number</span>
+    <input name="phoneNumber" type="number" placeholder="phone number" ng-model="SUphoneNumber"
+    class="form-control no-border"
+    ng-minlength="2"
+    ng-maxlength="12"
+    required>
+    <div class='help-block' ng-messages="form.phoneNumber.$error" style="color:red" role="alert" ng-show="form.phoneNumber.$touched">
+     <div ng-message="required">You did not enter a field</div>
+     <div ng-message="minlength">Your field is too short</div>
+     <div ng-message="maxlength">Your field is too long</div>
+   </div>
+  </label>
+
+
+<!--
+	<div class="form-group"
+		ng-class="{'has-error': isInputInvalid(form.password), 'has-success': isInputValid(form.password)}">
+		<label for="password">Password</label>
+		<input type="password" name="password" ng-model="user.password" class="form-control" required>
+		<div class="progress" style="margin-top:10px">
+			<div class="progress-bar"
+					ng-class="{'progress-bar-success': isPasswordStrong(), 'progress-bar-warning': isPasswordOk(), 'progress-bar-danger': isPasswordWeak()}"
+					aria-valuenow="{{ passwordStrength }}"
+					aria-valuemin="0"
+					aria-valuemax="100"
+					style="width:{{ passwordStrength }}%">
+
+			</div>
+		</div>
+	</div>
+ -->
+
+<label class="item item-input item-floating-label">
+  <!-- <label class="item item-input item-floating-label" ng-class="{'has-error': isInputInvalid(form.password), 'has-success': isInputValid(form.password)}"> -->
+    <span class="input-label">password</span>
+    <input name="password" type="password" placeholder="password" ng-model="SUpassword"
+    class="form-control no-border"
+    ng-minlength="5"
+    ng-maxlength="25"
+    required>
+    <div class='help-block' ng-messages="form.password.$error" style="color:red" role="alert" ng-show="form.password.$touched">
+     <div ng-message="required">you did not enter a field</div>
+     <div ng-message="minlength">your field is too short</div>
+     <div ng-message="maxlength">your field is too long</div>
+   </div>
+   <!-- <div class="progress" style="margin-top:10px">
+     <div class="progress-bar"
+         ng-class="{'progress-bar-success': isPasswordStrong(), 'progress-bar-warning': isPasswordOk(), 'progress-bar-danger': isPasswordWeak()}"
+         aria-valuenow="{{ passwordStrength }}"
+         aria-valuemin="0"
+         aria-valuemax="100"
+         style="width:{{ passwordStrength }}%">
+     </div>
+   </div> -->
+  </label>
+
+
+  <label class="item item-input item-floating-label">
+    <span class="input-label">confirm password</span>
+    <input name="confirmPassword" type="password" placeholder="Confirm password" ng-model="SUconfirmPassword"
+    class="form-control no-border"
+    required>
+    <div ng-show="((form.password.$dirty && form.confirmPassword.$dirty) && (SUpassword != SUconfirmPassword))">
+        <span style="color:red">password mismatched</span>
+    </div>
+  </label>
+
+    <button type="submit" class="button button-block" ng-click='checkSignup=!checkSignup' ng-disabled='!form.$valid'>sign up</button>
+
+
+
+<p style='font-size:6px'>
+  by signing up, you are agreeing to have Fetch store your user information to use the application. Fetch will not distribute your information
+</p>
+
+  </ion-content>
+</ion-view>
